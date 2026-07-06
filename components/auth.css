@@ -1,0 +1,208 @@
+/* wirezat-ui-v1 / components/auth.css
+   Full-page auth card: login / register / setup modes.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Auth page layout ────────────────────────────────────────────────────── */
+/* Use <body class="app-shell"> + <header class="header"> from shell.css,
+   then wrap the card in <div class="auth-main"> for centered content. */
+.auth-main {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - var(--header-h));
+    padding: var(--gap-section);
+}
+
+/* ── Card dimensions ─────────────────────────────────────────────────────── */
+:root {
+    --auth-card-w:         380px;
+    --auth-logo-size:      44px;
+    --auth-logo-font-size: 22px;
+    --auth-logo-radius:    10px;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+.auth-card {
+    width: 100%;
+    max-width: var(--auth-card-w);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+/* ── Header (logo + app name + subtitle) ─────────────────────────────────── */
+.auth-header {
+    padding: var(--pad-page) var(--pad-page) var(--pad-card);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-page);
+}
+
+.auth-logo {
+    width: var(--auth-logo-size);
+    height: var(--auth-logo-size);
+    background: var(--accent);
+    color: var(--accent-text);
+    border-radius: var(--auth-logo-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--auth-logo-font-size);
+    margin: 0 auto var(--gap-item);
+}
+
+.auth-title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+}
+
+.auth-sub {
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+    margin-top: 3px;
+}
+
+/* ── Tabs (login / register) — hidden in single-mode ────────────────────── */
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.auth-tab {
+    flex: 1;
+    height: var(--h-tab);
+    padding: 0 var(--pad-card);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+    font-family: inherit;
+}
+.auth-tab:hover { color: var(--text); }
+.auth-tab.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+    font-weight: var(--weight-semibold);
+}
+
+/* ── Form area ───────────────────────────────────────────────────────────── */
+.auth-body {
+    padding: var(--gap-section) var(--pad-page) var(--pad-page);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-field);
+}
+
+.auth-body label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+}
+
+/* ── Panels (switched by JS) ─────────────────────────────────────────────── */
+.auth-panel {
+    display: none;
+    flex-direction: column;
+    gap: var(--gap-field);
+}
+.auth-panel.active { display: flex; }
+
+/* ── Input wrapper (password field with optional icon indicator) ─────────── */
+.input-wrap {
+    position: relative;
+}
+.input-wrap .input {
+    padding-right: var(--gap-section);
+}
+
+.input-indicator {
+    position: absolute;
+    right: var(--gap-field);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--text-sm);
+    pointer-events: none;
+    font-style: normal;
+}
+.input-wrap-ok  .input-indicator { color: var(--success); }
+.input-wrap-err .input-indicator { color: var(--danger); }
+.input-wrap-ok  .input { border-color: var(--success); }
+.input-wrap-err .input { border-color: var(--danger); }
+
+/* ── Footer (status message + submit button) ─────────────────────────────── */
+.auth-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-control);
+    margin-top: var(--gap-icon);
+}
+
+.auth-footer .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-md);
+}
+
+/* ── Demo link (below forms, no account needed) ──────────────────────────── */
+.auth-demo-link {
+    display: block;
+    text-align: center;
+    margin-top: var(--gap-control);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-decoration: none;
+}
+.auth-demo-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* ── Inline status message ───────────────────────────────────────────────── */
+.status-msg {
+    font-size: var(--text-sm);
+    min-height: var(--text-md);
+    line-height: 1.4;
+}
+.status-msg.ok  { color: var(--success); }
+.status-msg.err { color: var(--danger); }
+
+/* ── Language menu (dropdown) ────────────────────────────────────────────── */
+.lang-menu { position: relative; }
+
+.lang-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + var(--gap-icon));
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    min-width: 130px;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+.lang-menu[data-open] .lang-dropdown { display: block; }
+
+.lang-option {
+    display: block;
+    width: 100%;
+    padding: var(--pad-cell-y) var(--gap-field);
+    font-size: var(--text-base);
+    color: var(--text);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: background 0.1s;
+}
+.lang-option:hover { background: var(--bg-hover); }
+.lang-option.active { color: var(--accent); font-weight: var(--weight-medium); }

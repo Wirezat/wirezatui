@@ -1,0 +1,117 @@
+/* wirezat-ui-v1 / components/buttons.css
+   Requires: tokens/base.css + app/theme.css
+*/
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-inline);
+    height: var(--h-btn);
+    padding: 0 var(--pad-btn);
+    border-radius: var(--radius);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s;
+    font-family: inherit;
+    background: none;
+    color: var(--text);
+}
+
+.btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+/* ── Variants ────────────────────────────────────────────────────────────── */
+.btn-primary {
+    background: var(--accent);
+    color: var(--accent-text);
+    border-color: var(--accent-dark);
+}
+.btn-primary:hover:not(:disabled) { background: var(--accent-dark); }
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border-strong);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); }
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+.btn-danger:hover:not(:disabled) { filter: brightness(0.88); }
+
+.btn-danger-ghost {
+    background: transparent;
+    color: var(--danger);
+    border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+}
+.btn-danger-ghost:hover:not(:disabled) {
+    background: var(--danger-muted);
+    border-color: var(--danger);
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────────── */
+.btn-sm {
+    height: var(--h-btn-sm);
+    padding: 0 var(--pad-btn-sm);
+    font-size: var(--text-sm);
+}
+
+/* ── Flat (borderless) variants ──────────────────────────────────────────── */
+.btn-flat {
+    background: transparent;
+    color: var(--text-faint);
+    border-color: transparent;
+}
+.btn-flat:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); }
+
+.btn-danger-flat {
+    background: transparent;
+    color: var(--text-faint);
+    border-color: transparent;
+}
+.btn-danger-flat:hover:not(:disabled) { background: var(--danger-muted); color: var(--danger); }
+
+/* Square icon-only button */
+.btn-icon {
+    width: var(--h-btn);
+    padding: 0;
+    justify-content: center;
+}
+.btn-icon.btn-sm { width: var(--h-btn-sm); }
+
+/* ── Icon-always-colored button pattern ──────────────────────────────────── */
+/* Icon always colored, chrome (bg/border) invisible until hover.             */
+/* Pass the desired color via --_icon-color (inline style or ancestor CSS).   */
+/* Compose with .btn + a size modifier. Works on non-square buttons too.      */
+
+.btn-icon-color {
+    background: transparent;
+    color: var(--_icon-color, currentColor);
+    border-color: transparent;
+}
+.btn-icon-color:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--_icon-color, currentColor) 12%, transparent);
+    border-color: var(--_icon-color, currentColor);
+}
+
+/* ── Two-state toggle button (monochrome, frameless) ─────────────────────── */
+/* Like btn-icon-color: no frame except on hover. Monochrome two-state via      */
+/* intensity — OFF: faint, ON: full primary text colour. State via aria-pressed.*/
+.btn-toggle {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-muted); /* OFF: clearly visible, just dimmer */
+}
+.btn-toggle[aria-pressed="true"] {
+    color: var(--text);       /* ON: full primary text colour */
+}
+.btn-toggle:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text) 12%, transparent);
+    border-color: var(--text);
+}

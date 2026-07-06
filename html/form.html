@@ -1,0 +1,70 @@
+<!-- wirezat-ui-v1 / html/form.html
+     Form fields with label, caption, titel-container, multi-field rows.
+     Rules:
+       - Buttons always in .form-actions, never in a .form-row with fields
+       - One style per page (don't mix label-above and label-below)
+       - Multi-field rows allowed when logically consistent (e.g. Name + Unit)
+     Requires: components/forms.css
+-->
+
+<!-- ── Field with label above (default) ──────────────────────────── -->
+<div class="field">
+  <label class="field-label">{{LABEL}}</label>
+  <input class="input" type="text" placeholder="{{PLACEHOLDER}}">
+</div>
+
+<!-- ── Field with caption below (Unterschrift-Stil) ──────────────── -->
+<div class="field">
+  <input class="input" type="number">
+  <span class="field-caption">{{CAPTION_TEXT}}</span>
+</div>
+
+<!-- ── Titel-Container replacing label (prominent heading) ───────── -->
+<div>
+  <div class="titel-container">{{SECTION_TITLE}}</div>
+  <div class="field">
+    <input class="input" type="text">
+  </div>
+</div>
+
+<!-- ── Multi-field row (logically related fields side by side) ───── -->
+<div class="form-row">
+  <div class="field" style="flex:1">
+    <label class="field-label">{{LABEL_A}}</label>
+    <input class="input" type="text">
+  </div>
+  <div class="field" style="width:130px">
+    <label class="field-label">{{LABEL_B}}</label>
+    <select class="select">
+      <option>{{OPTION}}</option>
+    </select>
+  </div>
+</div>
+
+<!-- ── Radio group (toggle-style, ≤4 options) ────────────────────── -->
+<div class="field">
+  <label class="field-label">{{LABEL}}</label>
+  <div class="radio-group">
+    <button class="radio-opt active">{{OPT_A}}</button>
+    <button class="radio-opt">{{OPT_B}}</button>
+    <button class="radio-opt">{{OPT_C}}</button>
+  </div>
+</div>
+
+<!-- ── Checkbox ───────────────────────────────────────────────────── -->
+<label class="check-item">
+  <input type="checkbox">
+  {{OPTION_LABEL}}
+</label>
+
+<!-- ── Textarea ──────────────────────────────────────────────────── -->
+<div class="field">
+  <label class="field-label">{{LABEL}}</label>
+  <textarea class="input textarea" placeholder="{{PLACEHOLDER}}"></textarea>
+</div>
+
+<!-- ── Form actions (always bottom-right, never in form-row) ─────── -->
+<div class="form-actions">
+  <button class="btn btn-ghost">{{CANCEL}}</button>
+  <button class="btn btn-primary">{{SAVE}}</button>
+</div>

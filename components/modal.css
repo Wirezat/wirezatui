@@ -1,0 +1,88 @@
+/* wirezat-ui-v1 / components/modal.css
+   Global modal — activated by containers, always at fixed position.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Backdrop ────────────────────────────────────────────────────────────── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--pad-page);
+}
+
+/* Hidden by default; JS adds .open */
+.modal-backdrop { display: none; }
+.modal-backdrop.open { display: flex; }
+
+/* ── Modal panel ─────────────────────────────────────────────────────────── */
+.modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--pad-page) * 2);
+}
+
+/* ── Modal header ────────────────────────────────────────────────────────── */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-control);
+    padding: var(--pad-modal);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--h-btn-sm);
+    height: var(--h-btn-sm);
+    border-radius: var(--radius-sm);
+    color: var(--text-faint);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: var(--text-lg);
+    transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
+}
+.modal-close:hover { background: var(--bg-hover); color: var(--text); }
+
+/* ── Modal body ──────────────────────────────────────────────────────────── */
+.modal-body {
+    padding: var(--pad-modal);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-field);
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Modal footer ────────────────────────────────────────────────────────── */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap-control);
+    padding: var(--gap-item) var(--pad-modal);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}

@@ -1,0 +1,40 @@
+/* wirezat-ui-v1 / index.css
+   Convenience import: loads everything.
+   For apps that need full control, import files individually.
+
+   Load order:
+     tokens/base.css          — tokens (no colors; app provides theme.css)
+     layout/shell.css         — app-shell, header, sidebar, main
+     layout/page.css          — breadcrumb, page-header, konfig-bar, tabs
+     components/buttons.css
+     components/nav.css
+     components/badges.css
+     components/cards.css     — tile (3-row), stat-tile
+     components/containers.css — container + view-picker + filter-bar
+     components/forms.css     — field, label, caption, titel-container, inputs
+     components/tables.css    — compact table, group-hd, expandable, checklist
+     components/modal.css
+     components/empty.css
+     components/inline-edit.css
+     components/dropdown.css
+     components/infocard.css  — hover-triggered info card overlay
+*/
+
+@import './tokens/base.css';
+@import './layout/shell.css';
+@import './layout/page.css';
+@import './components/buttons.css';
+@import './components/nav.css';
+@import './components/badges.css';
+@import './components/cards.css';
+@import './components/containers.css';
+@import './components/forms.css';
+@import './components/tables.css';
+@import './components/modal.css';
+@import './components/empty.css';
+@import './components/inline-edit.css';
+@import './components/dropdown.css';
+@import './components/user-menu.css';
+@import './components/auth.css';
+@import './components/infocard.css';
+@import './components/autocomplete.css';

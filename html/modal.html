@@ -1,0 +1,25 @@
+<!-- wirezat-ui-v1 / html/modal.html
+     Global modal — place once in <body>, activate via JS openModal().
+     Alternative: use createModal() from js/components/modal.js (auto-creates DOM).
+     JS: initModal() from js/modal.js, openModal({title, bodyHTML, confirmLabel, onConfirm})
+     Requires: components/modal.css, js/modal.js
+-->
+<div class="modal-backdrop" data-wui-modal>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wui-modal-title">
+
+    <div class="modal-header">
+      <span class="modal-title" data-modal-title id="wui-modal-title"></span>
+      <button class="modal-close btn btn-icon btn-sm btn-ghost" data-modal-close>✕</button>
+    </div>
+
+    <div class="modal-body" data-modal-body>
+      <!-- Content injected by openModal({ bodyHTML }) -->
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-modal-cancel>{{CANCEL_LABEL}}</button>
+      <button class="btn btn-primary" data-modal-confirm>{{CONFIRM_LABEL}}</button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,382 @@
+/* wirezat-ui-v1 / components/tables.css
+   Compact table, group headers, expandable rows, checklist variant.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Base table ──────────────────────────────────────────────────────────── */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-base);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.table thead th {
+    padding: var(--pad-cell-y) var(--pad-cell);
+    text-align: left;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-page);
+    white-space: nowrap;
+}
+
+/* ── Body rows ───────────────────────────────────────────────────────────── */
+.table tbody td {
+    padding: var(--pad-cell-y) var(--pad-cell);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+
+.table tbody tr:hover td { background: var(--bg-hover); }
+
+/* ── Group header row ────────────────────────────────────────────────────── */
+.table-group-hd td {
+    padding: var(--gap-inline) var(--pad-cell);
+    background: var(--bg-page);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.table-group-hd:first-child td { border-top: none; }
+
+/* ── Collapsible group header ────────────────────────────────────────────── */
+.table-group-hd.collapsible { cursor: pointer; user-select: none; }
+.table-group-hd.collapsible:hover td { background: color-mix(in srgb, var(--bg-hover) 100%, transparent); }
+
+/* ── Expandable detail row ───────────────────────────────────────────────── */
+.table-expand-row td {
+    padding: 0;
+    background: var(--bg-page);
+}
+.table-expand-body {
+    padding: var(--pad-container) var(--pad-card);
+    display: grid;
+    gap: var(--gap-field);
+}
+/* Hidden by default; JS toggles .open */
+.table-expand-row { display: none; }
+.table-expand-row.open { display: table-row; }
+
+/* Trigger cell with expand arrow */
+.table-expand-trigger {
+    cursor: pointer;
+    color: var(--text-faint);
+    transition: color 0.12s;
+    user-select: none;
+}
+.table-expand-trigger:hover { color: var(--accent); }
+
+/* ── Checklist variant (table + checkbox column) ─────────────────────────── */
+.table-checklist td.check-col {
+    width: 36px;
+    text-align: center;
+    padding-right: var(--pad-cell);
+}
+
+/* ── Muted / secondary cell text ─────────────────────────────────────────── */
+.td-muted { color: var(--text-muted); font-size: var(--text-sm); }
+.td-faint  { color: var(--text-faint); font-size: var(--text-xs); }
+
+/* ── Number / mono cell ──────────────────────────────────────────────────── */
+.td-mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text);
+    white-space: nowrap;
+}
+
+/* ── Action cell (buttons/icons, right-aligned) ──────────────────────────── */
+.td-actions {
+    text-align: right;
+    width: 1%;
+    white-space: nowrap;
+    padding-left: var(--gap-control);
+}
+
+/* ── Link cell ───────────────────────────────────────────────────────────── */
+.td-link {
+    color: var(--text);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition: color 0.12s;
+}
+.td-link:hover { color: var(--accent); text-decoration: underline; }
+
+/* ── Drag handle ─────────────────────────────────────────────────────────── */
+.drag-col  { width: 24px; padding-left: var(--gap-inline) !important; padding-right: var(--gap-inline) !important; }
+.drag-handle {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--text-faint);
+    cursor: grab;
+    user-select: none;
+    text-align: center;
+}
+.table tbody tr:hover .drag-handle { color: var(--text-muted); }
+
+/* ── Drag-reorder states ─────────────────────────────────────────────────── */
+/* Row being dragged: faded placeholder stays in its original position */
+tr.wui-drag-source td { opacity: 0.35; }
+tr.wui-drag-source .drag-handle { cursor: grabbing !important; }
+
+/* Drop indicator: 2px accent line at the edge of the hovered row */
+tr.wui-drop-edge-top td    { box-shadow: 0 -2px 0 0 var(--accent); }
+tr.wui-drop-edge-bottom td { box-shadow: 0  2px 0 0 var(--accent); }
+
+/* End-zone: always-visible drop target at the bottom of the list */
+tr.wui-drop-zone-end td {
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+/* Ghost: row clone used as native drag image */
+.wui-drag-ghost {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    opacity: 0.9;
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    box-shadow: 0 6px 24px rgba(0,0,0,.22);
+    overflow: hidden;
+}
+.wui-drag-ghost table { table-layout: fixed; }
+.wui-drag-ghost tr td {
+    background: color-mix(in srgb, var(--bg-card) 92%, var(--accent));
+}
+
+/* ── Collapsible group header arrow ──────────────────────────────────────── */
+/* Wrap the group label in .group-hd-inner and add a .group-hd-arrow span. */
+.group-hd-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-icon);
+}
+.group-hd-arrow {
+    display: inline-block;
+    font-size: 10px;
+    opacity: 0.5;
+    transition: transform 0.15s;
+}
+.table-group-hd.collapsed .group-hd-arrow { transform: rotate(-90deg); }
+
+/* ── Editable group header ───────────────────────────────────────────────── */
+/* Opt-in: add data-group-editable to tr.table-group-hd.                     */
+/* Clicking .group-hd-name enters edit mode; Enter/blur commits, Escape      */
+/* cancels. Delete button appears only in edit mode.                          */
+
+.table-group-hd[data-group-editable] .group-hd-name { cursor: text; }
+
+.group-hd-input {
+    display: none;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--accent);
+    border-radius: 0;
+    padding: 2px 0;
+    font-size: var(--text-xs);
+    font-family: inherit;
+    font-weight: var(--weight-bold);
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    min-width: 10ch;
+    outline: none;
+}
+
+.group-hd-del {
+    visibility: hidden;
+    pointer-events: none;
+    margin-left: auto;
+}
+
+.table-group-hd[data-group-editable]:hover .group-hd-del,
+.table-group-hd.group-editing .group-hd-del {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.table-group-hd.group-editing                { cursor: default; }
+.table-group-hd.group-editing .group-hd-name  { display: none; }
+.table-group-hd.group-editing .group-hd-input { display: inline-block; }
+
+/* ── Group scope bar ─────────────────────────────────────────────────────── */
+/* Vertical accent bar on the left of groups that have at least one item.     */
+/* Visible on header whether collapsed or expanded — lets the user distinguish */
+/* an empty group (no bar) from a collapsed group (bar present).              */
+/* Requires: header has data-group-populated; PL rows have data-group.        */
+
+.table-group-hd[data-group-populated] td:first-child,
+[data-plid][data-group] td:first-child {
+    position: relative;
+    overflow: visible; /* allow ::before to paint outside overflow:hidden td */
+}
+
+.table-group-hd[data-group-populated] td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: -1px; /* close gap to first item row border */
+    width: 2px;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+}
+
+/* Collapsed: bar fades out downward — signals "non-empty, just hidden" */
+.table-group-hd[data-group-populated].collapsed td:first-child::before {
+    background: linear-gradient(to bottom, var(--accent) 30%, transparent 100%);
+    bottom: 0;
+    border-radius: 2px 2px 0 0;
+}
+
+[data-plid][data-group] td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+}
+
+[data-plid][data-group]:has(+ .row-spacer) td:first-child::before {
+    background: linear-gradient(to bottom, var(--accent) 40%, transparent 100%);
+}
+
+/* ── Row spacer ──────────────────────────────────────────────────────────── */
+.row-spacer td { height: 8px; padding: 0 !important; border: none !important; background: transparent !important; }
+.row-spacer:hover td { background: transparent !important; }
+
+/* ── Hidden rows (opt-in feature) ───────────────────────────────────────── */
+/* Activate on a table by adding .table-has-hidden.
+   Hidden rows: .row-hidden (hidden by default, shown when .show-hidden is toggled).
+   Toggle button: any [data-wui-hidden-toggle] inside or near the table.    */
+
+.row-hidden { display: none; }
+
+.table-has-hidden.show-hidden .row-hidden { display: table-row; }
+
+.row-hidden td {
+    color: var(--text-faint);
+    background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0px, transparent 5px,
+        rgba(128, 128, 128, 0.07) 5px, rgba(128, 128, 128, 0.07) 6px
+    );
+}
+
+.row-hidden:hover td {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        var(--bg-hover) 0px, var(--bg-hover) 5px,
+        rgba(128, 128, 128, 0.10) 5px, rgba(128, 128, 128, 0.10) 6px
+    );
+}
+
+/* Active state for the toggle button */
+[data-wui-hidden-toggle].active {
+    background: var(--bg-hover);
+    border-color: var(--border-strong);
+    color: var(--text);
+}
+
+/* ── Inline editable cell ────────────────────────────────────────────────── */
+.td-input {
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    padding: var(--gap-icon) var(--gap-control);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    background: transparent;
+    color: var(--text);
+    width: 100%;
+    box-sizing: border-box;
+}
+.td-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+}
+
+.td-editable { cursor: text; }
+.td-editable .td-val {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.td-editable .td-input { display: none; }
+.td-editable.editing .td-val  { display: none; }
+.td-editable.editing .td-input { display: block; }
+
+/* ── Bulk row ─────────────────────────────────────────────────────────────── */
+tr[data-wui-bulk-row] { display: none; }
+table.bulk-active tr[data-wui-bulk-row] { display: table-row; }
+tr[data-wui-bulk-row] td {
+    background: var(--accent-muted);
+    border-bottom: 1px solid var(--accent);
+}
+tr[data-wui-bulk-row] td:first-child { border-left: 2px solid var(--accent); }
+tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
+
+/* ── Bulk writable cell ──────────────────────────────────────────────────── */
+.bulk-writable {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-icon);
+}
+.bulk-writable .td-input { flex: 1; min-width: 0; }
+
+/* ── Balance table (inputs / outputs / surplus) ──────────────────────────── */
+.balance-val  { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); }
+.balance-warn { color: var(--danger); font-weight: var(--weight-semibold); }
+
+/* ── Cell-clamp: overflow strategies for narrow table cells ─────────────── */
+/* Base: clips content. Apply one modifier for the overflow behaviour.
+   JS must set .overflows once: inner.scrollWidth > el.offsetWidth + 1      */
+
+.cell-clamp {
+    overflow: hidden;
+    white-space: nowrap;
+    contain: layout paint;
+}
+
+.cell-clamp-inner {
+    display: inline-block;
+}
+
+/* --dots: browser ellipsis (no inner element needed) */
+.cell-clamp--dots {
+    text-overflow: ellipsis;
+}
+
+/* --fade: transparent gradient fades to the right */
+.cell-clamp--fade {
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image:         linear-gradient(to right, black 80%, transparent 100%);
+}
+
+/* --scroll: hover marquee (seamless loop via doubled text in JS) */
+.cell-clamp--scroll.overflows:hover .cell-clamp-inner {
+    will-change: transform;
+    animation: cell-marquee 5s linear 0.5s infinite;
+}
+
+@keyframes cell-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}

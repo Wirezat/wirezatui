@@ -1,0 +1,123 @@
+/* wirezat-ui-v1 / layout/shell.css
+   App shell: outer frame, header, sidebar, main content area.
+   Requires: tokens/base.css + app/theme.css
+
+   ── Layout-Regionen Glossar ──────────────────────────────────────────────
+   Region          Klasse            Kürzel   Datei
+   ─────────────   ───────────────   ──────   ──────────────────
+   App-Shell       .app-shell        —        layout/shell.css
+   Topbar          .header           —        layout/shell.css
+   Seitenleiste    .sidebar          —        layout/shell.css
+   Scrollbereich   .main             —        layout/shell.css
+   Inhaltsbereich  .page             —        layout/shell.css
+   Seitenkopf      .page-header      —        layout/page.css
+   Zweispalter     .split-layout     —        layout/page.css
+   Hauptspalte     .main-panel       .mp      layout/page.css
+   Nebenspalte     .side-panel       .sp      layout/page.css
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── App shell ───────────────────────────────────────────────────────────── */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-page);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 var(--pad-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-item);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-md);
+    color: var(--text);
+    text-decoration: none;
+}
+
+.header-logo {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-md);
+    color: var(--accent-text);
+    flex-shrink: 0;
+}
+
+/* Subtitle next to brand (e.g. "/ Admin") */
+.header-sub {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-normal);
+    color: var(--text-faint);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control);
+}
+
+/* ── App body (sidebar + main) ───────────────────────────────────────────── */
+.app-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: var(--pad-container) var(--gap-item);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-icon);
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+}
+
+/* ── Main content area ───────────────────────────────────────────────────── */
+.main {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.page {
+    max-width: var(--page-w);
+    margin: 0 auto;
+    padding: var(--pad-page) var(--pad-page) 64px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-section);
+}
+
+.page-wide { max-width: var(--page-w-wide); }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+    .sidebar { display: none; }
+    .page { padding: var(--pad-container); }
+}

@@ -1,0 +1,66 @@
+/* wirezat-ui-v1 / components/inline-edit.css
+   Inline-editing field states. No separate edit mode — click activates.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Read-only field ─────────────────────────────────────────────────────── */
+/* No border; transparent background. Not interactive. */
+.field-ro {
+    display: block;
+    padding: var(--gap-inline) var(--pad-btn-sm);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: var(--text-base);
+    font-family: inherit;
+    color: var(--text);
+    line-height: var(--line-height);
+    cursor: default;
+    width: 100%;
+}
+
+/* ── Editable field — hover state ────────────────────────────────────────── */
+/* Shows that the field can be clicked to edit. */
+.field-editable {
+    display: block;
+    padding: var(--gap-inline) var(--pad-btn-sm);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: var(--text-base);
+    font-family: inherit;
+    color: var(--text);
+    line-height: var(--line-height);
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.1s, border-color 0.1s;
+}
+.field-editable:hover {
+    background: var(--accent-muted);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* ── Active / editing state ──────────────────────────────────────────────── */
+/* Looks like a real input when clicked. */
+.field-editable:focus,
+.field-editable.editing {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-muted);
+    cursor: text;
+    outline: none;
+}
+
+/* ── Inline-editable table cell ──────────────────────────────────────────── */
+/* For Odoo-style table row editing. */
+td.cell-editable {
+    padding: 0;
+}
+td.cell-editable .field-editable {
+    border-radius: 0;
+    width: 100%;
+    padding: var(--pad-cell-y) var(--pad-cell);
+}
+td.cell-editable .field-editable:hover {
+    border-radius: var(--radius-sm);
+}

@@ -1,0 +1,176 @@
+/* wirezat-ui-v1 / layout/page.css
+   Per-page structural elements: breadcrumb, page-header, konfig-bar, tabs.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Breadcrumb ──────────────────────────────────────────────────────────── */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-inline);
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.12s;
+}
+.breadcrumb a:hover { color: var(--text); }
+
+.breadcrumb-sep { opacity: 0.4; font-size: var(--text-xs); }
+.breadcrumb-current { color: var(--text); font-weight: var(--weight-medium); }
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--pad-container);
+}
+
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control);
+}
+
+.page-title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.page-subtitle {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+/* ── Konfig-Bar ──────────────────────────────────────────────────────────── */
+/* Collapsible strip under page-header. Trigger (⚙) sits in .page-title-row.
+   When no controls are registered: omit trigger + bar entirely.            */
+
+.konfig-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-icon);
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+    padding: 3px var(--gap-inline);
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    user-select: none;
+}
+.konfig-trigger:hover {
+    background: var(--bg-hover);
+    color: var(--text-muted);
+}
+.konfig-trigger.open {
+    background: var(--accent-muted);
+    color: var(--accent-dark);
+}
+
+.konfig-bar {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-field);
+    padding: var(--gap-inline) var(--pad-container);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    /* Absorb the page gap so a single row opens into existing space */
+    margin-bottom: calc(-1 * var(--gap-section));
+}
+.konfig-bar.open { display: flex; }
+
+/* Inline control inside konfig-bar */
+.konfig-item {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-inline);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ── Split layout ────────────────────────────────────────────────────────── */
+/* Two-column: main-panel (flex:1) + side-panel (fixed width) on the right.
+   Kürzel: split-layout → no alias needed (used once per page)
+           .main-panel  → .mp
+           .side-panel  → .sp                                               */
+.split-layout {
+    display: flex;
+    gap: var(--gap-container);
+    align-items: stretch;
+}
+
+.main-panel, .mp {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-container);
+}
+
+.side-panel, .sp {
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel .container, .sp .container { flex: 1; }
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+.tabs-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    gap: 0;
+}
+
+.tab-btn {
+    padding: 0 var(--pad-card);
+    height: var(--h-tab);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-inline);
+    white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+    color: var(--accent-dark);
+    border-bottom-color: var(--accent);
+    font-weight: var(--weight-semibold);
+}
+
+/* Badge inside a tab (e.g. count) */
+.tab-count {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    background: var(--bg-hover);
+    color: var(--text-faint);
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+}
+.tab-btn.active .tab-count {
+    background: var(--accent-muted);
+    color: var(--accent-dark);
+}

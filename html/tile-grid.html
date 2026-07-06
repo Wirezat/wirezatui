@@ -1,0 +1,30 @@
+<!-- wirezat-ui-v1 / html/tile-grid.html
+     Tile grid: 3-row tiles (title / subtitle / meta) and stat-tile variant.
+     Requires: components/cards.css
+-->
+
+<!-- Standard tile grid -->
+<div class="tile-grid">
+
+  <!-- Standard tile (3 rows) -->
+  <a class="tile" href="{{HREF}}">
+    <div class="tile-title">{{TITLE}}</div>
+    <div class="tile-subtitle">{{SUBTITLE}}</div>      <!-- omit if not needed -->
+    <div class="tile-meta">{{META_INFO}}</div>         <!-- omit if not needed -->
+    <!-- Delete/action button (appears on hover) -->
+    <button class="btn btn-icon btn-sm btn-danger-ghost tile-action" data-action="delete">✕</button>
+  </a>
+
+  <!-- "New" tile -->
+  <button class="tile tile-new">+ {{NEW_LABEL}}</button>
+
+</div>
+
+<!-- ── Stat tile grid ─────────────────────────────────────────────────── -->
+<!-- Same 3-row structure. Value = title, name = subtitle, meta = empty.  -->
+<div class="stat-grid">
+  <div class="stat-tile">
+    <span class="stat-tile-value">{{VALUE}}</span>
+    <span class="stat-tile-label">{{LABEL}}</span>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<!-- wirezat-ui-v1 / html/container.html
+     Data container with header, optional filter bar, and body.
+     Max 3 per page/tab: 1× container-config + 2× data containers.
+
+     Variants:
+       Default data container    — as shown below
+       Config container          — add class "container-config" to .container
+       Single view (no picker)   — replace <button.view-picker> with <span.view-picker-label>
+       No filter bar             — omit .container-filter entirely
+       Flush body (tables)       — use .container-body-flush instead of .container-body
+
+     Requires: components/containers.css
+-->
+<div class="container">
+
+  <div class="container-header">
+    <span class="container-title">{{TITLE}}</span>
+    <!-- View picker: dropdown when >1 view -->
+    <button class="view-picker" data-view-picker>{{CURRENT_VIEW}} ▾</button>
+    <!-- Single view (not interactive): -->
+    <!-- <span class="view-picker-label">{{VIEW_NAME}}</span> -->
+  </div>
+
+  <!-- Filter bar — omit if no filters needed -->
+  <div class="container-filter">
+    <select class="select" style="width:auto; height:var(--h-btn-sm);">
+      <option>{{FILTER_ALL}}</option>
+      <option>{{FILTER_A}}</option>
+    </select>
+    <input class="input" style="width:160px; height:var(--h-btn-sm);" placeholder="{{SEARCH_PLACEHOLDER}}">
+  </div>
+
+  <!-- Body: use .container-body-flush for tables that touch edges -->
+  <div class="container-body">
+    {{CONTENT}}
+  </div>
+
+</div>

@@ -1,0 +1,35 @@
+<!-- wirezat-ui-v1 / html/page-header.html
+     Breadcrumb + page title + optional konfig-bar.
+     Omit .konfig-trigger and .konfig-bar entirely when no controls needed.
+     Requires: layout/page.css
+-->
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+  <a href="{{PARENT_HREF}}">{{PARENT_LABEL}}</a>
+  <span class="breadcrumb-sep">›</span>
+  <span class="breadcrumb-current">{{CURRENT_LABEL}}</span>
+</nav>
+
+<!-- Page header -->
+<div class="page-header" data-page-header-area>
+  <div class="page-title-row">
+    <h1 class="page-title">{{TITLE}}</h1>
+    <!-- Remove konfig-trigger when konfig-bar has no controls -->
+    <button class="konfig-trigger" data-konfig-trigger>⚙</button>
+  </div>
+  <!-- Primary action — omit if none -->
+  <button class="btn btn-primary">{{PRIMARY_ACTION}}</button>
+</div>
+
+<!-- Konfig-bar — omit entirely when empty -->
+<div class="konfig-bar" data-konfig-bar>
+  <!-- Inline controls: check-item, select, radio-group, etc. -->
+  <label class="check-item">
+    <input type="checkbox"> {{OPTION_LABEL}}
+  </label>
+  <select class="select" style="width:auto; height:var(--h-btn-sm);">
+    <option>{{OPTION_A}}</option>
+    <option>{{OPTION_B}}</option>
+  </select>
+</div>

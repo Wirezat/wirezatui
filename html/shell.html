@@ -1,0 +1,54 @@
+<!-- wirezat-ui-v1 / html/shell.html
+     App shell fragment. Adapt {{placeholders}} for your template engine.
+     Requires: tokens/base.css, app/theme.css, layout/shell.css, layout/page.css, components/nav.css
+-->
+<div class="app-shell">
+
+  <header class="header">
+    <a class="header-brand" href="/">
+      <div class="header-logo">⚙</div>
+      {{APP_NAME}}
+    </a>
+    <div class="header-right">
+      <!-- Theme toggle -->
+      <button class="btn btn-ghost btn-icon" data-theme-toggle title="Theme wechseln">🌙</button>
+      <!-- Language picker -->
+      <div class="dropdown-wrap">
+        <button class="btn btn-ghost btn-icon" data-dropdown-trigger>🌐</button>
+        <div class="dropdown-panel">
+          <button class="dropdown-item active" data-lang="de">Deutsch</button>
+          <button class="dropdown-item" data-lang="en">English</button>
+        </div>
+      </div>
+      <!-- User menu -->
+      <div class="dropdown-wrap">
+        <button class="btn btn-ghost" data-dropdown-trigger>{{USERNAME}} ▾</button>
+        <div class="dropdown-panel">
+          <div class="dropdown-header">{{USERNAME}}</div>
+          <a class="dropdown-item" href="/personal">Profil</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" data-action="logout">Abmelden</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <nav class="sidebar">
+      <!-- nav-section + nav-link groups, tool-specific -->
+      <span class="nav-section">{{SECTION_LABEL}}</span>
+      <a class="nav-link" href="{{HREF}}">
+        <i class="nav-icon">{{ICON}}</i>
+        {{LABEL}}
+      </a>
+    </nav>
+
+    <main class="main">
+      <div class="page">
+        {{PAGE_CONTENT}}
+      </div>
+    </main>
+
+  </div>
+</div>

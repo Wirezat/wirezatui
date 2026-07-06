@@ -1,0 +1,76 @@
+/* wirezat-ui-v1 / components/user-menu.css
+   User menu trigger + dropdown content.
+   Open/close handled by dropdown.js (initDropdowns) via .dropdown-panel.open.
+   Wrapper must use .dropdown-wrap from dropdown.css for positioning.
+   Requires: tokens/base.css + app/theme.css + components/dropdown.css
+*/
+
+/* ── Trigger button ──────────────────────────────────────────────────────── */
+.user-menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-inline);
+    height: var(--h-btn-sm);
+    padding: 0 var(--gap-control);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    font-family: inherit;
+}
+.user-menu-trigger:hover {
+    background: var(--bg-hover);
+    border-color: var(--border);
+}
+
+.user-menu-trigger .avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: inherit;
+    border: none;
+}
+
+.user-menu-trigger .username {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text);
+}
+
+.user-menu-trigger .chevron {
+    font-size: 9px;
+    color: var(--text-faint);
+    transition: transform 0.15s;
+    font-style: normal;
+}
+.dropdown-wrap:has(.dropdown-panel.open) .chevron { transform: rotate(180deg); }
+
+/* ── Dropdown panel content ──────────────────────────────────────────────── */
+/* Panel visibility + positioning from dropdown.css (.dropdown-panel / .dropdown-panel.open) */
+
+.user-dropdown-header {
+    padding: var(--pad-card) var(--pad-card) var(--gap-control);
+    border-bottom: 1px solid var(--border);
+}
+.user-dropdown-name {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+}
+.user-dropdown-role {
+    font-size: var(--text-xs);
+    color: var(--text-faint);
+    margin-top: 2px;
+}
+
+.user-dropdown-section { padding: var(--gap-icon) 0; }
+.user-dropdown-section + .user-dropdown-section { border-top: 1px solid var(--border); }

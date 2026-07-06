@@ -1,0 +1,76 @@
+<!-- wirezat-ui-v1 / html/infocard.html
+     Reference: all available infocard slots.
+     Requires: components/infocard.css + js/infocard.js (initInfocards)
+
+     Trigger element (any tag, any position in DOM):
+       class="infocard-trigger"   — optional style hook (cursor etc.)
+       data-infocard="card-id"    — must match id of a .infocard-def
+
+     Definition element (hidden, anywhere in DOM):
+       id="card-id"
+       class="infocard-def"
+       hidden
+-->
+
+<!-- ── Trigger ── -->
+<span class="infocard-trigger" data-infocard="example-card">ℹ</span>
+
+<!-- ── Definition (all slots shown; every slot is optional) ── -->
+<div id="example-card" class="infocard-def" hidden>
+
+  <!-- Header: icon + title + subtitle -->
+  <div class="infocard-header">
+    <img class="infocard-icon" src="/assets/items/example.png" alt="" />
+    <div class="infocard-heading">
+      <span class="infocard-title">Iron Ingot</span>
+      <span class="infocard-subtitle">Vanilla</span>
+    </div>
+  </div>
+
+  <!-- Section without heading: plain key/value rows -->
+  <div class="infocard-section">
+    <div class="infocard-row">
+      <span class="infocard-key">ID</span>
+      <span class="infocard-val">minecraft:iron_ingot</span>
+    </div>
+    <div class="infocard-row">
+      <span class="infocard-key">Mod ID</span>
+      <span class="infocard-val">minecraft</span>
+    </div>
+    <div class="infocard-row">
+      <span class="infocard-key">Unit</span>
+      <span class="infocard-val">items</span>
+    </div>
+  </div>
+
+  <!-- Section with heading: rate conversions -->
+  <div class="infocard-section" data-label="Rates">
+    <div class="infocard-row">
+      <span class="infocard-key">/min</span>
+      <span class="infocard-val">30</span>
+    </div>
+    <div class="infocard-row">
+      <span class="infocard-key">/sec</span>
+      <span class="infocard-val">0.5</span>
+    </div>
+    <div class="infocard-row">
+      <span class="infocard-key">/hr</span>
+      <span class="infocard-val">1800</span>
+    </div>
+  </div>
+
+  <!-- Grid: crafting table (3×3); data-cols sets column count -->
+  <!-- data-label on each cell shows a tooltip on hover        -->
+  <div class="infocard-grid" data-cols="3">
+    <div class="infocard-grid-cell"></div>
+    <div class="infocard-grid-cell" data-label="Iron Ingot"><img src="/assets/items/iron_ingot.png" alt="" /></div>
+    <div class="infocard-grid-cell"></div>
+    <div class="infocard-grid-cell" data-label="Iron Ingot"><img src="/assets/items/iron_ingot.png" alt="" /></div>
+    <div class="infocard-grid-cell" data-label="Stick"><img src="/assets/items/stick.png" alt="" /></div>
+    <div class="infocard-grid-cell"></div>
+    <div class="infocard-grid-cell"></div>
+    <div class="infocard-grid-cell" data-label="Stick"><img src="/assets/items/stick.png" alt="" /></div>
+    <div class="infocard-grid-cell"></div>
+  </div>
+
+</div>

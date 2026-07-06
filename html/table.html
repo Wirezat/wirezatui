@@ -1,0 +1,74 @@
+<!-- wirezat-ui-v1 / html/table.html
+     Compact table with group headers, expandable rows, checklist variant.
+     Use inside .container-body-flush for edge-to-edge layout.
+     Requires: components/tables.css
+-->
+<table class="table">
+  <thead>
+    <tr>
+      <th style="width:100%">{{COL_NAME}}</th>
+      <th>{{COL_B}}</th>
+      <th class="td-actions"></th>  <!-- action column, no label -->
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- Group header row -->
+    <tr class="table-group-hd">
+      <td colspan="3">{{GROUP_LABEL}}</td>
+    </tr>
+
+    <!-- Standard row -->
+    <tr>
+      <td>{{NAME}}</td>
+      <td class="td-muted">{{VALUE}}</td>
+      <td class="td-actions">
+        <button class="btn btn-sm btn-ghost">…</button>
+      </td>
+    </tr>
+
+    <!-- Expandable row: trigger in first cell, detail row follows -->
+    <tr>
+      <td>
+        <span class="table-expand-trigger" data-expand="row-1">▸ {{NAME}}</span>
+      </td>
+      <td class="td-muted">{{VALUE}}</td>
+      <td class="td-actions"></td>
+    </tr>
+    <tr class="table-expand-row" id="row-1">
+      <td colspan="3">
+        <div class="table-expand-body">{{EXPAND_CONTENT}}</div>
+      </td>
+    </tr>
+
+    <!-- Empty state: placeholder rows (min 5) + message -->
+    <tr class="table-placeholder-row"><td>—</td><td>—</td><td></td></tr>
+    <tr class="table-placeholder-row"><td>—</td><td>—</td><td></td></tr>
+    <tr class="table-placeholder-row"><td>—</td><td>—</td><td></td></tr>
+    <tr class="table-placeholder-row"><td>—</td><td>—</td><td></td></tr>
+    <tr class="table-placeholder-row"><td>—</td><td>—</td><td></td></tr>
+    <tr class="table-empty-row"><td colspan="3">{{EMPTY_MESSAGE}}</td></tr>
+
+  </tbody>
+</table>
+
+<!-- ── Checklist variant ────────────────────────────────────────────── -->
+<!-- Add class "table-checklist" and a checkbox column. -->
+<table class="table table-checklist">
+  <thead>
+    <tr>
+      <th style="width:100%">{{COL_NAME}}</th>
+      <th>{{COL_B}}</th>
+      <th class="check-col">✓</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{NAME}}</td>
+      <td class="td-muted">{{VALUE}}</td>
+      <td class="check-col">
+        <input type="checkbox" checked>
+      </td>
+    </tr>
+  </tbody>
+</table>

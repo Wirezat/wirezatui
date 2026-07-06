@@ -1,0 +1,54 @@
+/* wirezat-ui-v1 / components/empty.css
+   Empty state: two variants.
+   (1) Present-but-empty — container renders, table shows ≥5 placeholder rows.
+   (2) Not-used — container not rendered at all (convention, no CSS needed).
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Empty message row ───────────────────────────────────────────────────── */
+/* Placed as the last <tr> in an empty table body. */
+.table-empty-row td {
+    text-align: center;
+    padding: var(--gap-section) var(--pad-cell);
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    font-style: italic;
+    border-bottom: none;
+}
+
+/* ── Placeholder rows ────────────────────────────────────────────────────── */
+/* Min 5 rows of "—" to fill visual space. */
+.table-placeholder-row td {
+    color: color-mix(in srgb, var(--border-strong) 60%, transparent);
+    padding: var(--pad-cell-y) var(--pad-cell);
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+}
+
+/* ── Standalone empty state (non-table contexts) ─────────────────────────── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-item);
+    padding: var(--gap-section) var(--pad-page);
+    color: var(--text-faint);
+    text-align: center;
+    min-height: 160px;
+}
+
+.empty-state-icon {
+    font-size: 28px;
+    opacity: 0.4;
+}
+
+.empty-state-text {
+    font-size: var(--text-sm);
+    line-height: var(--line-height);
+    max-width: 280px;
+}
+
+.empty-state-action {
+    margin-top: var(--gap-inline);
+}

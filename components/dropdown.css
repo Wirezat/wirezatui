@@ -1,0 +1,70 @@
+/* wirezat-ui-v1 / components/dropdown.css
+   Generic dropdown panel: user menu, lang picker, filter dropdowns.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Trigger wrapper ─────────────────────────────────────────────────────── */
+.dropdown-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+/* ── Dropdown panel ──────────────────────────────────────────────────────── */
+.dropdown-panel {
+    position: absolute;
+    top: calc(100% + var(--gap-icon));
+    right: 0;
+    z-index: 150;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Hidden by default; JS toggles .open */
+.dropdown-panel { display: none; }
+.dropdown-panel.open { display: flex; }
+
+/* ── Dropdown header ─────────────────────────────────────────────────────── */
+.dropdown-header {
+    padding: var(--gap-item) var(--pad-container);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ── Dropdown items ──────────────────────────────────────────────────────── */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control);
+    padding: var(--gap-control) var(--pad-container);
+    font-size: var(--text-base);
+    color: var(--text);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    text-decoration: none;
+    transition: background 0.1s;
+}
+.dropdown-item:hover { background: var(--bg-hover); }
+.dropdown-item.active {
+    color: var(--accent-dark);
+    font-weight: var(--weight-medium);
+}
+.dropdown-item.danger { color: var(--danger); }
+.dropdown-item.danger:hover { background: var(--danger-muted); }
+
+/* ── Dropdown divider ────────────────────────────────────────────────────── */
+.dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: var(--gap-icon) 0;
+}

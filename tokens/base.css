@@ -1,0 +1,180 @@
+/* wirezat-ui-v1 / tokens/base.css
+   Design tokens: shape, typography, spacing.
+   Does NOT define colors — each app provides its own theme.css.
+
+   Load order:
+     1. tokens/base.css       (this file)
+     2. <app>/theme.css        (colors — app-specific)
+     3. layout/shell.css
+     4. layout/page.css
+     5. components/<name>.css  (only what the app uses)
+*/
+
+/* ── Color token declarations (values set by app/theme.css) ─────────────── */
+:root {
+    /* Accent */
+    --accent:           unset;
+    --accent-dark:      unset;
+    --accent-text:      unset;
+    --accent-muted:     unset;
+
+    /* Text */
+    --text:             unset;
+    --text-muted:       unset;
+    --text-faint:       unset;
+
+    /* Borders */
+    --border:           unset;
+    --border-strong:    unset;
+
+    /* Surfaces */
+    --bg:               unset;
+    --bg-page:          unset;
+    --bg-card:          unset;
+    --bg-hover:         unset;
+
+    /* Semantic */
+    --danger:           unset;
+    --danger-muted:     unset;
+    --success:          unset;
+    --success-muted:    unset;
+    --warn:             unset;
+    --warn-muted:       unset;
+
+    /* Config-Container tint (lila — overridable per app) */
+    --config-bg:        unset;
+    --config-border:    unset;
+    --config-header-bg: unset;
+}
+
+/* ── Shape ───────────────────────────────────────────────────────────────── */
+:root {
+    --radius:           8px;
+    --radius-sm:        4px;
+    --radius-lg:        12px;
+    --radius-pill:      99px;
+}
+
+/* ── Typography ──────────────────────────────────────────────────────────── */
+:root {
+    --font:             "Segoe UI", -apple-system, system-ui, sans-serif;
+    --font-mono:        "Courier New", monospace;
+
+    --text-xs:          11px;
+    --text-sm:          12px;
+    --text-base:        13px;
+    --text-md:          14px;
+    --text-lg:          16px;
+    --text-xl:          20px;
+
+    --weight-normal:    400;
+    --weight-medium:    500;
+    --weight-semibold:  600;
+    --weight-bold:      700;
+
+    --line-height:      1.5;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+:root {
+    --header-h:         52px;
+    --sidebar-w:        220px;
+    --page-w:           900px;
+    --page-w-wide:      1200px;
+}
+
+/* ── Spacing — named by context, not pixel value ─────────────────────────── */
+:root {
+    /* Gaps (between elements) */
+    --gap-icon:         4px;    /* icon ↔ label */
+    --gap-inline:       6px;    /* inline elements in a row (breadcrumb, header-right) */
+    --gap-control:      8px;    /* controls side by side (buttons, inputs) */
+    --gap-field:        10px;   /* between form fields */
+    --gap-item:         12px;   /* between list items / tile stats */
+    --gap-card:         16px;   /* between tiles in a grid */
+    --gap-container:    20px;   /* between containers on a page */
+    --gap-section:      28px;   /* between major page sections */
+
+    /* Padding (inside elements) */
+    --pad-btn:          14px;   /* button horizontal padding */
+    --pad-btn-sm:       10px;   /* small button horizontal padding */
+    --pad-cell:         10px;   /* table cell horizontal padding */
+    --pad-cell-y:       7px;    /* table cell vertical padding */
+    --pad-card:         20px;   /* card / tile body padding */
+    --pad-container:    12px;   /* container body padding */
+    --pad-page:         28px;   /* outer page padding */
+    --pad-modal:        20px;   /* modal body/footer padding */
+
+    /* Component heights */
+    --h-btn:            34px;
+    --h-btn-sm:         28px;
+    --h-input:          34px;
+    --h-tab:            40px;
+    --h-header:         var(--header-h);
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    color-scheme: light;
+    font-size: 100%;
+}
+
+body {
+    font-family: var(--font);
+    font-size: var(--text-base);
+    line-height: var(--line-height);
+    color: var(--text);
+    background: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button { cursor: pointer; background: none; border: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+/* ── Scrollbars ──────────────────────────────────────────────────────────── */
+/* Applies to every scrollable element (Firefox: inherited via `*`; WebKit: the
+   ::-webkit-scrollbar pseudo-elements target whichever element scrolls, no
+   selector scoping needed). Uses theme tokens so it matches light/dark/app
+   accent automatically — no per-app override needed. */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: var(--radius-pill);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-faint);
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
