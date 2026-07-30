@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-wui-modal</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<pre id="out"></pre>
+<script type="module">
+  import { openWuiModal, closeWuiModal } from '../js/wui/modal.js'
+  const log = []
+
+  let confirmed = false
+  openWuiModal({
+    titleKey: 'common.confirm',
+    content: { type: 'form', fields: [{ type: 'text', key: 'name', labelKey: 'common.name', value: 'x' }] },
+    actions: [{ labelKey: 'common.confirm', variant: 'primary', onClick: () => { confirmed = true } }],
+  })
+
+  log.push(['backdrop in DOM', !!document.querySelector('.modal-backdrop')])
+  log.push(['title rendered', document.querySelector('.modal-title')?.textContent === 'Confirm' || document.querySelector('.modal-title')?.textContent === 'common.confirm'])
+  log.push(['form content nested', !!document.querySelector('.modal-body .field')])
+
+  document.querySelector('.modal-footer .btn-primary').click()
+  log.push(['action onClick fired', confirmed === true])
+  log.push(['modal closed after action', !document.querySelector('.modal-backdrop')])
+
+  openWuiModal({ titleKey: 'common.confirm' })
+  document.querySelector('.modal-backdrop').click()
+  log.push(['closes on backdrop click', !document.querySelector('.modal-backdrop')])
+
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
