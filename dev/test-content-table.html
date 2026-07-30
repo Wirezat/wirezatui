@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-content-table</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div id="host"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { render } from '../js/wui/content-types/table.js'
+  const log = []
+  const { el, update } = render({
+    columns: [{ key: 'name', labelKey: 'common.name', grow: true }],
+    rows: [{ name: 'Iron' }, { name: 'Copper' }],
+  })
+  document.getElementById('host').appendChild(el)
+  log.push(['renders 2 rows', el.querySelectorAll('tbody tr').length === 2])
+  log.push(['first cell text', el.querySelector('tbody tr td').textContent === 'Iron'])
+  update({ rows: [{ name: 'Gold' }] })
+  log.push(['update() re-renders in place', el.querySelectorAll('tbody tr').length === 1
+    && el.querySelector('tbody tr td').textContent === 'Gold'])
+  log.push(['same host element reused', el.parentElement === document.getElementById('host')])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
