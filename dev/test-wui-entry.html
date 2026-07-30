@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-wui-entry</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div class="header"></div>
+<nav class="sidebar"></nav>
+<div id="wui-page-content"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { init, renderPage, showModal } from '../js/wui.js'
+  const log = []
+
+  await init({ theme: { accent: '#3b82f6' }, lang: 'en', nav: [] })
+  log.push(['theme applied', document.documentElement.style.getPropertyValue('--accent').trim() === '#3b82f6'])
+
+  const page = renderPage({
+    containers: [{ id: 'demo', title: 'common.name', content: { type: 'table', columns: [{ key: 'name', labelKey: 'common.name' }], rows: [{ name: 'Iron' }] } }],
+  })
+  log.push(['container mounted', document.querySelector('#wui-page-content .container') !== null])
+  page.get('demo').update({ rows: [{ name: 'Gold' }] })
+  log.push(['handle.update() works', document.querySelector('#wui-page-content tbody tr td').textContent === 'Gold'])
+
+  let threw = false
+  try { page.get('nope') } catch (e) { threw = e instanceof Error }
+  log.push(['unknown id throws', threw])
+
+  showModal({ titleKey: 'common.confirm' })
+  log.push(['showModal delegates to wui/modal', !!document.querySelector('.modal-backdrop')])
+
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
