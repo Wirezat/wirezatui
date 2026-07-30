@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-content-form</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div id="host"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { render } from '../js/wui/content-types/form.js'
+  const log = []
+  const { el, values } = render({
+    fields: [
+      { type: 'text', key: 'name', labelKey: 'common.name', value: 'Iron' },
+      { type: 'checkbox', key: 'active', labelKey: 'common.active', value: true },
+      { type: 'select', key: 'mode', labelKey: 'common.mode', options: ['a', 'b'], value: 'b' },
+    ],
+  })
+  document.getElementById('host').appendChild(el)
+  const v = values()
+  log.push(['text field value', v.name === 'Iron'])
+  log.push(['checkbox value', v.active === true])
+  log.push(['select value', v.mode === 'b'])
+  log.push(['3 fields rendered', el.querySelectorAll('.field').length === 3])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
