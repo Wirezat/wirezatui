@@ -18,6 +18,7 @@
      components/inline-edit.css
      components/dropdown.css
      components/infocard.css  — hover-triggered info card overlay
+     components/graph.css     — layered directed graph board
 */
 
 @import './tokens/base.css';
@@ -38,3 +39,4 @@
 @import './components/auth.css';
 @import './components/infocard.css';
 @import './components/autocomplete.css';
+@import './components/graph.css';

@@ -1,0 +1,189 @@
+/* wirezat-ui-v1 / components/graph.css
+   Layered directed graph: drag-pannable board, fullscreen overlay,
+   HTML nodes + SVG edge underlay.
+   Requires: tokens/base.css + app/theme.css
+*/
+
+/* ── Board (toolbar + canvas) ───────────────────────────────────────────── */
+.graph-board {
+    position: relative;
+    background: var(--bg-card);
+}
+
+/* Fullscreen: overlays the app's .main container (rect set via JS) */
+.graph-board-fs {
+    position: fixed;
+    z-index: 200;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+}
+.graph-board-fs .graph-canvas {
+    flex: 1;
+    max-height: none;
+}
+
+.graph-fs-btn {
+    position: absolute;
+    top: var(--gap-item);
+    right: var(--gap-item);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--h-btn-sm);
+    height: var(--h-btn-sm);
+    font-size: var(--text-base);
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.graph-fs-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--border-strong); }
+
+/* ── Canvas (scroll + drag-pan area) ────────────────────────────────────── */
+.graph-canvas {
+    overflow: auto;
+    max-height: 70vh;
+    /* Don't let the graph's intrinsic width inflate ancestors (e.g. .page has
+       no overflow-x) — contain it so overflow scrolls HERE instead. */
+    contain: inline-size;
+}
+.graph-canvas.scrollable {
+    cursor: grab;
+}
+.graph-canvas.scrollable.panning {
+    cursor: grabbing;
+    user-select: none;
+}
+
+.graph-inner {
+    position: relative;
+}
+
+/* ── Edges ──────────────────────────────────────────────────────────────── */
+.graph-edges {
+    position: absolute;
+    inset: 0;
+    color: var(--border-strong);
+    pointer-events: none;
+}
+.graph-edges .graph-edge {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    pointer-events: stroke;
+}
+.graph-edges .graph-edge.dashed { stroke-dasharray: 4 3; }
+.graph-edges .graph-edge.back   { stroke: var(--warn, #f59e0b); color: var(--warn, #f59e0b); }
+
+/* ── Nodes ──────────────────────────────────────────────────────────────── */
+.graph-node {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--gap-inline) var(--gap-item);
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color 0.12s, box-shadow 0.12s;
+}
+.graph-node:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* ── Labels (optional, per-node, zero or more) ─────────────────────────────
+   A self-describing, independently clickable row — the current machine name,
+   a "click to pick a recipe" prompt, whatever the caller wants. Only ones
+   with a `menu` become interactive (see .clickable); a bare label is inert
+   text like .graph-node-subtitle, just styled to stand out as a status line. */
+.graph-node-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.graph-node-label.muted { color: var(--text-faint); font-style: italic; }
+.graph-node-label.clickable {
+    color: var(--accent);
+    border-radius: var(--radius-sm);
+    margin: 0 calc(-1 * var(--gap-icon));
+    padding: 0 var(--gap-icon);
+    transition: background 0.12s;
+}
+.graph-node-label.clickable:hover { background: var(--accent-muted); }
+
+/* ── Path highlight ─────────────────────────────────────────────────────────
+   Click a node to dim everything not on its path (see graph.js pathThrough).
+   Selected node keeps full opacity + an accent ring; edges on the path are
+   thickened so the traced route reads clearly against the dimmed rest. */
+.graph-node-dim {
+    opacity: 0.25;
+}
+.graph-node-selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.graph-edges .graph-edge-dim {
+    opacity: 0.15;
+}
+
+.graph-node-title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.graph-node-subtitle {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.graph-node-badge {
+    font-size: 10px;
+    color: var(--text-faint);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Kind variants — generic visual roles, no domain meaning ──────────────── */
+.graph-node-primary {
+    border-color: var(--accent);
+    border-width: 2px;
+}
+
+.graph-node-terminal {
+    border-style: dashed;
+    background: var(--bg-page);
+}
+.graph-node-terminal .graph-node-title { font-weight: var(--weight-normal); }
+
+.graph-node-muted {
+    opacity: 0.55;
+    border-style: dashed;
+}
+
+/* Left accent bar — a free-form secondary marker, orthogonal to the other kinds */
+.graph-node-tagged {
+    border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--border-strong));
+}
+
+.graph-node-warn {
+    border-color: var(--warn, #f59e0b);
+    box-shadow: 0 0 0 1px var(--warn, #f59e0b);
+}
