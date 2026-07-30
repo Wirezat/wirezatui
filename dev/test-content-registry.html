@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-content-registry</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<pre id="out"></pre>
+<script type="module">
+  import { renderContent } from '../js/wui/content-types/index.js'
+  const log = []
+
+  const table = renderContent({ type: 'table', columns: [{ key: 'name', labelKey: 'common.name' }], rows: [] })
+  log.push(['dispatches to table', table.el.tagName === 'DIV' && !!table.el.querySelector('table')])
+
+  const node = document.createElement('span')
+  node.textContent = 'hi'
+  const raw = renderContent({ type: 'raw', node })
+  log.push(['dispatches to raw', raw.el === node && raw.update === null])
+
+  let threw = false
+  try { renderContent({ type: 'nope' }) } catch (e) { threw = e instanceof Error }
+  log.push(['unknown type throws', threw])
+
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
