@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-accent-theme</title></head>
+<body>
+<pre id="out"></pre>
+<script type="module">
+  import { applyAccentTheme } from '../js/wui/accent-theme.js'
+  const log = []
+  applyAccentTheme({ accent: '#3b82f6', danger: '#dc2626', bg: '#0b0f14' })
+  const root = document.documentElement
+  log.push(['--accent set', root.style.getPropertyValue('--accent').trim() === '#3b82f6'])
+  log.push(['--danger set', root.style.getPropertyValue('--danger').trim() === '#dc2626'])
+  log.push(['--bg set', root.style.getPropertyValue('--bg').trim() === '#0b0f14'])
+  log.push(['--accent-hover derived', root.style.getPropertyValue('--accent-hover').trim().startsWith('rgb(')])
+  log.push(['--accent-tint derived', root.style.getPropertyValue('--accent-tint').trim().startsWith('rgba(')])
+  log.push(['missing key untouched', root.style.getPropertyValue('--border').trim() === ''])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
