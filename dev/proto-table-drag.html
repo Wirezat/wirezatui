@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>proto-table-drag</title>
+<!--
+  Reference prototype, saved from the 2026-07-30 brainstorming session
+  (docs/superpowers/specs/2026-07-30-wui-v2-global-rules-and-component-catalog-design.md).
+  Not production code — a working proof of the group-boundary drag/drop
+  logic, ported from mc_optimizer's table-features.js (initDraggableRows).
+
+  KNOWN BUG (unresolved): the group accent bar (::before on td:first-child)
+  intermittently disappears on rows involved in an active native HTML5 drag
+  operation (visually confirmed via screenshot, not yet root-caused — needs
+  real devtools, not just Playwright screenshots, to diagnose). Fix this
+  during the actual wirezatUI/js/wui/content-types/table.js drag-reorder
+  implementation, not by further guessing here.
+
+  Verified correct (do not re-derive, just port):
+  - Native HTML5 drag API (draggable=true, dragstart/dragover/drop/dragend),
+    NOT manual pointermove tracking.
+  - Drag initiates from anywhere on the row (no drag-handle icon — user
+    explicitly dislikes handles, confirmed in this session).
+  - Ghost = real cloned <tr> wrapped in a matching <table>, passed to
+    e.dataTransfer.setDragImage() — the browser renders it natively
+    following the cursor. Do not build a manually-positioned floating ghost.
+  - Drop-edge indicator: box-shadow on the TARGET row (top or bottom, by
+    cursor position within the row's bounding rect), not a synthetic
+    inserted line element.
+  - Group accent bar: CSS-only via [data-group] td:first-child::before,
+    fading via :has(+ .row-spacer) on the last member of each group — a
+    .row-spacer row must follow every group's last member for this to
+    work. No JS bookkeeping needed to keep the bar correct after reorders.
+  - Group-boundary drop semantics (the tricky part): dropping on a
+    group-header row's TOP edge = ungrouped, placed before the group.
+    Dropping on its BOTTOM edge = joins the group as first member.
+    Dropping on a regular row inherits THAT row's own group regardless of
+    edge (top or bottom) — the group transition only happens at the
+    header/spacer boundary, not within a member row.
+  - Cross-table drag (dragging from one table's rows into a different
+    table) is NEW work, not present in mc_optimizer's original — verified
+    working in this prototype via a shared window.__wuiDragRow reference.
+-->
+<link rel="stylesheet" href="../index.css">
+<style>
+body { font-family: system-ui, sans-serif; }
+.demo-page { background:#111827; padding:20px; color:#d1d5db; display:flex; gap:24px; flex-wrap:wrap; }
+.box { background:#1f2937; border:1px solid #374151; border-radius:1px; width:320px; }
+.box-hd { padding:10px 14px; font-size:14px; font-weight:600; color:#fff; }
+.demo-table { width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; }
+.demo-table th { text-align:left; padding:6px 10px; color:#9ca3af; font-weight:500; border-bottom:1px solid #374151; }
+.demo-table td { padding:8px 10px 8px 16px; border-bottom:1px solid #2a3341; position:relative; overflow:visible; }
+.demo-table tbody tr[data-id]:hover td { background:#242e3d; cursor:grab; }
+.group-hd td { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; color:#d1d5db; cursor:default; }
+.row-spacer td { height:6px; padding:0 !important; border:none !important; }
+
+[data-group] td:first-child::before,
+.group-hd td:first-child::before {
+  content:''; position:absolute; left:0; top:0; bottom:-1px; width:2px;
+  background:#3b82f6;
+}
+.group-hd td:first-child::before { border-radius:2px 2px 0 0; }
+[data-group]:has(+ .row-spacer) td:first-child::before {
+  background:linear-gradient(to bottom, #3b82f6 40%, transparent 100%);
+  bottom:0;
+}
+
+tr.wui-drag-source td { opacity:0.35; }
+tr.wui-drop-edge-top td    { box-shadow: 0 -2px 0 0 #3b82f6; }
+tr.wui-drop-edge-bottom td { box-shadow: 0  2px 0 0 #3b82f6; }
+.wui-drag-ghost { position:fixed; opacity:0.9; border-radius:1px; border:1px solid #3b82f6; overflow:hidden; }
+.wui-drag-ghost table { table-layout:fixed; border-collapse:collapse; }
+.wui-drag-ghost td { background:#28344a; }
+</style>
+</head>
+<body>
+
+<h2 style="color:#d1d5db;font-family:system-ui;">Prototype: table drag/drop with group-boundary semantics + cross-table</h2>
+
+<div class="demo-page" id="dp">
+  <div class="box">
+    <div class="box-hd">Ore Processor</div>
+    <table class="demo-table" data-list="a">
+      <tr><th>Name</th><th>Rate</th></tr>
+      <tbody>
+        <tr class="group-hd" data-group="g1"><td colspan="2">▾ Ore Processor (2)</td></tr>
+        <tr data-id="r1" data-group="g1"><td>Lignite Coal Dust</td><td>1/s</td></tr>
+        <tr data-id="r2" data-group="g1"><td>Coal Dust</td><td>1/s</td></tr>
+        <tr class="row-spacer"><td colspan="2"></td></tr>
+        <tr data-id="r4"><td>Ungrouped Item</td><td>3/s</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box">
+    <div class="box-hd">Smelting (andere Tabelle)</div>
+    <table class="demo-table" data-list="b">
+      <tr><th>Name</th><th>Rate</th></tr>
+      <tbody>
+        <tr class="group-hd" data-group="g2"><td colspan="2">▾ Smelting (1)</td></tr>
+        <tr data-id="r3" data-group="g2"><td>Iron Ingot</td><td>2/s</td></tr>
+        <tr class="row-spacer"><td colspan="2"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.querySelectorAll('.demo-table').forEach(table => {
+    table.querySelectorAll('tbody tr[data-id]').forEach(row => { row.draggable = true })
+
+    table.addEventListener('dragstart', e => {
+      const row = e.target.closest('tr[data-id]')
+      if (!row) { e.preventDefault(); return }
+      row.classList.add('wui-drag-source')
+      window.__wuiDragRow = row
+
+      const wrap = document.createElement('div')
+      wrap.className = 'wui-drag-ghost'
+      const gt = document.createElement('table')
+      const clone = row.cloneNode(true)
+      clone.classList.remove('wui-drag-source')
+      const gtb = document.createElement('tbody')
+      gtb.appendChild(clone)
+      gt.appendChild(gtb)
+      wrap.appendChild(gt)
+      Object.assign(wrap.style, { top: '-9999px', left: '0', width: table.getBoundingClientRect().width + 'px' })
+      document.body.appendChild(wrap)
+      const rowRect = row.getBoundingClientRect()
+      e.dataTransfer.setDragImage(wrap, e.clientX - rowRect.left, e.clientY - rowRect.top)
+      requestAnimationFrame(() => wrap.remove())
+      e.dataTransfer.effectAllowed = 'move'
+    })
+
+    table.addEventListener('dragover', e => {
+      const dragRow = window.__wuiDragRow
+      if (!dragRow) return
+      e.preventDefault()
+      const target = e.target.closest('tr')
+      if (!target || target === dragRow || target.classList.contains('row-spacer')) return
+
+      document.querySelectorAll('.wui-drop-edge-top, .wui-drop-edge-bottom').forEach(r => r.classList.remove('wui-drop-edge-top', 'wui-drop-edge-bottom'))
+      const rect = target.getBoundingClientRect()
+      const edge = e.clientY < rect.top + rect.height / 2 ? 'top' : 'bottom'
+      target.classList.add(edge === 'top' ? 'wui-drop-edge-top' : 'wui-drop-edge-bottom')
+      target.dataset.dropEdge = edge
+      window.__wuiOverRow = target
+    })
+
+    table.addEventListener('drop', e => {
+      const dragRow = window.__wuiDragRow
+      const overRow = window.__wuiOverRow
+      if (!dragRow || !overRow) return
+      e.preventDefault()
+      const edge = overRow.dataset.dropEdge
+      const isGroupHd = overRow.classList.contains('group-hd')
+
+      // Exact port of the real drop-handler branching (table-features.js):
+      if (isGroupHd && edge === 'top') {
+        // Ungrouped, positioned before this group
+        overRow.before(dragRow)
+        delete dragRow.dataset.group
+      } else if (isGroupHd && edge === 'bottom') {
+        // First item inside this group
+        overRow.after(dragRow)
+        dragRow.dataset.group = overRow.dataset.group
+      } else {
+        // Regular row: inherit target's own group (or none), insert per edge
+        if (edge === 'top') overRow.before(dragRow)
+        else overRow.after(dragRow)
+        if (overRow.dataset.group) dragRow.dataset.group = overRow.dataset.group
+        else delete dragRow.dataset.group
+      }
+
+      overRow.classList.remove('wui-drop-edge-top', 'wui-drop-edge-bottom')
+      dragRow.classList.remove('wui-drag-source')
+      delete overRow.dataset.dropEdge
+      window.__wuiDragRow = window.__wuiOverRow = null
+    })
+  })
+
+  document.addEventListener('dragend', () => {
+    document.querySelectorAll('.wui-drag-source').forEach(r => r.classList.remove('wui-drag-source'))
+    document.querySelectorAll('.wui-drop-edge-top, .wui-drop-edge-bottom').forEach(r => r.classList.remove('wui-drop-edge-top', 'wui-drop-edge-bottom'))
+    window.__wuiDragRow = window.__wuiOverRow = null
+  })
+})()
+</script>
+
+</body></html>
