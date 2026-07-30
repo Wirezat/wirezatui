@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-content-tiles</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div id="host"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { render } from '../js/wui/content-types/tiles.js'
+  const log = []
+  const { el, update } = render({ items: [{ titleKey: 'save.tile.default' }] })
+  document.getElementById('host').appendChild(el)
+  log.push(['renders 1 tile', el.querySelectorAll('.tile').length === 1])
+  update({ stats: [{ value: 42, labelKey: 'common.total' }] })
+  log.push(['switches to stat grid', el.querySelectorAll('.stat-tile').length === 1])
+  log.push(['stat value text', el.querySelector('.stat-tile-value').textContent === '42'])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
