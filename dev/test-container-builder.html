@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-container-builder</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div id="host"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { buildContainer } from '../js/wui/container-builder.js'
+  const log = []
+  const handle = buildContainer({
+    id: 'demo',
+    title: 'common.name',
+    content: { type: 'table', columns: [{ key: 'name', labelKey: 'common.name' }], rows: [{ name: 'Iron' }] },
+  })
+  document.getElementById('host').appendChild(handle.el)
+  log.push(['renders container chrome', handle.el.classList.contains('container')])
+  log.push(['renders table body', !!handle.el.querySelector('table')])
+  handle.update({ rows: [{ name: 'Gold' }] })
+  log.push(['update() reflects in DOM', handle.el.querySelector('tbody tr td').textContent === 'Gold'])
+  handle.setContent({ type: 'raw', node: (() => { const s = document.createElement('span'); s.textContent = 'raw!'; return s })() })
+  log.push(['setContent() swaps content type', handle.el.querySelector('.container-body-flush, .container-body')?.textContent.includes('raw!')])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
