@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>test-content-io-profile</title>
+<link rel="stylesheet" href="../index.css"></head>
+<body>
+<div id="host"></div>
+<pre id="out"></pre>
+<script type="module">
+  import { render } from '../js/wui/content-types/io-profile.js'
+  const log = []
+  const { el, update } = render({
+    rows: [
+      { itemKey: 'Iron Ingot', rate: '16/s', section: 'Inputs' },
+      { itemKey: 'Iron Plate', rate: '16/s', section: 'Outputs' },
+    ],
+  })
+  document.getElementById('host').appendChild(el)
+  log.push(['2 group headers + 2 rows = 4 tr', el.querySelectorAll('tbody tr').length === 4])
+  log.push(['group header text', [...el.querySelectorAll('.table-group-hd')].some(tr => tr.textContent === 'Inputs')])
+  update({ rows: [{ itemKey: 'Gold Ingot', rate: '4/s', section: 'Inputs' }] })
+  log.push(['update reshapes correctly', el.querySelectorAll('tbody tr').length === 2])
+  document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
+  console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
+</script>
+</body></html>
