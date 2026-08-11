@@ -1,0 +1,60 @@
+/* wirezat-ui-v1 / components/glint.css
+   Generic animated sheen — a diagonal band of light sweeping across whatever
+   it's put on, blended additively so it lightens rather than tints. Nothing
+   here is item- or icon-specific: every visual is a custom property, so a
+   more specific selector can reskin the color/speed/angle for an entirely
+   different context (a "new" badge, a premium-tier highlight, ...) without
+   touching this file.
+
+   Usage: <span class="glint">...</span> around the element the sheen should
+   sweep over (an <img>, a card, anything). The sweep is a ::after overlay on
+   the wrapper — never the element itself, since ::after is unreliable on
+   replaced elements like <img> — so it never affects the wrapped element's
+   own layout or hit-testing (pointer-events: none). The wrapper is otherwise
+   invisible: it takes no size opinion of its own, so give it whatever class
+   the wrapped element already uses for sizing (both can share one class).
+   Requires: tokens/base.css
+*/
+
+.glint {
+    --glint-color: #caa6ff;
+    --glint-duration: 2.2s;
+    --glint-angle: 115deg;
+    --glint-band: 35%;
+
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.glint::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        var(--glint-angle),
+        transparent 0%,
+        transparent calc(50% - var(--glint-band) / 2),
+        var(--glint-color) 50%,
+        transparent calc(50% + var(--glint-band) / 2),
+        transparent 100%
+    );
+    background-size: 250% 250%;
+    mix-blend-mode: color-dodge;
+    opacity: 0.6;
+    pointer-events: none;
+    animation: wui-glint-sweep var(--glint-duration) linear infinite;
+}
+
+@keyframes wui-glint-sweep {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .glint::after {
+        animation: none;
+        background-position: 50% 50%;
+        opacity: 0.35;
+    }
+}
