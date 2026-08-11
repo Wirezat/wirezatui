@@ -1,0 +1,12 @@
+/* wirezat-ui-v1 / components/detail-grid.css
+   Key/value pairs, generalized from the Infocard row pattern — no new CSS
+   invented, just made usable outside the Infocard context.
+   Requires: tokens/base.css
+*/
+
+.detail-grid { display: flex; flex-direction: column; }
+.detail-grid.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.detail-row { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: var(--text-sm, 12px); border-bottom: 1px solid var(--border); }
+.detail-row:last-child { border-bottom: none; }
+.detail-key { color: var(--text-muted); }
+.detail-val { color: var(--text); font-family: var(--font-mono, monospace); font-size: var(--text-xs, 11px); }

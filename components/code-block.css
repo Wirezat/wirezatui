@@ -1,0 +1,14 @@
+/* wirezat-ui-v1 / components/code-block.css
+   Background --bg-card (Option A from Schritt 12) — same surface as every
+   other component, no special darker tone.
+   Requires: tokens/base.css
+*/
+
+.code-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); font-family: var(--font-mono, monospace); font-size: var(--text-sm, 12px); color: var(--text); overflow: hidden; }
+.code-block-header { display: flex; justify-content: flex-end; padding: 4px 8px; border-bottom: 1px solid var(--border); }
+.code-block-header:empty { display: none; }
+.code-copy-btn { font-size: var(--text-xs, 11px); color: var(--text-faint); cursor: pointer; background: none; border: none; }
+.code-copy-btn:hover { color: var(--text); }
+.code-block-body { padding: 10px 12px; display: flex; overflow-x: auto; }
+.code-lines { color: var(--text-faint); margin-right: 12px; user-select: none; text-align: right; flex-shrink: 0; }
+.code-content { color: var(--text-muted); white-space: pre; }

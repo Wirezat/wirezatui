@@ -1,0 +1,9 @@
+/* wirezat-ui-v1 / components/anchor.css
+   In-page jump navigation. Same Schritt-17 selected pattern as Tree/Dropdown/Nav-link.
+   Requires: tokens/base.css
+*/
+
+.anchor-list { display: flex; flex-direction: column; gap: 1px; }
+.anchor-item { padding: 5px 10px; font-size: var(--text-sm, 12px); color: var(--text-faint); border-radius: var(--radius); cursor: pointer; transition: color 0.12s; text-decoration: none; display: block; }
+.anchor-item:hover { color: var(--text); }
+.anchor-item.active { color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }

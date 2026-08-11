@@ -1,0 +1,11 @@
+/* wirezat-ui-v1 / components/transfer.css
+   Two-list box, replaces mod-picker.js's ad-hoc approach.
+   Requires: tokens/base.css, components/buttons.css
+*/
+
+.transfer { display: flex; align-items: center; gap: 8px; }
+.transfer-list { width: 220px; height: 260px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow-y: auto; }
+.transfer-header { padding: 6px 10px; font-size: var(--text-xs, 11px); color: var(--text-faint); border-bottom: 1px solid var(--border); }
+.transfer-row { padding: 6px 10px; font-size: var(--text-sm, 12px); color: var(--text-muted); cursor: pointer; transition: color 0.12s; }
+.transfer-row:hover { color: var(--text); }
+.transfer-buttons { display: flex; flex-direction: column; gap: 6px; }

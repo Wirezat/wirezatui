@@ -1,0 +1,53 @@
+/* wirezat-ui-v1 / components/command-palette.css
+   Cmd/Ctrl+K, WITH backdrop (Modal-Chrome-like, VSCode/Linear convention)
+   — deliberately not backdrop-less like Autocomplete, since it takes over
+   the whole screen context.
+   Requires: tokens/base.css
+*/
+
+.cmdk-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    padding-top: 15vh;
+}
+.cmdk-panel {
+    width: 480px;
+    max-width: 90vw;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+.cmdk-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: var(--text-md, 14px);
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+}
+.cmdk-list { overflow-y: auto; }
+.cmdk-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    font-size: var(--text-base, 13px);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.12s;
+}
+.cmdk-row:hover, .cmdk-row.active { color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }

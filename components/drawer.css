@@ -1,0 +1,32 @@
+/* wirezat-ui-v1 / components/drawer.css
+   1:1 Modal-Chrome recipe, edge-docked instead of centered. Exception to
+   the Modal-family draggable rule (Schritt 7) — Drawer is edge-fixed, not
+   freely movable.
+   Requires: tokens/base.css
+*/
+
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 800;
+    background: rgba(0, 0, 0, 0.4);
+}
+.drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    background: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+.drawer.right { right: 0; border-left: 1px solid var(--border); }
+.drawer.left  { left: 0;  border-right: 1px solid var(--border); }
+.drawer.bottom { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: 320px; border-top: 1px solid var(--border); }
+
+.drawer-header { padding: 14px 14px 0 14px; font-size: var(--text-md, 14px); font-weight: var(--weight-semibold, 600); color: var(--text); }
+.drawer-header:empty { display: none; }
+.drawer-body { flex: 1; padding: 8px 14px 14px 14px; overflow-y: auto; }
+.drawer-footer { padding: 0 14px 14px 14px; display: flex; justify-content: flex-end; gap: var(--gap-control, 8px); }
+.drawer-footer:empty { display: none; }

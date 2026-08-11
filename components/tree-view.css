@@ -1,0 +1,22 @@
+/* wirezat-ui-v1 / components/tree-view.css
+   Nested Label rows. Selected state reuses the Schritt-17 pattern
+   (neutral text on rest/hover, inset accent bar for selected) — no new
+   visual language invented.
+   Requires: tokens/base.css
+*/
+
+.tree { font-size: var(--text-base, 13px); }
+.tree-node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.12s;
+}
+.tree-node:hover { color: var(--text); }
+.tree-node.selected { color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }
+.tree-children { margin-left: 18px; }
+.tree-chevron { font-size: 9px; width: 10px; color: var(--text-faint); }

@@ -1,0 +1,21 @@
+/* wirezat-ui-v1 / components/accordion.css
+   Header = Label + rotating chevron (90°, same convention as Nav/Dropdown
+   chevrons). Body shows/hides. Container border/radius per item.
+   Requires: tokens/base.css
+*/
+
+.accordion { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.accordion-item + .accordion-item { border-top: 1px solid var(--border); }
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    font-size: var(--text-base, 13px);
+    color: var(--text);
+    cursor: pointer;
+}
+.accordion-chevron { font-size: 10px; color: var(--text-faint); transition: transform 0.15s; }
+.accordion-item.open .accordion-chevron { transform: rotate(90deg); }
+.accordion-body { padding: 0 12px 12px; font-size: var(--text-sm, 12px); color: var(--text-muted); }

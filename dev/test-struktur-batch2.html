@@ -1,0 +1,41 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/accordion.css">
+<link rel="stylesheet" href="../components/tree-view.css">
+<link rel="stylesheet" href="../components/command-palette.css">
+<link rel="stylesheet" href="../components/drawer.css">
+<link rel="stylesheet" href="../components/anchor.css">
+<link rel="stylesheet" href="../components/transfer.css">
+<link rel="stylesheet" href="../components/detail-grid.css">
+<link rel="stylesheet" href="../components/code-block.css">
+<link rel="stylesheet" href="../components/buttons.css">
+<link rel="stylesheet" href="../components/utility.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif;display:flex;gap:24px;flex-wrap:wrap}</style>
+</head><body>
+  <div class="accordion">
+    <div class="accordion-item open"><div class="accordion-header">Details <span class="accordion-chevron">▸</span></div><div class="accordion-body">Inhalt</div></div>
+    <div class="accordion-item"><div class="accordion-header">Historie <span class="accordion-chevron">▸</span></div></div>
+  </div>
+
+  <div class="tree"><div class="tree-node">Fabrik A</div><div class="tree-children"><div class="tree-node selected">Eisen-Linie</div></div></div>
+
+  <button class="btn btn-primary" id="open-cmdk">Cmd+K öffnen</button>
+  <button class="btn btn-ghost" id="open-drawer">Drawer öffnen</button>
+
+  <div class="detail-grid" style="width:240px"><div class="detail-row"><span class="detail-key">Rezept-ID</span><span class="detail-val">iron_smelt</span></div></div>
+
+  <div class="code-block" style="width:200px"><div class="code-block-header"><button class="code-copy-btn">⧉ Kopieren</button></div><div class="code-block-body"><span class="code-content">{ "rate": 64 }</span></div></div>
+
+<script type="module">
+  import { openCommandPalette } from '../js/components/command-palette.js'
+  import { openDrawer } from '../js/components/drawer.js'
+  document.getElementById('open-cmdk').onclick = () => openCommandPalette([
+    { labelKey: 'Neue Produktionslinie', kbd: '↵', onSelect: () => console.log('new') },
+  ])
+  document.getElementById('open-drawer').onclick = () => {
+    const body = document.createElement('div')
+    body.textContent = 'Filterfelder hier…'
+    openDrawer({ side: 'right', titleKey: 'Filter', content: body, actions: [{ labelKey: 'Anwenden', variant: 'primary', onClick: () => {} }] })
+  }
+</script>
+</body></html>
