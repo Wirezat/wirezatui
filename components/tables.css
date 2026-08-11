@@ -20,7 +20,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-bottom: 1px solid var(--border);
-    background: var(--bg-page);
+    background: var(--bg);
     white-space: nowrap;
 }
 
@@ -39,7 +39,7 @@
 /* ── Group header row ────────────────────────────────────────────────────── */
 .table-group-hd td {
     padding: var(--gap-inline) var(--pad-cell);
-    background: var(--bg-page);
+    background: var(--bg);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     font-size: var(--text-xs);
@@ -57,7 +57,7 @@
 /* ── Expandable detail row ───────────────────────────────────────────────── */
 .table-expand-row td {
     padding: 0;
-    background: var(--bg-page);
+    background: var(--bg);
 }
 .table-expand-body {
     padding: var(--pad-container) var(--pad-card);

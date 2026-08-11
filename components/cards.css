@@ -18,7 +18,7 @@
     padding: var(--pad-card);
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
     min-height: 88px;
     cursor: pointer;
     text-decoration: none;
@@ -84,7 +84,7 @@
     font-size: var(--text-sm);
     gap: var(--gap-inline);
 }
-.tile-new:hover { opacity: 1; border-color: var(--accent); color: var(--accent-dark); }
+.tile-new:hover { opacity: 1; border-color: var(--accent); color: var(--accent); }
 
 /* ── Stat tile ───────────────────────────────────────────────────────────── */
 /* Same 3-row structure: value = title, name = subtitle, meta = empty.      */
@@ -95,7 +95,7 @@
     padding: var(--pad-container) var(--pad-card);
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
     min-width: 100px;
 }
 

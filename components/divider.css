@@ -1,0 +1,17 @@
+/* wirezat-ui-v1 / components/divider.css
+   Standalone divider primitive — replaces the two previous duplicates
+   (dropdown.css's .dropdown-divider, nav.css's .nav-divider). Context
+   components set only their own margin; this file owns the line itself.
+   Requires: tokens/base.css
+*/
+
+.wui-divider {
+    height: 1px;
+    background: var(--border);
+}
+
+.wui-divider.v {
+    width: 1px;
+    height: 100%;
+    background: var(--border);
+}
