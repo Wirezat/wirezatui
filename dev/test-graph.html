@@ -1,0 +1,18 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/graph.css">
+<style>body{background:var(--bg);padding:24px}#g{width:600px;height:300px}</style>
+</head><body>
+<div id="g"></div>
+<script type="module">
+  import { renderGraph } from '../js/components/graph.js'
+  renderGraph(document.getElementById('g'), {
+    nodes: [
+      { id: 'iron_ore', level: 1, title: 'Iron Ore', kind: 'terminal', badge: 'Rohstoff' },
+      { id: 'iron_ingot', level: 0, title: 'Iron Ingot', kind: 'primary', subtitle: 'minecraft',
+        labels: [{ text: 'Electric Furnace' }],
+        dependsOn: [{ to: 'iron_ore' }] },
+    ],
+  }, { fullscreenLabel: 'Fullscreen' })
+</script>
+</body></html>

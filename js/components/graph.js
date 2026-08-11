@@ -8,47 +8,42 @@
      import { renderGraph } from '/ui/js/components/graph.js'
 
      renderGraph(parentEl, {
-       nodes: [{ id, level, title, subtitle?, badge?, kind?, warn?, attrs?, labels? }],
+       nodes: [{ id, level, title, subtitle?, badge?, kind?, warn?, attrs?, labels?,
+                  dependsOn?: [{ to, dashed?, title? }] }],
+       //   dependsOn replaces the old separate edges[] array — each node
+       //   declares its own dependencies (consumer→dependency), matching how
+       //   the real domain data already looks (a recipe/item knows its own
+       //   inputs). The internal flat edge list is derived once at the top
+       //   of this function; everything below is otherwise unchanged.
        //   level: 0 = root/result. Nodes are pushed to their DEEPEST position
        //   reachable via edges (longest path), so shared inputs sit at the
        //   deepest level that uses them and multi-edges stay readable.
-       //   Card width is fixed; height is measured from actual content, so
-       //   titles/subtitles/labels that wrap never get clipped.
-       //   kind: '' | 'primary' | 'terminal' | 'muted' | 'tagged' — generic visual
-       //   roles, no domain meaning. Space-separated for combinations (e.g.
-       //   'muted tagged': tagged is a free-form marker, orthogonal to state).
-       //   warn: true → warning border (e.g. cycle member)
-       //   attrs: { 'data-…': value } set on the node element (for click delegation)
-       //   badge: static (non-interactive) small caption line, e.g. a terminal
-       //   node's "raw material" — use labels instead for anything clickable.
-       //   labels: [{ text, menu?: [{label, subtitle?, action, danger?, active?}], muted?, cls? }]
-       //   — zero or more explicit, self-describing clickable rows (e.g. the
-       //   current machine name, or a "click to pick a recipe" prompt). Each
-       //   click stops propagation (does NOT trigger the path highlight below)
-       //   and opens a popover from that label's own `menu`; onMenuAction(node,
-       //   action) fires when an item is picked. A label without `menu` is
-       //   just inert text. `cls` adds an arbitrary extra class (e.g. a
-       //   domain-specific status color) alongside the built-in `muted` style.
-       edges: [{ from, to, dashed?, title? }],
-       //   from = consumer, to = dependency; drawn as flow dependency → consumer
+       //   kind: '' | 'primary' | 'terminal' | 'muted' | 'tagged' — primary
+       //   is now a 1px accent border (was 2px — fixed, violated the
+       //   1px-border-only rule).
+       //   labels: [{ text, menu?, muted?, cls? }] — hover is a color
+       //   transition now (muted→accent), never a background.
      }, {
-       fullscreenLabel: 'Fullscreen',   // title attr for the fullscreen toggle
-       onMenuAction: (node, action) => {},  // fires when a label's menu item is picked
+       fullscreenLabel: 'Fullscreen',
+       onMenuAction: (node, action) => {},
      })
-
-     // Clicking a node (outside its labels) toggles highlighting of the full
-     // path through it — all transitive dependencies (its own inputs) and all
-     // transitive consumers (things that need it) — dimming everything else.
-     // Clicking the same node again, or the empty canvas, clears it.
 */
 
 import { openPopover } from './popover.js'
 
-export function renderGraph(parent, { nodes = [], edges = [] } = {}, {
+export function renderGraph(parent, { nodes = [] } = {}, {
     fullscreenLabel = '',
     onMenuAction = () => {},
 } = {}) {
     parent.innerHTML = ''
+
+    // Derive the flat edge list the rest of this file already expects —
+    // callers declare dependencies per-node (mirrors the real domain shape:
+    // every recipe/item already knows its own inputs), this is the only
+    // place that flattens it. No other logic below this line changes.
+    const edges = nodes.flatMap(n =>
+        (n.dependsOn || []).map(d => ({ from: n.id, to: d.to, dashed: d.dashed, title: d.title }))
+    )
 
     const NODE_W = 190, MIN_NODE_H = 58, COL_GAP = 70, ROW_GAP = 14, PAD = 18
 
