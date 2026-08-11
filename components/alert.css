@@ -1,0 +1,38 @@
+/* wirezat-ui-v1 / components/alert.css
+   Alert/Banner — inline, page-placed (vs. Toast's floating stack).
+   Formalizes solve.html's ad-hoc .banner-error/.banner-warn, which used
+   a tint background (danger-muted/warn-muted) — a direct violation of the
+   global "never a tint as surface" rule. Standard recipe instead:
+   bg-card surface, full semantic-color border, icon follows border color.
+   Requires: tokens/base.css
+*/
+
+.alert {
+    display: flex;
+    gap: var(--gap-control, 8px);
+    align-items: flex-start;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: var(--text-sm, 12px);
+    color: var(--text-muted);
+}
+.alert.success { border-color: var(--success); }
+.alert.success .alert-icon { color: var(--success); }
+.alert.danger  { border-color: var(--danger); }
+.alert.danger  .alert-icon { color: var(--danger); }
+.alert.warn    { border-color: var(--warn); }
+.alert.warn    .alert-icon { color: var(--warn); }
+.alert.info    { border-color: var(--accent); }
+.alert.info    .alert-icon { color: var(--accent); }
+
+.alert-icon { font-size: 13px; flex-shrink: 0; }
+.alert-dismiss {
+    margin-left: auto;
+    color: var(--text-faint);
+    cursor: pointer;
+    font-size: 11px;
+    background: none;
+    border: none;
+}

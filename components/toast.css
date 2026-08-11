@@ -1,0 +1,41 @@
+/* wirezat-ui-v1 / components/toast.css
+   Toast — structurally NOT Modal-Chrome (Schritt 7): no backdrop, no
+   header/footer segments, left 3px accent bar instead of border. The
+   only place in the system with a colored border-left outside the Table
+   group-accent-bar.
+   Requires: tokens/base.css
+*/
+
+.toast-stack {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 900;
+    display: flex;
+    flex-direction: column-reverse;  /* newest on top */
+    gap: 8px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control, 8px);
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--success);
+    border-radius: var(--radius);
+    font-size: var(--text-sm, 12px);
+    color: var(--text);
+    width: 280px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    animation: toast-in 0.15s ease-out;
+}
+.toast.danger { border-left-color: var(--danger); }
+.toast.warn   { border-left-color: var(--warn); }
+.toast.info   { border-left-color: var(--accent); }
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}

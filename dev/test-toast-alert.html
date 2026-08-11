@@ -1,0 +1,18 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/toast.css">
+<link rel="stylesheet" href="../components/alert.css">
+<link rel="stylesheet" href="../components/buttons.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif;max-width:400px}</style>
+</head><body>
+  <div class="alert danger"><span class="alert-icon">⛔</span><span>Diese Rezeptkette enthält einen unauflösbaren Zyklus.</span></div>
+  <div class="alert warn" style="margin-top:8px"><span class="alert-icon">⚠</span><span>Keine aktiven Mods konfiguriert.</span><button class="alert-dismiss">✕</button></div>
+
+  <button class="btn btn-primary" id="fire-toast" style="margin-top:16px">Toast auslösen</button>
+
+<script type="module">
+  import { showToast } from '../js/components/toast.js'
+  document.getElementById('fire-toast').onclick = () =>
+    showToast({ tone: 'success', messageKey: 'Produktionslinie gespeichert' })
+</script>
+</body></html>
