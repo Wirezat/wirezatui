@@ -1,0 +1,47 @@
+/* wirezat-ui-v1 / components/tabs.css
+   Tab bar — merges the old tabs-bar (layout/page.css) and auth-tabs
+   (components/auth.css, equal-width duplicate) into one component.
+   Requires: tokens/base.css
+*/
+
+.wui-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Equal-width variant — replaces the old auth-tabs' flex:1 */
+.wui-tabs.fill .wui-tab {
+    flex: 1;
+    justify-content: center;
+}
+
+.wui-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-inline, 6px);
+    height: var(--h-tab, 34px);
+    padding: 0 var(--pad-card, 14px);
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: var(--text-base, 13px);
+    font-weight: var(--weight-medium, 500);
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.12s;
+}
+.wui-tab:hover { color: var(--text); }
+
+/* Active indicator — pseudo-element bar, NOT a real border (Schritt 9
+   correction: the old 2px border-bottom violated the "1px border only"
+   rule, copied 1:1 from the pre-redesign codebase). */
+.wui-tab.active { color: var(--accent); font-weight: var(--weight-semibold, 600); }
+.wui-tab.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+}
