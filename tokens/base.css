@@ -10,49 +10,41 @@
      5. components/<name>.css  (only what the app uses)
 */
 
-/* ── Color token declarations (values set by app/theme.css) ─────────────── */
+/* ── Base colors — set by the consuming app's theme.css; these are the
+   fallback defaults, deliberately generic so a misconfigured app is
+   visibly wrong instead of silently fine. ── */
 :root {
-    /* Accent */
-    --accent:           unset;
-    --accent-dark:      unset;
-    --accent-text:      unset;
-    --accent-muted:     unset;
-
-    /* Text */
-    --text:             unset;
-    --text-muted:       unset;
-    --text-faint:       unset;
-
-    /* Borders */
-    --border:           unset;
-    --border-strong:    unset;
-
-    /* Surfaces */
-    --bg:               unset;
-    --bg-page:          unset;
-    --bg-card:          unset;
-    --bg-hover:         unset;
-
-    /* Semantic */
-    --danger:           unset;
-    --danger-muted:     unset;
-    --success:          unset;
-    --success-muted:    unset;
-    --warn:             unset;
-    --warn-muted:       unset;
-
-    /* Config-Container tint (lila — overridable per app) */
-    --config-bg:        unset;
-    --config-border:    unset;
-    --config-header-bg: unset;
+    --accent:   #3b82f6;
+    --danger:   #dc2626;
+    --success:  #16a34a;
+    --warn:     #d97706;
+    --config:   #8b5cf6;
+    --text:     #d1d5db;
+    --border:   #374151;
+    --bg:       #111827;
+    --bg-card:  #1f2937;
 }
 
-/* ── Shape ───────────────────────────────────────────────────────────────── */
+/* ── Derived — pure CSS formulas, no JS shading. ── */
 :root {
-    --radius:           8px;
-    --radius-sm:        4px;
-    --radius-lg:        12px;
-    --radius-pill:      99px;
+    --accent-muted:  color-mix(in srgb, var(--accent) 15%, transparent);
+    --accent-hover:  color-mix(in srgb, var(--accent) 85%, black);
+    --danger-muted:  color-mix(in srgb, var(--danger) 15%, transparent);
+    --danger-hover:  color-mix(in srgb, var(--danger) 85%, black);
+    --success-muted: color-mix(in srgb, var(--success) 15%, transparent);
+    --warn-muted:    color-mix(in srgb, var(--warn) 15%, transparent);
+    --config-muted:  color-mix(in srgb, var(--config) 15%, transparent);
+    --text-muted:    color-mix(in srgb, var(--text) 70%, var(--bg));
+    --text-faint:    color-mix(in srgb, var(--text) 45%, var(--bg));
+    --border-strong: color-mix(in srgb, var(--border) 60%, var(--text));
+    --bg-hover:      color-mix(in srgb, var(--bg-card) 92%, var(--text));
+}
+
+/* ── Rounding — deliberately sharp. No --radius-lg. ── */
+:root {
+    --radius:      1px;
+    --radius-sm:   1px;
+    --radius-pill: 99px;
 }
 
 /* ── Typography ──────────────────────────────────────────────────────────── */
