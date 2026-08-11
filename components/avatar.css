@@ -1,0 +1,18 @@
+/* wirezat-ui-v1 / components/avatar.css
+   Text on an accent-filled avatar is hardcoded white — --accent-text was
+   removed from the color suite (no theme slot for it).
+   Requires: tokens/base.css
+*/
+
+.wui-avatar {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--text-xs, 11px); font-weight: var(--weight-bold, 700);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.wui-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.wui-avatar-icon { background: var(--bg-hover); color: var(--text-muted); }
