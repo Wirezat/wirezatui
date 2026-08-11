@@ -1,0 +1,110 @@
+/* wirezat-ui-v1 / components/icontext.css
+   Icon + text pairing: a fixed-size leading icon followed by a label and an
+   optional subtitle. Purely presentational — it takes an image URL and text
+   and knows nothing about what they represent.
+
+   The icon slot keeps its box when there is no image, so labels stay
+   column-aligned in lists where only some rows have an icon.
+
+   Compose with components/marquee.css on .icontext-text for overflow scroll.
+   Requires: tokens/base.css
+*/
+
+.icontext {
+    --icontext-icon-size: 20px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-icon);
+    min-width: 0;
+    /* An inline-flex box shrink-wraps its content: without this a long label
+       widens its container instead of clipping, and .icontext-text never
+       overflows its own box — so a composed marquee could never trigger.
+       Consumers must give this element a container with a resolvable width;
+       inside one that computes to zero the label has nowhere to render. */
+    max-width: 100%;
+}
+
+.icontext-icon {
+    width: var(--icontext-icon-size);
+    height: var(--icontext-icon-size);
+    flex-shrink: 0;
+    object-fit: contain;
+    image-rendering: pixelated;
+    border-radius: var(--radius-sm);
+}
+
+.icontext-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.icontext-text {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icontext-subtitle {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* ── Sprite sheets ───────────────────────────────────────────────────────────
+   A vertical strip of frames in one file — the game's animated textures, fluids
+   above all. Squeezing the whole strip into an icon box reads as a smear, so
+   `cover` scales it to fill by width and lets the rest overflow, and the
+   position picks which cell shows.
+
+   Standalone rather than .icontext-icon modifiers: any image slot can be handed
+   a sheet, and .infocard-icon is handed the same ones.
+
+   Both are qualified with img so they outweigh whatever object-fit the slot they
+   land in sets for its ordinary images — overriding that is the entire point,
+   and a bare class would lose to any later single-class rule. */
+
+/* Hold on the first cell. */
+img.wui-sheet-first-cell {
+    object-fit: cover;
+    object-position: top;
+}
+
+/* Play the sheet.
+
+   --sheet-frames    frames to step through
+   --sheet-duration  one full pass
+   --sheet-end       where the last frame sits, as a percentage of the strip.
+                     Only 100% when every cell in the file is played; a strip
+                     whose animation covers just part of it stops short, or the
+                     steps land between cells and show two frames at once.
+   --sheet-direction `alternate` for a strip meant to run up and back down
+
+   steps(n, jump-none) is what makes this frame-accurate: it holds each frame for
+   its whole slice and includes both endpoints, so all n show and none is ever
+   half-scrolled. Interpolating instead would slide between frames, which the
+   game never does. */
+img.wui-sheet-play {
+    object-fit: cover;
+    animation: wui-sheet-play var(--sheet-duration)
+               steps(var(--sheet-frames), jump-none)
+               infinite var(--sheet-direction, normal);
+}
+
+@keyframes wui-sheet-play {
+    from { object-position: 50% 0%; }
+    to   { object-position: 50% var(--sheet-end, 100%); }
+}
+
+/* Someone who asked for less motion gets the still first cell instead. */
+@media (prefers-reduced-motion: reduce) {
+    img.wui-sheet-play {
+        animation: none;
+        object-position: top;
+    }
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────────── */
+.icontext-sm { --icontext-icon-size: 16px; }
+.icontext-lg { --icontext-icon-size: 28px; }
