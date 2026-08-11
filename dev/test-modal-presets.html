@@ -1,0 +1,28 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/modal.css">
+<link rel="stylesheet" href="../components/buttons.css">
+<link rel="stylesheet" href="../components/forms.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif}</style>
+</head><body>
+  <button class="btn btn-primary" id="open-confirm">Confirm öffnen</button>
+  <button class="btn btn-danger" id="open-danger">Danger-Confirm öffnen</button>
+  <button class="btn btn-ghost" id="open-checklist">Checklist öffnen</button>
+
+<script type="module">
+  import { showModal } from '../js/wui.js'
+  document.getElementById('open-confirm').onclick = () => showModal({
+    preset: 'confirm', titleKey: 'Löschen bestätigen', messageKey: 'Wirklich löschen?',
+    actions: [{ labelKey: 'Abbrechen', variant: 'ghost' }, { labelKey: 'Löschen', variant: 'primary' }],
+  })
+  document.getElementById('open-danger').onclick = () => showModal({
+    preset: 'danger-confirm', titleKey: 'Fabrik löschen', messageKey: 'Unwiderruflich.',
+    actions: [{ labelKey: 'Abbrechen', variant: 'ghost' }, { labelKey: 'Löschen', variant: 'danger' }],
+  })
+  document.getElementById('open-checklist').onclick = () => showModal({
+    preset: 'checklist', titleKey: 'Mods auswählen', selectAll: true,
+    items: [{ labelKey: 'Thermal', checked: true }, { labelKey: 'Mekanism', checked: false }],
+    actions: [{ labelKey: 'Übernehmen', variant: 'primary' }],
+  })
+</script>
+</body></html>

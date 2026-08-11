@@ -1,5 +1,5 @@
 /* wirezat-ui-v1 / components/modal.css
-   Global modal — activated by containers, always at fixed position.
+   Global modal chrome — one shape for all showModal() presets.
    Requires: tokens/base.css + app/theme.css
 */
 
@@ -7,39 +7,35 @@
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 200;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 500;
     padding: var(--pad-page);
 }
 
-/* Hidden by default; JS adds .open */
-.modal-backdrop { display: none; }
-.modal-backdrop.open { display: flex; }
-
 /* ── Modal panel ─────────────────────────────────────────────────────────── */
-.modal {
+.modal-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
+    overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
     width: 100%;
     max-width: 480px;
+    max-height: calc(100vh - var(--pad-page) * 2);
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - var(--pad-page) * 2);
 }
 
 /* ── Modal header ────────────────────────────────────────────────────────── */
 .modal-header {
+    padding: 14px 14px 0 14px;   /* loses its bottom portion */
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--gap-control);
-    padding: var(--pad-modal);
-    border-bottom: 1px solid var(--border);
     flex-shrink: 0;
 }
 
@@ -68,7 +64,7 @@
 
 /* ── Modal body ──────────────────────────────────────────────────────────── */
 .modal-body {
-    padding: var(--pad-modal);
+    padding: 8px 14px 14px 14px;  /* top drops to 8px */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -79,10 +75,44 @@
 
 /* ── Modal footer ────────────────────────────────────────────────────────── */
 .modal-footer {
+    padding: 0 14px 14px 14px;    /* loses its top portion */
     display: flex;
     justify-content: flex-end;
-    gap: var(--gap-control);
-    padding: var(--gap-item) var(--pad-modal);
-    border-top: 1px solid var(--border);
+    gap: var(--gap-control, 8px);
     flex-shrink: 0;
 }
+
+/* Auto-hide: an empty header/footer renders nothing */
+.modal-header:empty, .modal-footer:empty { display: none; }
+
+/* Popconfirm — no backdrop, no separate header segment (so no padding bug
+   in the first place), otherwise the same outline-button recipe. */
+.popconfirm-card {
+    position: fixed;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-field);
+    max-width: 280px;
+}
+
+/* Draggable — header is the grab surface, whole area, no handle icon. */
+.modal-header[data-draggable] { cursor: grab; }
+.modal-header[data-draggable]:active { cursor: grabbing; }
+
+/* ── Wizard extras ───────────────────────────────────────────────────────── */
+.modal-step-count {
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+    flex-shrink: 0;
+}
+.modal-breadcrumb {
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+}
+.modal-footer-spacer { margin-right: auto; }
