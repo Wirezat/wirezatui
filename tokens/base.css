@@ -71,8 +71,7 @@
 :root {
     --header-h:         52px;
     --sidebar-w:        220px;
-    --page-w:           900px;
-    --page-w-wide:      1200px;
+    --page-w:           1200px;
 }
 
 /* ── Spacing — named by context, not pixel value ─────────────────────────── */

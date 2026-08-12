@@ -50,8 +50,9 @@
 }
 
 .infocard-icon {
-    width: 28px;
-    height: 28px;
+    --icontext-icon-size: 28px;
+    width: var(--icontext-icon-size);
+    height: var(--icontext-icon-size);
     object-fit: contain;
     flex-shrink: 0;
     border-radius: var(--radius-sm);

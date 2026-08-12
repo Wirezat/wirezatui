@@ -362,7 +362,8 @@ tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
 
 /* ── Cell-clamp: overflow strategies for narrow table cells ─────────────── */
 /* Base: clips content. Apply one modifier for the overflow behaviour.
-   JS must set .overflows once: inner.scrollWidth > el.offsetWidth + 1      */
+   --scroll's hover marquee comes from the shared js/marquee.js +
+   components/marquee.css base via initCellClampScroll. */
 
 .cell-clamp {
     overflow: hidden;
@@ -385,13 +386,5 @@ tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
     mask-image:         linear-gradient(to right, black 80%, transparent 100%);
 }
 
-/* --scroll: hover marquee (seamless loop via doubled text in JS) */
-.cell-clamp--scroll.overflows:hover .cell-clamp-inner {
-    will-change: transform;
-    animation: cell-marquee 5s linear 0.5s infinite;
-}
-
-@keyframes cell-marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
+/* --scroll: hover marquee — animation comes from components/marquee.css,
+   which js/marquee.js applies by adding .wui-marquee / .wui-marquee-inner. */

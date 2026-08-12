@@ -7,10 +7,12 @@
      on the <table> element; rows opt-in with .row-hidden.
 
    initCellClampScroll(scope?)
-     Detects overflow in .cell-clamp.cell-clamp--scroll elements, doubles
-     the text in .cell-clamp-inner for seamless marquee, and sets .overflows.
+     Hands every .cell-clamp.cell-clamp--scroll element to the shared marquee
+     base (js/marquee.js), which measures overflow and wires the hover scroll.
      Call after rows are rendered into the DOM.
 */
+
+import { wireMarquee } from './marquee.js';
 
 export function initHiddenRows(scope = document) {
     scope.querySelectorAll('[data-wui-hidden-toggle]').forEach(btn => {
@@ -198,16 +200,96 @@ export function initCollapsibleGroups(table) {
         // Collapse toggle — skip when row is in edit mode
         const hd = e.target.closest('tr.table-group-hd.collapsible');
         if (!hd || hd.classList.contains('group-editing')) return;
-        hd.classList.toggle('collapsed');
-        const collapsed = hd.classList.contains('collapsed');
-        let sib = hd.nextElementSibling;
-        while (sib && !sib.classList.contains('table-group-hd')) {
-            const isSpacer = sib.classList.contains('row-spacer');
-            sib.style.display = collapsed ? 'none' : '';
-            sib = sib.nextElementSibling;
-            if (isSpacer) break;
-        }
+        _toggleGroupCollapse(hd, table);
     });
+}
+
+/* Rows belonging to a group header: everything until the next header,
+   including the trailing .row-spacer (which ends the group). */
+function _groupRows(hd) {
+    const rows = [];
+    let sib = hd.nextElementSibling;
+    while (sib && !sib.classList.contains('table-group-hd')) {
+        rows.push(sib);
+        if (sib.classList.contains('row-spacer')) break;
+        sib = sib.nextElementSibling;
+    }
+    return rows;
+}
+
+function _setRowsDisplay(rows, collapsed) {
+    // display:'' on uncollapse lets existing CSS rules (e.g. archived rows)
+    // re-apply naturally.
+    for (const r of rows) r.style.display = collapsed ? 'none' : '';
+}
+
+/* Animated collapse/expand. <tr> heights can't be transitioned, so instead:
+   the group's rows fade, and every row below the group FLIP-slides into its
+   new position (measure before/after, animate the translateY delta back to
+   zero). Falls back to an instant toggle for prefers-reduced-motion or when
+   the Web Animations API is unavailable. */
+const _GROUP_ANIM = { fade: 110, slide: 170 };
+
+async function _toggleGroupCollapse(hd, table) {
+    if (hd.dataset.wuiGroupAnimating) return; // ignore clicks mid-animation
+    const rows = _groupRows(hd);
+    hd.classList.toggle('collapsed');
+    const collapsed = hd.classList.contains('collapsed');
+
+    const instant = !rows.length
+        || typeof hd.animate !== 'function'
+        || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (instant) {
+        _setRowsDisplay(rows, collapsed);
+        return;
+    }
+
+    hd.dataset.wuiGroupAnimating = '1';
+    try {
+        // Visible, fade-able rows — evaluated after any display change, since
+        // hidden rows (display:none) must not be part of the fade set.
+        const fadeRows = () => rows.filter(r =>
+            !r.classList.contains('row-spacer') && r.style.display !== 'none');
+
+        if (collapsed) {
+            await Promise.all(fadeRows().map(r =>
+                r.animate([{ opacity: 1 }, { opacity: 0 }],
+                    { duration: _GROUP_ANIM.fade, easing: 'ease-out' })
+                    .finished.catch(() => {})));
+            const before = _rowTops(table);
+            _setRowsDisplay(rows, true);
+            _flipRows(table, before);
+        } else {
+            const before = _rowTops(table);
+            _setRowsDisplay(rows, false);
+            _flipRows(table, before);
+            fadeRows().forEach(r =>
+                r.animate([{ opacity: 0 }, { opacity: 1 }],
+                    { duration: _GROUP_ANIM.slide, easing: 'ease-out' }));
+        }
+    } finally {
+        delete hd.dataset.wuiGroupAnimating;
+    }
+}
+
+function _rowTops(table) {
+    const tops = new Map();
+    for (const r of table.querySelectorAll('tr')) {
+        if (r.style.display !== 'none') tops.set(r, r.getBoundingClientRect().top);
+    }
+    return tops;
+}
+
+function _flipRows(table, before) {
+    for (const [r, oldTop] of before) {
+        if (r.style.display === 'none') continue;
+        const delta = oldTop - r.getBoundingClientRect().top;
+        if (Math.abs(delta) < 1) continue;
+        r.animate(
+            [{ transform: `translateY(${delta}px)` }, { transform: 'translateY(0)' }],
+            { duration: _GROUP_ANIM.slide, easing: 'ease' },
+        );
+    }
 }
 
 function _enterGroupEdit(hd) {
@@ -531,14 +613,6 @@ function _resolveFromDOM(tbody, row) {
 
 export function initCellClampScroll(scope = document) {
     scope.querySelectorAll('.cell-clamp.cell-clamp--scroll').forEach(el => {
-        const inner = el.querySelector('.cell-clamp-inner');
-        if (!inner || inner.dataset.wuiScrollInit) return;
-        inner.dataset.wuiScrollInit = '1';
-
-        if (inner.scrollWidth > el.offsetWidth + 1) {
-            const orig = inner.textContent;
-            inner.textContent = orig + '   ' + orig;
-            el.classList.add('overflows');
-        }
+        wireMarquee(el, el.querySelector('.cell-clamp-inner'));
     });
 }

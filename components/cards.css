@@ -41,21 +41,9 @@
     white-space: nowrap;
 }
 
-/* ── Infinite loop scroll for overflowing titles ──────────────────────────── */
-/* JS (tile-scroll.js) wraps overflowing text in .tile-title-inner × 2.       */
-.tile-title-inner {
-    display: inline-flex;
-    align-items: baseline;
-    white-space: nowrap;
-    animation: tile-marquee var(--marquee-dur, 6s) linear infinite;
-    animation-play-state: paused;
-}
-.tile:hover .tile-title-inner { animation-play-state: running; }
-
-@keyframes tile-marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(var(--marquee-shift, -50%)); }
-}
+/* Animation comes from components/marquee.css; js/tile-scroll.js applies it.
+   The hover surface is the whole tile, not just the title. */
+.tile:hover .wui-marquee-inner { animation-play-state: running; }
 
 .tile-subtitle {
     font-size: var(--text-sm);

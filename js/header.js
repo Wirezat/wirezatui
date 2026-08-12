@@ -28,14 +28,14 @@ const DEFAULT_LABELS = {
 
 let _user = null;
 
-export async function init({ navLinks = [], adminSections = [], labels = {}, getLang = null, setLang = null } = {}) {
+export async function init({ navLinks = [], adminSections = [], labels = {}, getLang = null, setLang = null, publicPage = false } = {}) {
     const lbl = { ...DEFAULT_LABELS, ...labels };
     initThemeBtn();
     _initLangBtn(getLang, setLang);
     _buildSidebar(navLinks);
     initDropdowns();
     try {
-        _user = await getUser();
+        _user = await getUser({ silent401: publicPage });
         if (!_user) return;
     } catch (_) { return; }
     _renderTrigger();

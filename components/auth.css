@@ -6,10 +6,16 @@
 /* ── Auth page layout ────────────────────────────────────────────────────── */
 /* Use <body class="app-shell"> + <header class="header"> from shell.css,
    then wrap the card in <div class="auth-main"> for centered content. */
+/* .app-shell caps itself at the viewport height and clips overflow (see
+   shell.css) so .main can be the one thing that scrolls — auth pages have no
+   .main, so this needs its own flex-sized, scrollable box instead of the
+   min-height it used when the shell just grew with its content. */
 .auth-main {
     display: grid;
     place-items: center;
-    min-height: calc(100vh - var(--header-h));
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     padding: var(--gap-section);
 }
 

@@ -17,16 +17,21 @@
      </div>
 
    Usage:
-     openModal({ title, bodyHTML, confirmLabel, onConfirm })
-     closeModal()
+     openModal({ name, title, bodyHTML, confirmLabel, onConfirm })
+     closeModal(name)
 */
 
-function _backdrop() {
-    return document.querySelector('[data-wui-modal]');
+function _backdrops() {
+    return [...document.querySelectorAll('[data-wui-modal]')];
 }
 
-export function openModal({ title = '', bodyHTML = '', confirmLabel = 'Speichern', onConfirm = null } = {}) {
-    const backdrop = _backdrop();
+// name: optional data-wui-modal value, for pages with more than one generic
+// modal-backdrop. Without it, targets the first backdrop in the document
+// (backward compatible for single-modal pages).
+export function openModal({ name, title = '', bodyHTML = '', confirmLabel = 'Speichern', onConfirm = null } = {}) {
+    const backdrop = name
+        ? document.querySelector(`[data-wui-modal="${name}"]`)
+        : _backdrops()[0];
     if (!backdrop) return;
 
     backdrop.querySelector('[data-modal-title]').textContent = title;
@@ -35,27 +40,31 @@ export function openModal({ title = '', bodyHTML = '', confirmLabel = 'Speichern
     const confirmBtn = backdrop.querySelector('[data-modal-confirm]');
     if (confirmBtn) {
         confirmBtn.textContent = confirmLabel;
-        confirmBtn.onclick = () => { if (onConfirm) onConfirm(); closeModal(); };
+        confirmBtn.onclick = () => { if (onConfirm) onConfirm(); closeModal(name); };
     }
 
     backdrop.classList.add('open');
     backdrop.querySelector('.modal')?.focus();
 }
 
-export function closeModal() {
-    _backdrop()?.classList.remove('open');
+// name: optional data-wui-modal value. Without it, closes whichever backdrop
+// is currently open (backward compatible for single-modal pages).
+export function closeModal(name) {
+    const backdrop = name
+        ? document.querySelector(`[data-wui-modal="${name}"]`)
+        : _backdrops().find(b => b.classList.contains('open'));
+    backdrop?.classList.remove('open');
 }
 
 export function initModal() {
-    const backdrop = _backdrop();
-    if (!backdrop) return;
-
-    backdrop.addEventListener('click', e => {
-        if (e.target === backdrop) closeModal();
-    });
-
-    backdrop.querySelectorAll('[data-modal-close], [data-modal-cancel]').forEach(el => {
-        el.addEventListener('click', closeModal);
+    _backdrops().forEach(backdrop => {
+        const name = backdrop.getAttribute('data-wui-modal') || undefined;
+        backdrop.addEventListener('click', e => {
+            if (e.target === backdrop) closeModal(name);
+        });
+        backdrop.querySelectorAll('[data-modal-close], [data-modal-cancel]').forEach(el => {
+            el.addEventListener('click', () => closeModal(name));
+        });
     });
 
     document.addEventListener('keydown', e => {

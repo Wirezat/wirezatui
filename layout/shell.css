@@ -17,10 +17,17 @@
    ─────────────────────────────────────────────────────────────────────── */
 
 /* ── App shell ───────────────────────────────────────────────────────────── */
+/* height (not min-height) + overflow: hidden is load-bearing: .main's own
+   overflow-y: auto only ever activates if .main cannot grow past its
+   allotted height. With min-height, a tall page just grew the whole shell
+   instead, so the window scrolled and .main's scroll listeners never fired —
+   VirtualWindow's ancestor mode depends on .main being the real scrolling
+   element. */
 .app-shell {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background: var(--bg);
 }
 
@@ -113,8 +120,6 @@
     flex-direction: column;
     gap: var(--gap-section);
 }
-
-.page-wide { max-width: var(--page-w-wide); }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 700px) {

@@ -55,7 +55,7 @@ async function _refresh() {
     } catch { return false; }
 }
 
-export async function apiFetch(url, options = {}) {
+export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
     const token = getToken();
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -69,10 +69,20 @@ export async function apiFetch(url, options = {}) {
 
     if (res.status === 401) {
         const ok = await _refresh();
-        if (!ok) { logout(); return null; }
+        if (!ok) {
+            // On public pages a dead session just means "treat as logged out" —
+            // bouncing to /login would break pages that never required auth.
+            if (silent401) return res;
+            logout();
+            return null;
+        }
         const newHeaders = { ...headers, 'Authorization': 'Bearer ' + getToken() };
         res = await fetch(url, { ...options, headers: newHeaders });
-        if (res.status === 401) { logout(); return null; }
+        if (res.status === 401) {
+            if (silent401) return res;
+            logout();
+            return null;
+        }
     }
     return res;
 }
@@ -83,9 +93,9 @@ export function guard() {
 
 let _user = null;
 
-export async function getUser() {
+export async function getUser({ silent401 = false } = {}) {
     if (_user) return _user;
-    const res = await apiFetch(_cfg.meApi);
+    const res = await apiFetch(_cfg.meApi, {}, { silent401 });
     if (!res || !res.ok) return null;
     _user = await res.json();
     return _user;
