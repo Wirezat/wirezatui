@@ -169,19 +169,24 @@ tr.wui-drop-zone-end td {
 }
 
 /* ── Collapsible group header arrow ──────────────────────────────────────── */
-/* Wrap the group label in .group-hd-inner and add a .group-hd-arrow span. */
+/* Wrap the group label in .group-hd-inner and add an empty .group-hd-arrow
+   span — the glyph itself is CSS-injected, not markup, so callers never
+   hand-place '▾'/'▸'. */
 .group-hd-inner {
     display: flex;
     align-items: center;
     gap: var(--gap-icon);
 }
 .group-hd-arrow {
+    cursor: pointer;
+    user-select: none;
     display: inline-block;
     font-size: 10px;
     opacity: 0.5;
-    transition: transform 0.15s;
+    padding-right: 4px;
 }
-.table-group-hd.collapsed .group-hd-arrow { transform: rotate(-90deg); }
+.group-hd-arrow::before { content: '▾'; }
+.table-group-hd.collapsed .group-hd-arrow::before { content: '▸'; }
 
 /* ── Editable group header ───────────────────────────────────────────────── */
 /* Opt-in: add data-group-editable to tr.table-group-hd.                     */
