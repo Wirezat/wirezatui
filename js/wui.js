@@ -18,7 +18,7 @@
      })
      page.get('pl-table').update({ rows: newRows })
 
-     showModal({ titleKey: '...', content: {...}, actions: [...] })
+     showModal({ preset: 'form', titleKey: '...', content: {...}, actions: [...] })
 
    A page opts in by including <div id="wui-page-content"></div> in its
    static HTML (same placeholder pattern already used by e.g.
@@ -29,7 +29,7 @@
 
 import { applyAccentTheme }        from './wui/accent-theme.js'
 import { init as initHeaderChrome } from './header.js'
-import { load as loadI18n, applyI18n, getLang } from './i18n.js'
+import { load as loadI18n, applyI18n, getLang, t } from './i18n.js'
 import { buildContainer }          from './wui/container-builder.js'
 import { openWuiModal }            from './wui/modal.js'
 import { checkThemeTokens }        from './theme-check.js'
@@ -73,7 +73,9 @@ export function renderPage({ shell = true, host = '#wui-page-content',
         headerEl.innerHTML = `
             <div>
                 ${pageHeader.breadcrumb ? renderBreadcrumb(pageHeader.breadcrumb) : ''}
-                <div class="page-title">${esc(pageHeader.titleKey)}</div>
+                <div class="page-title-row">
+                    <div class="page-title">${esc(t(pageHeader.titleKey))}</div>
+                </div>
             </div>`
         if (pageHeader.actions?.length) {
             const actionsEl = document.createElement('div')
@@ -81,7 +83,7 @@ export function renderPage({ shell = true, host = '#wui-page-content',
             for (const a of pageHeader.actions) {
                 const btn = document.createElement('button')
                 btn.className = `btn btn-${a.variant || 'ghost'}`
-                btn.textContent = a.labelKey
+                btn.textContent = t(a.labelKey)
                 btn.onclick = a.onClick
                 actionsEl.appendChild(btn)
             }
@@ -123,8 +125,8 @@ function renderBreadcrumb(segments) {
     return `<div class="breadcrumb">${segments.map((s, i) => {
         const isLast = i === segments.length - 1
         const link = isLast
-            ? `<span class="breadcrumb-current">${esc(s.labelKey)}</span>`
-            : `<a href="${esc(s.href)}">${esc(s.labelKey)}</a>`
+            ? `<span class="breadcrumb-current">${esc(t(s.labelKey))}</span>`
+            : `<a href="${esc(s.href)}">${esc(t(s.labelKey))}</a>`
         const dd = (!isLast && s.siblings?.length) ? `<button class="breadcrumb-dd-btn">▾</button>` : ''
         const sep = isLast ? '' : `<span class="breadcrumb-sep">▸</span>`
         return link + dd + sep
@@ -135,6 +137,9 @@ export function showModal(cfg) {
     return openWuiModal(cfg)
 }
 
+/* Escapes for both text and attribute contexts (output lands in href="..."). */
 function esc(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;')
 }

@@ -8,12 +8,15 @@
   import { render } from '../js/wui/content-types/graph.js'
   const log = []
   const { el } = render({
-    nodes: [{ id: 'a', level: 0, title: 'Result' }, { id: 'b', level: 1, title: 'Iron' }],
-    edges: [{ from: 'a', to: 'b' }],
+    nodes: [
+      { id: 'a', level: 0, title: 'Result', dependsOn: [{ to: 'b' }] },
+      { id: 'b', level: 1, title: 'Iron' },
+    ],
   })
   document.getElementById('host').appendChild(el)
   log.push(['renders graph board', !!el.querySelector('.graph-board')])
   log.push(['renders 2 nodes', el.querySelectorAll('.graph-node').length === 2])
+  log.push(['renders 1 edge from dependsOn', el.querySelectorAll('.graph-edges path.graph-edge').length === 1])
   document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')
   console.log(log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n'))
 </script>

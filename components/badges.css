@@ -19,28 +19,30 @@
 }
 
 /* ── Semantic variants ───────────────────────────────────────────────────── */
+/* Outline recipe (Schritt 4): bg-card surface, full semantic-color border,
+   text follows the border color — no tinted-background fills. */
 .badge-accent {
-    background: var(--accent-muted);
-    color: var(--accent-dark);
-    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+    background: var(--bg-card);
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 .badge-success {
-    background: var(--success-muted);
+    background: var(--bg-card);
     color: var(--success);
-    border-color: color-mix(in srgb, var(--success) 25%, transparent);
+    border-color: var(--success);
 }
 
 .badge-danger {
-    background: var(--danger-muted);
+    background: var(--bg-card);
     color: var(--danger);
-    border-color: color-mix(in srgb, var(--danger) 25%, transparent);
+    border-color: var(--danger);
 }
 
 .badge-warn {
-    background: var(--warn-muted);
+    background: var(--bg-card);
     color: var(--warn);
-    border-color: color-mix(in srgb, var(--warn) 25%, transparent);
+    border-color: var(--warn);
 }
 
 /* ── Dot indicator ───────────────────────────────────────────────────────── */

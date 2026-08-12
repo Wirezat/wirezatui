@@ -24,26 +24,29 @@
 .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
 /* ── Variants ────────────────────────────────────────────────────────────── */
+/* Outline recipe (Schritt 3): bg-card surface, full semantic-color border,
+   text follows the border color. No filled buttons — replaces the old
+   background:var(--accent)/white-text style entirely. */
 .btn-primary {
-    background: var(--accent);
-    color: var(--accent-text);
-    border-color: var(--accent-dark);
+    background: var(--bg-card);
+    color: var(--accent);
+    border-color: var(--accent);
 }
-.btn-primary:hover:not(:disabled) { background: var(--accent-dark); }
+.btn-primary:hover:not(:disabled) { color: var(--accent-hover); border-color: var(--accent-hover); }
 
 .btn-ghost {
     background: transparent;
     color: var(--text-muted);
-    border-color: var(--border-strong);
+    border-color: var(--border);
 }
-.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); }
 
 .btn-danger {
-    background: var(--danger);
-    color: #fff;
+    background: var(--bg-card);
+    color: var(--danger);
     border-color: var(--danger);
 }
-.btn-danger:hover:not(:disabled) { filter: brightness(0.88); }
+.btn-danger:hover:not(:disabled) { color: var(--danger-hover); border-color: var(--danger-hover); }
 
 .btn-danger-ghost {
     background: transparent;
@@ -51,7 +54,6 @@
     border-color: color-mix(in srgb, var(--danger) 30%, transparent);
 }
 .btn-danger-ghost:hover:not(:disabled) {
-    background: var(--danger-muted);
     border-color: var(--danger);
 }
 
@@ -68,14 +70,14 @@
     color: var(--text-faint);
     border-color: transparent;
 }
-.btn-flat:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); }
+.btn-flat:hover:not(:disabled) { color: var(--text); }   /* was: background: var(--bg-hover) */
 
 .btn-danger-flat {
     background: transparent;
     color: var(--text-faint);
     border-color: transparent;
 }
-.btn-danger-flat:hover:not(:disabled) { background: var(--danger-muted); color: var(--danger); }
+.btn-danger-flat:hover:not(:disabled) { color: var(--danger); }   /* was: background: var(--danger-muted) */
 
 /* Square icon-only button */
 .btn-icon {

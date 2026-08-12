@@ -37,6 +37,14 @@
 .icontext-body {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    /* Without flex:1, the body's width is left to plain flex auto-sizing,
+       which — inside deep ancestor chains that also use min-width:0 (e.g. a
+       table cell's own flex wrapper) — can resolve to 0 instead of the
+       label's real content width, silently hiding text that IS present in
+       the DOM. flex:1 makes it reliably claim whatever space its container
+       already resolved, regardless of how deep that container's own chain
+       goes. */
     min-width: 0;
 }
 

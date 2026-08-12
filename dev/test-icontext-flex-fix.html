@@ -1,0 +1,34 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/icontext.css">
+<link rel="stylesheet" href="../components/tables.css">
+<style>body{background:var(--bg);color:var(--text);padding:20px;font-family:sans-serif}
+table{border-collapse:collapse;width:300px}
+td{padding:8px;border-bottom:1px solid var(--border)}
+</style>
+</head><body>
+<h3>Reproduces the exact nested flex chain from factory.html's production-line table</h3>
+<table id="target-table">
+  <tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:var(--gap-icon);">
+        <div class="td-muted" style="flex:1;min-width:0;">
+          <span class="icontext icontext-sm">
+            <img class="icontext-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' fill='%233b82f6'/%3E%3C/svg%3E">
+            <span class="icontext-body"><span class="icontext-text cell-clamp cell-clamp--scroll"><span class="cell-clamp-inner">Iron Plate</span></span></span>
+          </span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<div id="result" style="margin-top:16px;font-family:monospace"></div>
+<script>
+  const el = document.querySelector('.icontext-text');
+  const w = el.getBoundingClientRect().width;
+  const visible = el.textContent.trim().length > 0 && w > 10;
+  document.getElementById('result').textContent =
+    'icontext-text width: ' + w.toFixed(1) + 'px — ' + (visible ? 'PASS (label has real width)' : 'FAIL (still collapsed)');
+  document.getElementById('result').style.color = visible ? 'var(--success, #16a34a)' : 'var(--danger, #dc2626)';
+</script>
+</body></html>

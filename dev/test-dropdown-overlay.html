@@ -1,0 +1,32 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/dropdown.css">
+<link rel="stylesheet" href="../components/infocard.css">
+<link rel="stylesheet" href="../components/autocomplete.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif}
+.dropdown-wrap{position:relative;display:inline-block}
+.input{height:30px;padding:0 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)}
+</style>
+</head><body>
+  <div class="dropdown-wrap">
+    <button data-dropdown-trigger class="input">Menü ▾</button>
+    <div class="dropdown-panel">
+      <button class="dropdown-item">Profil</button>
+      <button class="dropdown-item active">Einstellungen</button>
+      <button class="dropdown-item danger">Abmelden</button>
+    </div>
+  </div>
+
+  <div class="wui-ac-wrap" style="position:relative;margin-top:60px">
+    <input class="input" id="ac-input" value="iron">
+    <div class="wui-ac-drop open" id="ac-drop">
+      <div class="wui-ac-row"><span class="wui-ac-primary">Iron Ingot</span><span class="wui-ac-secondary">minecraft</span></div>
+      <div class="wui-ac-row ac-active"><span class="wui-ac-primary">Iron Block</span><span class="wui-ac-secondary">minecraft</span></div>
+    </div>
+  </div>
+
+<script type="module">
+  import { initDropdowns } from '../js/dropdown.js'
+  initDropdowns()
+</script>
+</body></html>

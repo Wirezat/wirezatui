@@ -1,5 +1,6 @@
 /* wirezat-ui-v1 / layout/page.css
-   Per-page structural elements: breadcrumb, page-header, konfig-bar, tabs.
+   Per-page structural elements: breadcrumb, page-header, konfig-bar,
+   split-layout. Tabs live in components/tabs.css (.wui-tabs / .wui-tab).
    Requires: tokens/base.css + app/theme.css
 */
 
@@ -22,6 +23,16 @@
 .breadcrumb-sep { opacity: 0.4; font-size: var(--text-xs); }
 .breadcrumb-current { color: var(--text); font-weight: var(--weight-medium); }
 
+.breadcrumb-dd-btn {
+    font-size: 9px;
+    color: var(--text-faint);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 1px 3px;
+}
+.breadcrumb-dd-btn:hover { color: var(--accent); }
+
 /* ── Page header ─────────────────────────────────────────────────────────── */
 .page-header {
     display: flex;
@@ -34,6 +45,13 @@
     display: flex;
     align-items: center;
     gap: var(--gap-control);
+}
+
+/* Right-hand action cluster of .page-header */
+.page-header-actions {
+    display: flex;
+    gap: var(--gap-control, 8px);
+    align-items: center;
 }
 
 .page-title {
@@ -64,17 +82,12 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    transition: background 0.12s, color 0.12s;
+    transition: color 0.12s;
     user-select: none;
 }
-.konfig-trigger:hover {
-    background: var(--bg-hover);
-    color: var(--text-muted);
-}
-.konfig-trigger.open {
-    background: var(--accent-muted);
-    color: var(--accent-dark);
-}
+/* Hover/active are pure color transitions — no background tint (Schritt-17). */
+.konfig-trigger:hover { color: var(--text-muted); }
+.konfig-trigger.open  { color: var(--accent); }
 
 .konfig-bar {
     display: none;
@@ -125,52 +138,14 @@
     flex-direction: column;
     gap: var(--gap-container, 20px);
 }
+/* flex: 1 1 auto, not flex: 1 (which is 1 1 0%) — flex-basis:auto means
+   each container first claims its own natural content height; only the
+   LEFTOVER space (needed to stretch a shorter column to match the taller
+   one) gets distributed on top of that. flex-basis:0% ignores natural
+   content height entirely and splits ALL available space evenly among
+   sibling containers regardless of what each one actually needs — a
+   container whose content is naturally taller than its even share (e.g.
+   a machine-groups list whose rows wrap under a narrow main-panel) then
+   gets clipped by .container's overflow:hidden instead of sized to fit. */
 .main-panel .container, .mp .container,
-.side-panel .container, .sp .container { flex: 1; }
-
-/* ── Tabs ────────────────────────────────────────────────────────────────── */
-.tabs-bar {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    gap: 0;
-}
-
-.tab-btn {
-    padding: 0 var(--pad-card);
-    height: var(--h-tab);
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
-    color: var(--text-muted);
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    cursor: pointer;
-    transition: color 0.12s, border-color 0.12s;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--gap-inline);
-    white-space: nowrap;
-}
-
-.tab-btn:hover { color: var(--text); }
-
-.tab-btn.active {
-    color: var(--accent-dark);
-    border-bottom-color: var(--accent);
-    font-weight: var(--weight-semibold);
-}
-
-/* Badge inside a tab (e.g. count) */
-.tab-count {
-    font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
-    background: var(--bg-hover);
-    color: var(--text-faint);
-    padding: 1px 6px;
-    border-radius: var(--radius-pill);
-}
-.tab-btn.active .tab-count {
-    background: var(--accent-muted);
-    color: var(--accent-dark);
-}
+.side-panel .container, .sp .container { flex: 1 1 auto; }

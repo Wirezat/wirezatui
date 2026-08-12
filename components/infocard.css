@@ -136,7 +136,7 @@
 
 .infocard-grid-cell {
     aspect-ratio: 1;
-    background: var(--bg-page);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     display: flex;

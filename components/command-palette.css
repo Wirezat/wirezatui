@@ -18,7 +18,7 @@
     width: 480px;
     max-width: 90vw;
     background: var(--bg-card);
-    border: 1px solid var(--border-strong);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     overflow: hidden;

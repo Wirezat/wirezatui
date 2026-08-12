@@ -1,15 +1,15 @@
 <!-- wirezat-ui-v1 / html/tabs.html
      Tab bar + panels. JS: initTabs() from js/tabs.js.
      data-tabs wraps both bar and panels so initTabs() can scope correctly.
-     Requires: layout/page.css, js/tabs.js
+     Requires: components/tabs.css, components/badges.css, js/tabs.js
 -->
 <div data-tabs>
 
-  <div class="tabs-bar">
-    <button class="tab-btn active" data-tab="tab-a">{{TAB_A_LABEL}}</button>
-    <button class="tab-btn" data-tab="tab-b">{{TAB_B_LABEL}}</button>
+  <div class="wui-tabs">
+    <button class="wui-tab active" data-tab="tab-a">{{TAB_A_LABEL}}</button>
+    <button class="wui-tab" data-tab="tab-b">{{TAB_B_LABEL}}</button>
     <!-- Optional count badge inside tab: -->
-    <!-- <button class="tab-btn" data-tab="tab-c">{{LABEL}} <span class="tab-count">3</span></button> -->
+    <!-- <button class="wui-tab" data-tab="tab-c">{{LABEL}} <span class="badge">3</span></button> -->
   </div>
 
   <div data-tab-panel="tab-a">

@@ -14,7 +14,7 @@
 .graph-board-fs {
     position: fixed;
     z-index: 200;
-    border: 1px solid var(--border-strong);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     display: flex;
     flex-direction: column;
@@ -40,9 +40,10 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    transition: color 0.12s, border-color 0.12s;
 }
-.graph-fs-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--border-strong); }
+/* was: background: var(--bg-hover) — hover is a color transition only */
+.graph-fs-btn:hover { color: var(--text); border-color: var(--border-strong); }
 
 /* ── Canvas (scroll + drag-pan area) ────────────────────────────────────── */
 .graph-canvas {

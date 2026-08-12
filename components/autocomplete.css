@@ -14,9 +14,9 @@
     display: none;
     position: fixed;
     z-index: 9999;
-    background: var(--bg-page);
-    border: 1.5px solid var(--accent);
-    border-top: 1px solid var(--accent-muted);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);           /* was: 1.5px solid var(--accent) */
+    border-top: none;                                  /* was: 1px solid var(--accent-muted) */
     border-radius: 0 0 var(--radius) var(--radius);
     max-height: 260px;
     overflow-y: auto;
@@ -38,7 +38,7 @@
     overflow: hidden;
 }
 .wui-ac-row:hover,
-.wui-ac-row.ac-active { background: var(--accent-muted); color: var(--accent-dark); }
+.wui-ac-row.ac-active { color: var(--accent); }        /* was: background: var(--accent-muted); color: var(--accent-dark) */
 
 /* ── Primary field ───────────────────────────────────────────────────────── */
 /* The result's own name — must stay fully readable; the secondary field

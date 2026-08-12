@@ -1,0 +1,110 @@
+/* wirezat-ui-v1 / components/form-fields.css
+   The 11 field types beyond the 5 core ones. All build on the corrected
+   .input from forms.css. Requires: tokens/base.css, components/forms.css,
+   components/badges.css (Multi-Select chips reuse Badge, not a new chip).
+*/
+
+/* ── Toggle/Switch — small control, solid accent fill when on, same
+   precedent as Checkbox's checked state (not a "Fläche" violation). ── */
+.wui-switch {
+    width: 34px; height: 18px;
+    border-radius: var(--radius-pill);
+    background: var(--border);
+    position: relative;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+}
+.wui-switch.on { background: var(--accent); }
+.wui-switch-knob {
+    position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    transition: left 0.15s;
+}
+.wui-switch.on .wui-switch-knob { left: 18px; }
+
+/* ── Slider/Range ── */
+.wui-slider-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; position: relative; }
+.wui-slider-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--accent); border-radius: 2px; }
+.wui-slider-thumb { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--accent); transform: translate(-50%, -50%); cursor: pointer; }
+
+/* ── Date/Time-Picker — input+panel share one width via a wrapper, panel
+   merges seamlessly under the input (no top border/radius) — fixes the
+   alignment bug from the first mockup, same corner-squaring technique as
+   the open-state autocomplete input. ── */
+.wui-dt-wrap { display: flex; flex-direction: column; }
+.wui-dt-input { width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; }
+.wui-dt-panel {
+    width: 100%; box-sizing: border-box;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 8px;
+}
+.wui-dt-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-size: var(--text-xs, 11px); text-align: center; color: var(--text-muted); }
+.wui-dt-grid .selected { background: var(--bg-hover); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); border-radius: var(--radius); }
+
+/* ── Multi-Select — chips are the Badge component, not a new chip type ── */
+.wui-multiselect { min-height: var(--h-input, 30px); height: auto; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; padding: 4px 6px; }
+.wui-chip-x { color: var(--text-faint); cursor: pointer; margin-left: 2px; }
+
+/* ── Number-Input with stepper ── */
+.wui-num-group { display: inline-flex; }
+.wui-num-group .input { width: 60px; text-align: center; border-radius: 0; }
+.wui-num-step {
+    width: 24px; height: var(--h-input, 30px);
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-muted); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none;
+}
+.wui-num-step:first-child { border-radius: var(--radius) 0 0 var(--radius); border-right: none; }
+.wui-num-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: none; }
+
+/* ── Cascader — chained inputs, same corner-fusion as Number-Stepper ── */
+.wui-cascader { display: flex; }
+.wui-cascader .input { border-radius: 0; border-right: none; }
+.wui-cascader .input:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.wui-cascader .input:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-right: 1px solid var(--border); }
+
+/* ── Color-Picker ── */
+.wui-color-swatch { width: 30px; height: 30px; border-radius: var(--radius); border: 1px solid var(--border); cursor: pointer; }
+
+/* ── Rating ── */
+.wui-rating { display: flex; gap: 2px; font-size: 16px; }
+.wui-rating .on { color: var(--accent); }
+.wui-rating .off { color: var(--border-strong); }
+
+/* ── OTP-Input ── */
+.wui-otp { display: flex; gap: 6px; }
+.wui-otp .input { width: 32px; text-align: center; padding: 0; }
+
+/* ── File-Upload/Dropzone ── */
+.wui-dropzone {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-faint); font-size: var(--text-sm, 12px); text-align: center;
+    padding: 24px; cursor: pointer;
+}
+.wui-dropzone.dragover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Search-Input — reuses .wui-ac-drop from autocomplete.css when a
+   results panel is needed, no separate overlay design. ── */
+.wui-search-wrap { position: relative; }
+.wui-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--text-faint); font-size: 12px; }
+.wui-search-input { padding-left: 28px; }
+
+/* ── Shared end-icon slot — a trailing status glyph living INSIDE the
+   input (absolute, right-aligned), not a separate element after it.
+   Used for e.g. the password-confirm match indicator. ── */
+.input-wrap { position: relative; }
+.input.has-end-icon { padding-right: 26px; }
+.end-icon {
+    position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+    font-size: 12px; pointer-events: none;
+}
+.end-icon.ok  { color: var(--success); }
+.end-icon.bad { color: var(--danger); }

@@ -32,23 +32,39 @@
     color: var(--text);
 }
 
-/* View-picker — dropdown when >1 view, plain label when only 1 */
+/* View-picker — segmented row of icon buttons, one per view (>1 view);
+   plain label when only 1. Same recipe as the corrected .radio-group
+   (Schritt 19): neutral bg-card fläche, border between segments, active
+   segment = accent text + inset bottom bar, never a filled/tinted
+   background. */
 .view-picker {
     display: inline-flex;
-    align-items: center;
-    gap: var(--gap-icon);
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    padding: 3px var(--gap-inline);
-    border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    background: var(--bg-card);
-    cursor: pointer;
-    transition: background 0.12s, border-color 0.12s;
-    white-space: nowrap;
-    font-family: inherit;
+    border-radius: var(--radius);
+    overflow: hidden;
 }
-.view-picker:hover { border-color: var(--border-strong); background: var(--bg-hover); }
+
+.view-picker-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: none;
+    border-right: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--text-base);
+    font-family: inherit;
+    transition: color 0.12s;
+}
+.view-picker-btn:last-child { border-right: none; }
+.view-picker-btn:hover { color: var(--text); }
+.view-picker-btn.active {
+    color: var(--accent);
+    box-shadow: inset 0 -2px 0 var(--accent);
+}
 
 /* Single view — not interactive */
 .view-picker-label {
@@ -81,6 +97,13 @@
     padding: 0;
     flex: 1;
     min-height: 0;
+    /* A table-layout:fixed table whose explicit-width utility columns
+       (drag/check/warn/actions) sum to more than the available space has
+       nothing left to give its one flexible content column — without this,
+       that column silently collapses to 0 instead of the table scrolling.
+       Horizontal scroll is the robust fallback: content stays reachable
+       instead of vanishing when the container gets narrow. */
+    overflow-x: auto;
 }
 
 /* ── Container toolbar ───────────────────────────────────────────────────── */
@@ -98,9 +121,9 @@
 /* ── Config-container variant ────────────────────────────────────────────── */
 /* For settings / form containers. Visually distinguished by accent tint.   */
 .container-config {
-    border-color: var(--config-border);
+    border-color: var(--config);
 }
 .container-config .container-header {
-    background: var(--config-header-bg);
-    border-bottom-color: var(--config-border);
+    background: var(--config-muted);
+    border-bottom-color: var(--config);
 }

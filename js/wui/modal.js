@@ -4,6 +4,11 @@
    form, checklist, popconfirm, wizard) are configurations of the same chrome,
    not separate components.
 
+   Every preset returns a handle { el, close(), values() }. values() always
+   yields a plain object: form/prompt key it by field key, checklist by each
+   item's `id` (falling back to its index) with a boolean checked state,
+   confirm/danger-confirm/wizard/popconfirm have no inputs and yield {}.
+
    Usage:
      import { openWuiModal, closeWuiModal } from '/js/wui/modal.js'
      openWuiModal({
@@ -121,9 +126,6 @@ function _buildHeader(cfg) {
 
     const right = document.createElement('span')
     right.className = 'modal-header-right'
-    right.style.display = 'flex'
-    right.style.alignItems = 'center'
-    right.style.gap = 'var(--gap-control)'
 
     if (cfg.preset === 'wizard') {
         const count = document.createElement('span')
@@ -209,7 +211,7 @@ function _buildChecklist(cfg, body) {
     })
 
     return {
-        values: () => items.map((item, i) => ({ ...item, checked: boxes[i].checked })),
+        values: () => Object.fromEntries(items.map((item, i) => [item.id ?? i, boxes[i].checked])),
     }
 }
 
@@ -323,7 +325,6 @@ function _buildPopconfirm(cfg) {
 
     const footer = document.createElement('div')
     footer.className = 'modal-footer'
-    footer.style.padding = '0'
     ;(cfg.actions ?? []).forEach(a => footer.appendChild(_actionButton(a, handle)))
     card.appendChild(footer)
 

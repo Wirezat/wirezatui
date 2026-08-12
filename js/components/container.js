@@ -6,26 +6,35 @@
 
      const c = createContainer({
        title:       'Welten',
-       view:        'Kacheln',          // label when single view
-       views:       ['Kacheln','Liste'], // array → dropdown picker
-       config:      true,               // adds container-config class (purple tint)
-       filters:     [                   // optional filter controls
+       views:       [                    // >1 → segmented row of icon buttons
+         { key: 'tiles', icon: '▦', label: 'Kacheln' },
+         { key: 'table', icon: '☰', label: 'Liste' },
+       ],
+       view:         'tiles',            // initial active key; falls back to views[0].key
+       storageKey:   'view:my-list',      // optional — persists the active key in localStorage
+       config:       true,               // adds container-config class (purple tint)
+       filters:      [                   // optional filter controls
          { type: 'select', options: ['Alle', 'Aktiv'], placeholder: 'Status' },
          { type: 'search', placeholder: 'Suche…' }
        ],
-       flush:       true,               // container-body-flush (for tables)
-       onViewChange: (view) => {},
+       flush:        true,               // container-body-flush (for tables)
+       onViewChange: (key) => {},
      })
      parentEl.appendChild(c.el)
+     c.activeView   // currently active key
      // Update body content:
      c.setContent('<p>…</p>')
      c.setContent(domElement)
+
+   A single view (views.length <= 1) renders as a plain, non-interactive
+   label instead of a picker — nothing to switch between.
 */
 
 export function createContainer({
     title        = '',
     view         = null,
     views        = [],
+    storageKey   = null,
     config       = false,
     filters      = [],
     flush        = false,
@@ -43,24 +52,37 @@ export function createContainer({
     titleEl.textContent = title
     header.appendChild(titleEl)
 
-    // View picker
+    // View picker — segmented row of icon buttons, one per view.
+    const stored = storageKey ? localStorage.getItem(storageKey) : null
+    let activeView = (stored && views.some(v => v.key === stored)) ? stored : (view ?? views[0]?.key ?? null)
+
     if (views.length > 1) {
-        const picker = document.createElement('button')
+        const picker = document.createElement('div')
         picker.className = 'view-picker'
-        picker.textContent = (view ?? views[0]) + ' ▾'
-        picker.addEventListener('click', e => {
-            e.stopPropagation()
-            // Simple inline picker — swap through views
-            const current = views.indexOf(picker.textContent.replace(' ▾', ''))
-            const next = views[(current + 1) % views.length]
-            picker.textContent = next + ' ▾'
-            if (onViewChange) onViewChange(next)
-        })
+        const buttons = new Map()
+
+        for (const v of views) {
+            const btn = document.createElement('button')
+            btn.type = 'button'
+            btn.className = 'view-picker-btn' + (v.key === activeView ? ' active' : '')
+            btn.textContent = v.icon ?? ''
+            if (v.label) btn.title = v.label
+            btn.addEventListener('click', e => {
+                e.stopPropagation()
+                if (v.key === activeView) return
+                activeView = v.key
+                buttons.forEach((b, k) => b.classList.toggle('active', k === v.key))
+                if (storageKey) localStorage.setItem(storageKey, activeView)
+                if (onViewChange) onViewChange(activeView)
+            })
+            buttons.set(v.key, btn)
+            picker.appendChild(btn)
+        }
         header.appendChild(picker)
-    } else {
+    } else if (views.length === 1) {
         const label = document.createElement('span')
         label.className = 'view-picker-label'
-        label.textContent = view ?? (views[0] ?? '')
+        label.textContent = views[0].label ?? views[0].key ?? ''
         header.appendChild(label)
     }
 
@@ -111,5 +133,8 @@ export function createContainer({
         }
     }
 
-    return { el, body, setContent }
+    return {
+        el, body, setContent,
+        get activeView() { return activeView },
+    }
 }

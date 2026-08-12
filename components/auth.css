@@ -27,7 +27,7 @@
     max-width: var(--auth-card-w);
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
     overflow: hidden;
 }
 
@@ -36,14 +36,14 @@
     padding: var(--pad-page) var(--pad-page) var(--pad-card);
     text-align: center;
     border-bottom: 1px solid var(--border);
-    background: var(--bg-page);
+    background: var(--bg);
 }
 
 .auth-logo {
     width: var(--auth-logo-size);
     height: var(--auth-logo-size);
     background: var(--accent);
-    color: var(--accent-text);
+    color: #fff;   /* accent-filled surface: white text, --accent-text was removed */
     border-radius: var(--auth-logo-radius);
     display: flex;
     align-items: center;
@@ -64,34 +64,6 @@
     margin-top: 3px;
 }
 
-/* ── Tabs (login / register) — hidden in single-mode ────────────────────── */
-.auth-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-}
-
-.auth-tab {
-    flex: 1;
-    height: var(--h-tab);
-    padding: 0 var(--pad-card);
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
-    color: var(--text-muted);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: color 0.15s, border-color 0.15s;
-    font-family: inherit;
-}
-.auth-tab:hover { color: var(--text); }
-.auth-tab.active {
-    color: var(--text);
-    border-bottom-color: var(--accent);
-    font-weight: var(--weight-semibold);
-}
-
 /* ── Form area ───────────────────────────────────────────────────────────── */
 .auth-body {
     padding: var(--gap-section) var(--pad-page) var(--pad-page);
@@ -104,6 +76,13 @@
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     color: var(--text-muted);
+}
+
+#first-user-hint {
+    background: var(--bg-hover);   /* was: var(--bg-raised) */
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--gap-control, 8px) var(--pad-card, 14px);
 }
 
 /* ── Panels (switched by JS) ─────────────────────────────────────────────── */
@@ -202,7 +181,7 @@
     cursor: pointer;
     text-align: left;
     font-family: inherit;
-    transition: background 0.1s;
+    transition: color 0.1s;
 }
-.lang-option:hover { background: var(--bg-hover); }
+.lang-option:hover { color: var(--accent); }   /* was: background: var(--bg-hover) */
 .lang-option.active { color: var(--accent); font-weight: var(--weight-medium); }

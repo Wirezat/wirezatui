@@ -1,0 +1,34 @@
+/* wirezat-ui-v1 / components/marquee.css
+   Shared hover-marquee: a clipped container whose inner track scrolls on hover.
+   JS (js/marquee.js) measures overflow, duplicates the text and sets the
+   custom properties below. Consumers opt in via their own wrapper class
+   (see tables.css .cell-clamp--scroll, cards.css .tile-title).
+   Requires: tokens/base.css
+*/
+
+.wui-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.wui-marquee-inner {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    animation: wui-marquee
+               var(--marquee-dur, 6s)
+               linear
+               var(--marquee-delay, 0.5s)
+               infinite;
+    animation-play-state: paused;
+    will-change: transform;
+}
+
+/* Default hover trigger: hovering the clipping container itself.
+   Consumers with a larger hover surface (e.g. a whole tile) add their own rule. */
+.wui-marquee:hover .wui-marquee-inner { animation-play-state: running; }
+
+@keyframes wui-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--marquee-shift, -50%)); }
+}

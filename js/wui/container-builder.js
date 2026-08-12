@@ -3,11 +3,9 @@
    createContainer() for chrome (header/filters/view-picker) and dispatches
    the body content through content-types/index.js.
 
-   Note: createContainer()'s `views` param is a plain array of label strings
-   (single view-picker button that cycles through them on click), not a
-   dropdown keyed by id — wui's `views: [{key, labelKey}]` config is resolved
-   to that plain label list here; `key` is only used to report the selected
-   view back via `onViewSelect`.
+   Note: createContainer()'s `views` param is `[{key, icon, label}]` —
+   rendered as a segmented row of icon buttons. wui's `views: [{key, icon,
+   labelKey}]` config resolves labelKey → label here before passing through.
 
    Usage:
      import { buildContainer } from '/js/wui/container-builder.js'
@@ -26,27 +24,28 @@ import { t }                from '../i18n.js'
 
 export function buildContainer(cfg) {
     const {
-        id      = null,
-        title   = null,
-        views   = [],
-        filters = [],
-        config  = false,
-        content = null,
+        id         = null,
+        title      = null,
+        views      = [],
+        view       = null,
+        storageKey = null,
+        filters    = [],
+        config     = false,
+        content    = null,
         onViewSelect = null,
     } = cfg
 
-    const viewLabels  = views.map(v => v.labelKey ? t(v.labelKey) : v.key)
-    const viewByLabel = new Map(views.map((v, i) => [viewLabels[i], v]))
+    const resolvedViews = views.map(v => ({ key: v.key, icon: v.icon, label: v.labelKey ? t(v.labelKey) : v.label }))
 
     const container = createContainer({
         title:   title ? t(title) : '',
-        views:   viewLabels,
+        views:   resolvedViews,
+        view,
+        storageKey,
         config,
         filters: filters.map(_resolveFilter),
         flush:   content?.type === 'table' || content?.type === 'io-profile',
-        onViewChange: viewLabels.length > 1
-            ? label => onViewSelect?.(viewByLabel.get(label)?.key)
-            : null,
+        onViewChange: resolvedViews.length > 1 ? key => onViewSelect?.(key) : null,
     })
 
     let currentContent = content

@@ -36,8 +36,7 @@
     transition: background 0.1s, border-color 0.1s;
 }
 .field-editable:hover {
-    background: var(--accent-muted);
-    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+    border-color: var(--border);
 }
 
 /* ── Active / editing state ──────────────────────────────────────────────── */

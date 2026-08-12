@@ -9,6 +9,7 @@
 
   let confirmed = false
   openWuiModal({
+    preset: 'form',
     titleKey: 'common.confirm',
     content: { type: 'form', fields: [{ type: 'text', key: 'name', labelKey: 'common.name', value: 'x' }] },
     actions: [{ labelKey: 'common.confirm', variant: 'primary', onClick: () => { confirmed = true } }],
@@ -22,7 +23,12 @@
   log.push(['action onClick fired', confirmed === true])
   log.push(['modal closed after action', !document.querySelector('.modal-backdrop')])
 
-  openWuiModal({ titleKey: 'common.confirm' })
+  openWuiModal({
+    preset: 'confirm',
+    titleKey: 'common.confirm',
+    messageKey: 'common.confirm',
+    actions: [{ labelKey: 'common.cancel', variant: 'ghost' }],
+  })
   document.querySelector('.modal-backdrop').click()
   log.push(['closes on backdrop click', !document.querySelector('.modal-backdrop')])
 

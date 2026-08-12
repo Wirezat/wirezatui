@@ -12,30 +12,21 @@
 /* ── Dropdown panel ──────────────────────────────────────────────────────── */
 .dropdown-panel {
     position: absolute;
-    top: calc(100% + var(--gap-icon));
+    top: calc(100% + var(--gap-icon, 4px));
     right: 0;
     z-index: 150;
     background: var(--bg-card);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border);              /* was: var(--border-strong) at rest */
+    border-radius: var(--radius);                   /* was: var(--radius-lg) */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     min-width: 180px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
-
-/* Hidden by default; JS toggles .open */
 .dropdown-panel { display: none; }
 .dropdown-panel.open { display: flex; }
 
-/* Floating variant (popover.js): positioned via JS at a click-time trigger
-   rect instead of a static .dropdown-wrap ancestor. Its visibility is its own
-   presence in the DOM (popover.js creates it right before showing, removes it
-   to hide) rather than the .open toggle above — dropdown.js's global closeAll()
-   strips .open from every .dropdown-panel.open on every document click,
-   including the very click that just opened this panel, so this variant must
-   not depend on that class for display. */
 .dropdown-panel-floating {
     display: flex;
     position: fixed;
@@ -45,22 +36,20 @@
     overflow-y: auto;
 }
 
-/* ── Dropdown header ─────────────────────────────────────────────────────── */
 .dropdown-header {
-    padding: var(--gap-item) var(--pad-container);
+    padding: var(--gap-item, 12px) var(--pad-container, 14px);
     border-bottom: 1px solid var(--border);
-    font-size: var(--text-sm);
+    font-size: var(--text-sm, 12px);
     color: var(--text-muted);
 }
 
-/* ── Dropdown items ──────────────────────────────────────────────────────── */
 .dropdown-item {
     display: flex;
     align-items: center;
-    gap: var(--gap-control);
-    padding: var(--gap-control) var(--pad-container);
-    font-size: var(--text-base);
-    color: var(--text);
+    gap: var(--gap-control, 8px);
+    padding: var(--gap-control, 8px) var(--pad-container, 14px);
+    font-size: var(--text-base, 13px);
+    color: var(--text-muted);                        /* was: var(--text) — hover-retrofit rest state */
     cursor: pointer;
     border: none;
     background: transparent;
@@ -68,25 +57,23 @@
     text-align: left;
     font-family: inherit;
     text-decoration: none;
-    transition: background 0.1s;
+    transition: color 0.12s;
 }
-.dropdown-item:hover { background: var(--bg-hover); }
+.dropdown-item:hover { color: var(--text); }          /* was: background: var(--bg-hover) */
 .dropdown-item.active {
-    color: var(--accent-dark);
-    font-weight: var(--weight-medium);
+    color: var(--accent);                             /* was: var(--accent-dark) */
+    font-weight: var(--weight-medium, 500);
+    box-shadow: inset 2px 0 0 var(--accent);
 }
-.dropdown-item.danger { color: var(--danger); }
-.dropdown-item.danger:hover { background: var(--danger-muted); }
+.dropdown-item.danger { color: var(--text-muted); }
+.dropdown-item.danger:hover { color: var(--danger); } /* was: background: var(--danger-muted) */
 
-/* ── Dropdown divider ────────────────────────────────────────────────────── */
 .dropdown-divider {
     height: 1px;
     background: var(--border);
-    margin: var(--gap-icon) 0;
+    margin: var(--gap-icon, 4px) 0;
 }
 
-/* Optional two-line item content (used by popover.js) — label + a muted
-   secondary line for disambiguating otherwise-identical labels. */
 .dropdown-item-main {
     display: flex;
     flex-direction: column;
@@ -101,7 +88,7 @@
     max-width: 100%;
 }
 .dropdown-item-subtitle {
-    font-size: var(--text-xs);
+    font-size: var(--text-xs, 11px);
     color: var(--text-faint);
     white-space: nowrap;
     overflow: hidden;

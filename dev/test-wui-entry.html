@@ -14,7 +14,7 @@
   log.push(['theme applied', document.documentElement.style.getPropertyValue('--accent').trim() === '#3b82f6'])
 
   const page = renderPage({
-    containers: [{ id: 'demo', title: 'common.name', content: { type: 'table', columns: [{ key: 'name', labelKey: 'common.name' }], rows: [{ name: 'Iron' }] } }],
+    main: [{ id: 'demo', title: 'common.name', content: { type: 'table', columns: [{ key: 'name', labelKey: 'common.name' }], rows: [{ name: 'Iron' }] } }],
   })
   log.push(['container mounted', document.querySelector('#wui-page-content .container') !== null])
   page.get('demo').update({ rows: [{ name: 'Gold' }] })
@@ -24,7 +24,12 @@
   try { page.get('nope') } catch (e) { threw = e instanceof Error }
   log.push(['unknown id throws', threw])
 
-  showModal({ titleKey: 'common.confirm' })
+  showModal({
+    preset: 'confirm',
+    titleKey: 'common.confirm',
+    messageKey: 'common.confirm',
+    actions: [{ labelKey: 'common.cancel', variant: 'ghost' }],
+  })
   log.push(['showModal delegates to wui/modal', !!document.querySelector('.modal-backdrop')])
 
   document.getElementById('out').textContent = log.map(([n, ok]) => `${ok ? 'PASS' : 'FAIL'} ${n}`).join('\n')

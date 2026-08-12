@@ -5,7 +5,7 @@
    Load order:
      tokens/base.css          — tokens (no colors; app provides theme.css)
      layout/shell.css         — app-shell, header, sidebar, main
-     layout/page.css          — breadcrumb, page-header, konfig-bar, tabs
+     layout/page.css          — breadcrumb, page-header, konfig-bar, split-layout
      components/buttons.css
      components/nav.css
      components/badges.css
@@ -17,8 +17,31 @@
      components/empty.css
      components/inline-edit.css
      components/dropdown.css
+     components/user-menu.css
+     components/auth.css      — login/register card, lang picker
      components/infocard.css  — hover-triggered info card overlay
+     components/autocomplete.css
      components/graph.css     — layered directed graph board
+     components/marquee.css   — shared hover-marquee base
+     components/accordion.css
+     components/alert.css
+     components/anchor.css
+     components/avatar.css
+     components/code-block.css
+     components/command-palette.css
+     components/detail-grid.css
+     components/divider.css
+     components/drawer.css
+     components/feedback.css
+     components/form-fields.css
+     components/glint.css
+     components/icontext.css
+     components/skeleton.css
+     components/tabs.css      — .wui-tabs / .wui-tab (replaces legacy .tabs-bar)
+     components/toast.css
+     components/transfer.css
+     components/tree-view.css
+     components/utility.css
 */
 
 @import './tokens/base.css';
@@ -40,3 +63,23 @@
 @import './components/infocard.css';
 @import './components/autocomplete.css';
 @import './components/graph.css';
+@import './components/marquee.css';
+@import './components/accordion.css';
+@import './components/alert.css';
+@import './components/anchor.css';
+@import './components/avatar.css';
+@import './components/code-block.css';
+@import './components/command-palette.css';
+@import './components/detail-grid.css';
+@import './components/divider.css';
+@import './components/drawer.css';
+@import './components/feedback.css';
+@import './components/form-fields.css';
+@import './components/glint.css';
+@import './components/icontext.css';
+@import './components/skeleton.css';
+@import './components/tabs.css';
+@import './components/toast.css';
+@import './components/transfer.css';
+@import './components/tree-view.css';
+@import './components/utility.css';

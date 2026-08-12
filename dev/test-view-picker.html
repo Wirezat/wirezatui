@@ -1,0 +1,27 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/containers.css">
+<style>body{background:var(--bg);color:var(--text);padding:20px;font-family:sans-serif}</style>
+</head><body>
+<div id="host"></div>
+<div id="log" style="margin-top:16px;font-family:monospace"></div>
+
+<script type="module">
+  import { createContainer } from '../js/components/container.js'
+
+  const log = document.getElementById('log')
+  const c = createContainer({
+    title: 'Saves',
+    views: [
+      { key: 'tiles', icon: '▦', label: 'Kacheln' },
+      { key: 'table', icon: '☰', label: 'Liste' },
+    ],
+    storageKey: 'view:test-picker',
+    onViewChange: (key) => { log.textContent = 'onViewChange fired: ' + key + ' | c.activeView = ' + c.activeView }
+  })
+  c.setContent('<p style="padding:16px">body content</p>')
+  document.getElementById('host').appendChild(c.el)
+
+  window.__c = c
+</script>
+</body></html>

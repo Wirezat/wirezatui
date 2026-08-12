@@ -15,8 +15,16 @@
     padding: var(--pad-page);
 }
 
+/* Legacy static-markup contract (js/modal.js's initModal()/openModal()):
+   the backdrop element stays permanently in the DOM and toggles visibility
+   via .open, instead of being created/removed dynamically like showModal()'s
+   backdrop. Scoped to [data-wui-modal] specifically so it never affects the
+   new system's dynamically-created backdrops, which are never marked with
+   that attribute and rely on the flex default above. */
+.modal-backdrop[data-wui-modal]:not(.open) { display: none; }
+
 /* ── Modal panel ─────────────────────────────────────────────────────────── */
-.modal-card {
+.modal-card, .modal {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -45,6 +53,12 @@
     color: var(--text);
 }
 
+.modal-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control, 8px);
+}
+
 .modal-close {
     display: flex;
     align-items: center;
@@ -57,10 +71,10 @@
     border: none;
     cursor: pointer;
     font-size: var(--text-lg);
-    transition: background 0.12s, color 0.12s;
+    transition: color 0.12s;
     flex-shrink: 0;
 }
-.modal-close:hover { background: var(--bg-hover); color: var(--text); }
+.modal-close:hover { color: var(--text); }   /* was: background: var(--bg-hover) */
 
 /* ── Modal body ──────────────────────────────────────────────────────────── */
 .modal-body {
@@ -71,6 +85,12 @@
     gap: var(--gap-field);
     flex: 1;
     min-height: 0;
+}
+
+/* Message body text — confirm / danger-confirm / popconfirm */
+.modal-message {
+    font-size: var(--text-sm, 12px);
+    color: var(--text-muted);
 }
 
 /* ── Modal footer ────────────────────────────────────────────────────────── */
@@ -100,6 +120,8 @@
     gap: var(--gap-field);
     max-width: 280px;
 }
+/* The card supplies the padding; its footer must not add another ring. */
+.popconfirm-card .modal-footer { padding: 0; }
 
 /* Draggable — header is the grab surface, whole area, no handle icon. */
 .modal-header[data-draggable] { cursor: grab; }

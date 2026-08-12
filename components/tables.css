@@ -5,7 +5,16 @@
 
 /* ── Base table ──────────────────────────────────────────────────────────── */
 .table {
-    width: 100%;
+    /* min-width, not width: under table-layout:fixed (set per-table by
+       consuming pages that need persisted column widths), a hard width:100%
+       forces every column's share to sum to exactly the container's width —
+       an unstyled/flexible column then gets whatever's left over, which can
+       be negative and collapses to 0 when the fixed-width utility columns
+       (drag/check/warn/actions) alone already exceed the container. min-width
+       keeps the common case at 100% but lets the table grow past it when its
+       columns genuinely need more, so content stays reachable via the
+       .container-body-flush scroll (below) instead of vanishing. */
+    min-width: 100%;
     border-collapse: collapse;
     font-size: var(--text-base);
 }
@@ -125,6 +134,7 @@
     text-align: center;
 }
 .table tbody tr:hover .drag-handle { color: var(--text-muted); }
+.drag-handle:active { cursor: grabbing; }
 
 /* ── Drag-reorder states ─────────────────────────────────────────────────── */
 /* Row being dragged: faded placeholder stays in its original position */
