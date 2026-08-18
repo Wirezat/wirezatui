@@ -369,6 +369,11 @@ tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
     overflow: hidden;
     white-space: nowrap;
     contain: layout paint;
+    /* Without this, a cell-clamp wired by wireMarquee (which promotes it to
+       inline-block) shrink-to-fits its own text instead of the td's resolved
+       width under table-layout:auto, so it renders wider than — and spills
+       past — a parent td constrained only by max-width. */
+    max-width: 100%;
 }
 
 .cell-clamp-inner {

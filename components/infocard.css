@@ -40,6 +40,18 @@
     to   { opacity: 1; transform: translateY(0);   }
 }
 
+/* Title/subtitle marquee: js/infocard.js wires these via wireMarquee on every
+   show. The card only exists in the DOM while its trigger is hovered (JS
+   mouseenter/mouseleave), and the overlay is positioned above/below that
+   trigger rather than under the cursor — so a plain :hover on the marquee
+   itself would rarely fire. Run it unconditionally instead, since the card
+   being present already means "hovering". */
+.infocard .wui-marquee-inner { animation-play-state: running; }
+
+/* Inner text node for the title/subtitle marquee — must be display:inline-block
+   so scrollWidth is measurable (a plain inline box always reports 0). */
+.infocard-clamp-inner { display: inline-block; }
+
 /* ── Header ─────────────────────────────────────────────────────────────── */
 .infocard-header {
     display: flex;

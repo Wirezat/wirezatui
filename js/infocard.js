@@ -23,6 +23,8 @@
    the --_ic-cols CSS variable from it after cloning.
 */
 
+import { wireMarquee } from './marquee.js';
+
 let _active    = null;   // { overlay, def }
 let _showTimer = null;
 let _hideTimer = null;
@@ -88,7 +90,24 @@ function _show(trigger, def) {
     document.body.appendChild(overlay);
     _active = { overlay, def };
 
+    _wireMarquees(overlay);
     _position(trigger, overlay);
+}
+
+// Title/subtitle are plain text in the cloned markup — wrap and measure them
+// fresh each show, same wrap-then-wireMarquee pattern as js/tile-scroll.js.
+function _wireMarquees(overlay) {
+    overlay.querySelectorAll('.infocard-title, .infocard-subtitle').forEach(el => {
+        const inner = document.createElement('span');
+        inner.className = 'infocard-clamp-inner';
+        inner.textContent = el.textContent.trim();
+        el.textContent = '';
+        el.appendChild(inner);
+
+        if (!wireMarquee(el, inner)) {
+            el.textContent = inner.textContent; // fits: unwrap
+        }
+    });
 }
 
 function _hide() {
