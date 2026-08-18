@@ -57,7 +57,9 @@ async function _refresh() {
 
 export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
     const token = getToken();
-    const headers = { 'Content-Type': 'application/json', ...options.headers };
+    const headers = options.body instanceof FormData
+        ? { ...options.headers }
+        : { 'Content-Type': 'application/json', ...options.headers };
     if (token) headers['Authorization'] = 'Bearer ' + token;
 
     let res = await fetch(url, { ...options, headers });
