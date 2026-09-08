@@ -1,6 +1,25 @@
 /* wirezat-ui-v1 / js/auth.js
-   Session management (JWT tokens, getUser, logout, apiFetch) and
-   login page init (initAuth).
+   Session management (getUser, logout, apiFetch) and login page init (initAuth).
+
+   Two transports, same surface — pick with configure({ mode }):
+
+     'token'  (default)  Access and refresh token in localStorage, sent as a
+                         Bearer header. Works across origins and for clients
+                         that are not a browser, which is what a token API is
+                         for. The cost: localStorage is readable by any script
+                         on the page, so an XSS can carry the credentials off
+                         and keep using them.
+
+     'cookie'            The server sets an HttpOnly session cookie; every
+                         request just rides along with credentials. Script
+                         cannot read the cookie, so an XSS can act only while
+                         the page is open and cannot exfiltrate anything.
+                         Same-origin only, and the server must defend CSRF
+                         (SameSite=Strict or a token).
+
+   Neither is "the secure one" — they trade different risks. Pick 'token' when
+   something other than a same-origin browser page has to authenticate, and
+   'cookie' when nothing does.
 */
 
 import { initDropdowns } from './dropdown.js';
@@ -9,16 +28,25 @@ import { initThemeBtn }  from './theme.js';
 // ── Session management ────────────────────────────────────────────────────────
 
 const _cfg = {
+    mode:       'token',            // 'token' | 'cookie'
     loginPath:  '/login.html',
+    loginApi:   '/api/auth/login',  // cookie mode: where initAuth posts
     logoutApi:  '/api/auth/logout',
-    refreshApi: '/api/auth/refresh',
+    refreshApi: '/api/auth/refresh', // null = no refresh; a 401 is final
     meApi:      '/api/me',
 };
 
 export function configure(opts) { Object.assign(_cfg, opts); }
 
-export function getToken()   { return localStorage.getItem('access_token'); }
-export function getRefresh() { return localStorage.getItem('refresh_token'); }
+const _cookieMode = () => _cfg.mode === 'cookie';
+
+/* Auth keys only — localStorage also holds the theme and language, and signing
+   out is no reason to forget how someone likes to read the page. */
+const AUTH_KEYS = ['access_token', 'refresh_token'];
+function _clearTokens() { AUTH_KEYS.forEach(k => localStorage.removeItem(k)); }
+
+export function getToken()   { return _cookieMode() ? null : localStorage.getItem('access_token'); }
+export function getRefresh() { return _cookieMode() ? null : localStorage.getItem('refresh_token'); }
 
 function _setTokens(a, r) {
     localStorage.setItem('access_token',  a);
@@ -26,20 +54,37 @@ function _setTokens(a, r) {
 }
 
 export function logout() {
-    const token   = getToken();
-    const refresh = getRefresh();
-    if (token) {
-        fetch(_cfg.logoutApi, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body:    JSON.stringify({ refresh_token: refresh || '' }),
-        }).catch(() => {});
+    if (_cookieMode()) {
+        // keepalive so the request survives the navigation below — otherwise
+        // the server may never get to invalidate the session.
+        fetch(_cfg.logoutApi, { method: 'POST', credentials: 'same-origin', keepalive: true })
+            .catch(() => {});
+    } else {
+        const token = getToken();
+        if (token) {
+            fetch(_cfg.logoutApi, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body:    JSON.stringify({ refresh_token: getRefresh() || '' }),
+                keepalive: true,
+            }).catch(() => {});
+        }
+        _clearTokens();
     }
-    localStorage.clear();
+    _user = null;
     window.location.href = _cfg.loginPath;
 }
 
 async function _refresh() {
+    if (!_cfg.refreshApi) return false;
+    if (_cookieMode()) {
+        try {
+            // The refresh token is a cookie too, so there is nothing to send;
+            // a successful response rotates the cookies server-side.
+            const res = await fetch(_cfg.refreshApi, { method: 'POST', credentials: 'same-origin' });
+            return res.ok;
+        } catch { return false; }
+    }
     const r = getRefresh();
     if (!r) return false;
     try {
@@ -55,41 +100,45 @@ async function _refresh() {
     } catch { return false; }
 }
 
-export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
-    const token = getToken();
+function _send(url, options) {
     const headers = options.body instanceof FormData
         ? { ...options.headers }
         : { 'Content-Type': 'application/json', ...options.headers };
-    if (token) headers['Authorization'] = 'Bearer ' + token;
-
-    let res = await fetch(url, { ...options, headers });
-
-    // A 401 with no token just means "not logged in" (e.g. /api/me from an
-    // unauthenticated demo visitor) — that's an expected, non-fatal outcome
-    // for the caller to handle, not a session that needs bouncing.
-    if (res.status === 401 && !token) return res;
-
-    if (res.status === 401) {
-        const ok = await _refresh();
-        if (!ok) {
-            // On public pages a dead session just means "treat as logged out" —
-            // bouncing to /login would break pages that never required auth.
-            if (silent401) return res;
-            logout();
-            return null;
-        }
-        const newHeaders = { ...headers, 'Authorization': 'Bearer ' + getToken() };
-        res = await fetch(url, { ...options, headers: newHeaders });
-        if (res.status === 401) {
-            if (silent401) return res;
-            logout();
-            return null;
-        }
+    if (_cookieMode()) {
+        return fetch(url, { ...options, headers, credentials: 'same-origin' });
     }
-    return res;
+    const token = getToken();
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    return fetch(url, { ...options, headers });
 }
 
+export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
+    let res = await _send(url, options);
+    if (res.status !== 401) return res;
+
+    // Token mode can tell "never logged in" from "session expired": no token at
+    // all means the former, which is an expected outcome for the caller (e.g.
+    // /api/me on a public page), not a session worth bouncing. Cookie mode
+    // cannot see its own credential, so it has to try the refresh either way.
+    if (!_cookieMode() && !getToken()) return res;
+
+    if (await _refresh()) {
+        res = await _send(url, options);
+        if (res.status !== 401) return res;
+    }
+
+    // On public pages a dead session just means "treat as logged out" —
+    // bouncing to /login would break pages that never required auth.
+    if (silent401) return res;
+    logout();
+    return null;
+}
+
+/* Client-side gate for pages that must not render before a session exists.
+   Cookie mode has nothing to check — the credential is invisible to script —
+   so the server's own redirect is the gate, and this is deliberately a no-op. */
 export function guard() {
+    if (_cookieMode()) return;
     if (!getToken() && !getRefresh()) window.location.href = _cfg.loginPath;
 }
 
@@ -138,14 +187,15 @@ export function applyRoles() {
 */
 
 const DEFAULTS = {
-    loginUrl:    '/api/auth/login',
+    // loginUrl falls back to configure()'s loginApi so an app that already set
+    // its endpoints for the session layer does not have to repeat itself here.
     registerUrl: '/api/auth/register',
     configUrl:   '/api/auth/config',
     langFlags:   { en: '🇬🇧', de: '🇩🇪' },
 };
 
 export function initAuth(cfg, { t, getLang, setLang }) {
-    const c = { ...DEFAULTS, ...cfg };
+    const c = { loginUrl: _cfg.loginApi, ...DEFAULTS, ...cfg };
 
     // ── App identity ──────────────────────────────────────────────────────────
     const logoEl  = document.getElementById('auth-logo');
@@ -160,7 +210,9 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.title = (c.name ?? 'App') + ' — ' + t('login.title');
 
     // ── Skip if already logged in ─────────────────────────────────────────────
-    if (localStorage.getItem('access_token')) {
+    // Token mode can see its own credential. Cookie mode cannot, so the server
+    // is the one that redirects an already-signed-in visitor away from here.
+    if (!_cookieMode() && localStorage.getItem('access_token')) {
         window.location.href = c.redirect ?? '/';
         return;
     }
@@ -193,7 +245,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
 
     // Check server config — may force login-only if registration is disabled.
     // Never overrides an explicit mode (login / register / password).
-    if ((c.mode ?? 'both') === 'both') {
+    if ((c.mode ?? 'both') === 'both' && c.configUrl) {
         fetch(c.configUrl)
             .then(r => r.json())
             .then(api => { if (!api.registration_enabled) applyMode('login'); })
@@ -243,6 +295,28 @@ export function initAuth(cfg, { t, getLang, setLang }) {
         el.textContent = '';
     }
 
+    // ── Credential submit ─────────────────────────────────────────────────────
+    /* One request shape for both transports. Token mode reads the tokens out of
+       the JSON body; cookie mode expects the server to have set the cookie and
+       may answer with no body at all, so the response is only parsed when there
+       is something to parse. */
+    async function _submit(url, payload) {
+        const res = await fetch(url, {
+            method:      'POST',
+            headers:     { 'Content-Type': 'application/json' },
+            body:        JSON.stringify(payload),
+            credentials: _cookieMode() ? 'same-origin' : 'omit',
+        });
+
+        let data = null;
+        const body = await res.text();
+        if (body) { try { data = JSON.parse(body); } catch { data = { message: body.trim() }; } }
+
+        if (!res.ok) return { ok: false, message: data?.message };
+        if (!_cookieMode()) _setTokens(data.access_token, data.refresh_token);
+        return { ok: true };
+    }
+
     // ── Login ─────────────────────────────────────────────────────────────────
     async function doLogin() {
         clearStatus('status-login');
@@ -253,15 +327,8 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             return;
         }
         try {
-            const res  = await fetch(c.loginUrl, {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({ username, password }),
-            });
-            const data = await res.json();
-            if (!res.ok) { showStatus('status-login', 'err', data.message || t('msg.login_failed')); return; }
-            localStorage.setItem('access_token',  data.access_token);
-            localStorage.setItem('refresh_token', data.refresh_token);
+            const r = await _submit(c.loginUrl, { username, password });
+            if (!r.ok) { showStatus('status-login', 'err', r.message || t('msg.login_failed')); return; }
             window.location.href = c.redirect ?? '/';
         } catch { showStatus('status-login', 'err', t('msg.network_error')); }
     }
@@ -283,15 +350,8 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             return;
         }
         try {
-            const res  = await fetch(c.registerUrl, {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({ username, password }),
-            });
-            const data = await res.json();
-            if (!res.ok) { showStatus('status-reg', 'err', data.message || t('msg.registration_failed')); return; }
-            localStorage.setItem('access_token',  data.access_token);
-            localStorage.setItem('refresh_token', data.refresh_token);
+            const r = await _submit(c.registerUrl, { username, password });
+            if (!r.ok) { showStatus('status-reg', 'err', r.message || t('msg.registration_failed')); return; }
             window.location.href = c.redirect ?? '/';
         } catch { showStatus('status-reg', 'err', t('msg.network_error')); }
     }
