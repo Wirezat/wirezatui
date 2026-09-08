@@ -8,6 +8,7 @@
        theme: { accent: '#3b82f6' },
        lang:  'en',                          // optional, defaults to stored getLang()
        nav:   [{ href: '/save', icon: '🏭', label: 'Factories' }],
+       header: { labels: { logout: 'Sign out' } },  // optional, see header.js
      })
 
      const page = renderPage({
@@ -29,17 +30,22 @@
 
 import { applyAccentTheme }        from './wui/accent-theme.js'
 import { init as initHeaderChrome } from './header.js'
-import { load as loadI18n, applyI18n, getLang, t } from './i18n.js'
+import { load as loadI18n, applyI18n, getLang, setLang, t } from './i18n.js'
 import { buildContainer }          from './wui/container-builder.js'
 import { openWuiModal }            from './wui/modal.js'
 import { checkThemeTokens }        from './theme-check.js'
 
-export async function init({ theme = {}, lang = null, nav = [] } = {}) {
+/* getLang/setLang are passed unconditionally: init() already owns the language
+   (it takes `lang`, loads the locale, applies it), and html/shell.html ships a
+   [data-lang] picker — so wiring that picker belongs here, not in every app.
+   `header` forwards header.js's remaining options (adminSections, labels,
+   publicPage) and is spread last so an app can still override the defaults. */
+export async function init({ theme = {}, lang = null, nav = [], header = {} } = {}) {
     applyAccentTheme(theme)
     checkThemeTokens()
     await loadI18n(lang ?? getLang())
     applyI18n()
-    await initHeaderChrome({ navLinks: nav })
+    await initHeaderChrome({ navLinks: nav, getLang, setLang, ...header })
 }
 
 /* renderPage — replaces the old flat containers[] entirely (Schritt 16).
