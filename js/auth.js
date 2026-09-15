@@ -9,6 +9,11 @@ import { initThemeBtn }  from './theme.js';
 // ── Session management ────────────────────────────────────────────────────────
 
 const _cfg = {
+    // 'bearer' (default): access/refresh tokens in localStorage, sent as
+    // Authorization headers. 'cookie': the server carries the session in an
+    // HttpOnly cookie, so there is no token to read or attach — every
+    // function below branches on this instead of on token presence.
+    mode:       'bearer',
     loginPath:  '/login.html',
     logoutApi:  '/api/auth/logout',
     refreshApi: '/api/auth/refresh',
@@ -26,14 +31,20 @@ function _setTokens(a, r) {
 }
 
 export function logout() {
-    const token   = getToken();
-    const refresh = getRefresh();
-    if (token) {
-        fetch(_cfg.logoutApi, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body:    JSON.stringify({ refresh_token: refresh || '' }),
-        }).catch(() => {});
+    if (_cfg.mode === 'cookie') {
+        // No token to prove who's logging out — the cookie does that. The
+        // server reads it, deletes the session, and clears the cookie.
+        fetch(_cfg.logoutApi, { method: 'POST' }).catch(() => {});
+    } else {
+        const token   = getToken();
+        const refresh = getRefresh();
+        if (token) {
+            fetch(_cfg.logoutApi, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body:    JSON.stringify({ refresh_token: refresh || '' }),
+            }).catch(() => {});
+        }
     }
     localStorage.clear();
     window.location.href = _cfg.loginPath;
@@ -61,6 +72,15 @@ export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
     if (token) headers['Authorization'] = 'Bearer ' + token;
 
     let res = await fetch(url, { ...options, headers });
+
+    // Cookie mode has no token to test, so a 401 here can only mean the
+    // session cookie is gone or expired — always fatal, never "not logged in
+    // yet" (there's no separate signal for that case, and no refresh to try).
+    if (res.status === 401 && _cfg.mode === 'cookie') {
+        if (silent401) return res;
+        logout();
+        return null;
+    }
 
     // A 401 with no token just means "not logged in" (e.g. /api/me from an
     // unauthenticated demo visitor) — that's an expected, non-fatal outcome
@@ -251,11 +271,24 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             return;
         }
         try {
-            const res  = await fetch(c.loginUrl, {
+            const res = await fetch(c.loginUrl, {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ username, password }),
             });
+            if (_cfg.mode === 'cookie') {
+                // The server answers with the session cookie itself (Set-Cookie
+                // on success, no body either way) — there is no token JSON to
+                // read, and parsing one here is what used to throw and mask a
+                // real login as "could not reach the server".
+                if (!res.ok) {
+                    const message = (await res.text().catch(() => '')).trim();
+                    showStatus('status-login', 'err', message || t('msg.login_failed'));
+                    return;
+                }
+                window.location.href = c.redirect ?? '/';
+                return;
+            }
             const data = await res.json();
             if (!res.ok) { showStatus('status-login', 'err', data.message || t('msg.login_failed')); return; }
             localStorage.setItem('access_token',  data.access_token);
@@ -281,11 +314,20 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             return;
         }
         try {
-            const res  = await fetch(c.registerUrl, {
+            const res = await fetch(c.registerUrl, {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ username, password }),
             });
+            if (_cfg.mode === 'cookie') {
+                if (!res.ok) {
+                    const message = (await res.text().catch(() => '')).trim();
+                    showStatus('status-reg', 'err', message || t('msg.registration_failed'));
+                    return;
+                }
+                window.location.href = c.redirect ?? '/';
+                return;
+            }
             const data = await res.json();
             if (!res.ok) { showStatus('status-reg', 'err', data.message || t('msg.registration_failed')); return; }
             localStorage.setItem('access_token',  data.access_token);
@@ -306,13 +348,21 @@ export function initAuth(cfg, { t, getLang, setLang }) {
                 const result = await c.onPassword(password);
                 if (!result?.ok) { showStatus('status-password', 'err', result?.message || t('msg.login_failed')); return; }
             } else if (c.passwordUrl) {
-                const res  = await fetch(c.passwordUrl, {
+                const res = await fetch(c.passwordUrl, {
                     method:  'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body:    JSON.stringify({ password }),
                 });
-                const data = await res.json();
-                if (!res.ok) { showStatus('status-password', 'err', data.message || t('msg.login_failed')); return; }
+                if (_cfg.mode === 'cookie') {
+                    if (!res.ok) {
+                        const message = (await res.text().catch(() => '')).trim();
+                        showStatus('status-password', 'err', message || t('msg.login_failed'));
+                        return;
+                    }
+                } else {
+                    const data = await res.json();
+                    if (!res.ok) { showStatus('status-password', 'err', data.message || t('msg.login_failed')); return; }
+                }
             }
             if (c.onSuccess) c.onSuccess();
             else window.location.href = c.redirect ?? '/';
