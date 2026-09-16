@@ -111,6 +111,13 @@
     padding: 0;
 }
 
+/* Any classed layout rule sharing [hidden]'s element (.field, .modal-backdrop,
+   .tab-panel, …) has equal specificity and wins as the later author rule —
+   the browser's own `[hidden] { display: none }` is a user-agent default, and
+   author styles beat those regardless of order. Restated here as an author
+   rule so `el.hidden = true` still hides the element. */
+[hidden] { display: none !important; }
+
 html {
     color-scheme: light;
     font-size: 100%;
