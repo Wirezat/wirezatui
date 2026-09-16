@@ -2,7 +2,8 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-.btn {
+.btn,
+.wui-guest button:not([class]) {
     display: inline-flex;
     align-items: center;
     gap: var(--gap-inline);
@@ -21,7 +22,15 @@
     color: var(--text);
 }
 
-.btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.btn:disabled,
+.wui-guest button:not([class]):disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+/* A guest button (see .wui-guest in forms.css) takes .btn geometry above and
+   the neutral ghost surface below — never primary: a guest author has not
+   told us which of their buttons carries the primary action. Both yield the
+   moment the author names any class: from then on the button follows the same
+   rule as host code, where .btn-danger without .btn is the author's own
+   business. */
 
 /* ── Variants ────────────────────────────────────────────────────────────── */
 /* Outline recipe (Schritt 3): bg-card surface, full semantic-color border,
@@ -34,12 +43,14 @@
 }
 .btn-primary:hover:not(:disabled) { color: var(--accent-hover); border-color: var(--accent-hover); }
 
-.btn-ghost {
+.btn-ghost,
+.wui-guest button:not([class]) {
     background: transparent;
     color: var(--text-muted);
     border-color: var(--border);
 }
-.btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); }
+.btn-ghost:hover:not(:disabled),
+.wui-guest button:not([class]):hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); }
 
 .btn-danger {
     background: var(--bg-card);

@@ -42,8 +42,25 @@
     margin-bottom: var(--gap-inline);
 }
 
+/* ── Gast-Inhalt (.wui-guest) ────────────────────────────────────────────── */
+/* Marks a container whose content is authored by someone who does not know
+   this package — an embedded plugin, a rendered document, injected markup.
+   Bare input/select/textarea/button inside it pick up the house recipes
+   without the author naming a single class.
+
+   The guest selectors are appended to the .input / .select / .textarea / .btn
+   rules themselves and never copy their declarations, so guest optics cannot
+   drift from the real ones. An explicit class always wins: an author who
+   wants more (.radio-group, .field, .btn-danger) just uses it.
+
+   min-width:0 is guest-only. An author laying out a flex row cannot know that
+   a form control's intrinsic min-width would otherwise push the row past its
+   container. */
+.wui-guest :is(input, select, textarea, button) { min-width: 0; }
+
 /* ── Inputs ──────────────────────────────────────────────────────────────── */
-.input {
+.input,
+.wui-guest input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"]) {
     height: var(--h-input);
     padding: 0 var(--pad-btn-sm);
     border: 1px solid var(--border);
@@ -56,14 +73,18 @@
     transition: border-color 0.12s, box-shadow 0.12s;
     outline: none;
 }
-.input:focus {
+.input:focus,
+.wui-guest input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"]):focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-muted);
 }
-.input::placeholder { color: var(--text-faint); }
-.input:disabled { opacity: 0.5; cursor: not-allowed; background: var(--bg); }
+.input::placeholder,
+.wui-guest input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"])::placeholder { color: var(--text-faint); }
+.input:disabled,
+.wui-guest input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"]):disabled { opacity: 0.5; cursor: not-allowed; background: var(--bg); }
 
-.textarea {
+.textarea,
+.wui-guest textarea {
     height: auto;
     min-height: 80px;
     padding: var(--gap-inline) var(--pad-btn-sm);
@@ -72,7 +93,8 @@
 }
 
 /* ── Select / Dropdown field ─────────────────────────────────────────────── */
-.select {
+.select,
+.wui-guest select {
     appearance: none;
     height: var(--h-input);
     padding: 0 var(--gap-section) 0 var(--pad-btn-sm);
@@ -89,7 +111,8 @@
     transition: border-color 0.12s;
     width: 100%;
 }
-.select:focus { border-color: var(--accent); }
+.select:focus,
+.wui-guest select:focus { border-color: var(--accent); }
 
 /* ── Radio group (toggle-style, ≤4 options) ──────────────────────────────── */
 .radio-group {

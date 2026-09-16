@@ -11,7 +11,8 @@
      components/badges.css
      components/cards.css     — tile (3-row), stat-tile
      components/containers.css — container + view-picker + filter-bar
-     components/forms.css     — field, label, caption, titel-container, inputs
+     components/forms.css     — field, label, caption, titel-container, inputs,
+                                .wui-guest (bare controls in foreign-authored content)
      components/tables.css    — compact table, group-hd, expandable, checklist
      components/modal.css
      components/empty.css
