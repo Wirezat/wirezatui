@@ -3,7 +3,7 @@
 
    Two transports, same surface — pick with configure({ mode }):
 
-     'token'  (default)  Access and refresh token in localStorage, sent as a
+     'bearer' (default)  Access and refresh token in localStorage, sent as a
                          Bearer header. Works across origins and for clients
                          that are not a browser, which is what a token API is
                          for. The cost: localStorage is readable by any script
@@ -17,7 +17,7 @@
                          Same-origin only, and the server must defend CSRF
                          (SameSite=Strict or a token).
 
-   Neither is "the secure one" — they trade different risks. Pick 'token' when
+   Neither is "the secure one" — they trade different risks. Pick 'bearer' when
    something other than a same-origin browser page has to authenticate, and
    'cookie' when nothing does.
 */
@@ -28,7 +28,7 @@ import { initThemeBtn }  from './theme.js';
 // ── Session management ────────────────────────────────────────────────────────
 
 const _cfg = {
-    mode:       'token',            // 'token' | 'cookie'
+    mode:       'bearer',           // 'bearer' | 'cookie'
     loginPath:  '/login.html',
     loginApi:   '/api/auth/login',  // cookie mode: where initAuth posts
     logoutApi:  '/api/auth/logout',
@@ -300,6 +300,12 @@ export function initAuth(cfg, { t, getLang, setLang }) {
        the JSON body; cookie mode expects the server to have set the cookie and
        may answer with no body at all, so the response is only parsed when there
        is something to parse. */
+    async function _parseBody(res) {
+        const body = await res.text();
+        if (!body) return null;
+        try { return JSON.parse(body); } catch { return { message: body.trim() }; }
+    }
+
     async function _submit(url, payload) {
         const res = await fetch(url, {
             method:      'POST',
@@ -307,11 +313,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             body:        JSON.stringify(payload),
             credentials: _cookieMode() ? 'same-origin' : 'omit',
         });
-
-        let data = null;
-        const body = await res.text();
-        if (body) { try { data = JSON.parse(body); } catch { data = { message: body.trim() }; } }
-
+        const data = await _parseBody(res);
         if (!res.ok) return { ok: false, message: data?.message };
         if (!_cookieMode()) _setTokens(data.access_token, data.refresh_token);
         return { ok: true };
@@ -368,13 +370,18 @@ export function initAuth(cfg, { t, getLang, setLang }) {
                 const result = await c.onPassword(password);
                 if (!result?.ok) { showStatus('status-password', 'err', result?.message || t('msg.login_failed')); return; }
             } else if (c.passwordUrl) {
-                const res  = await fetch(c.passwordUrl, {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify({ password }),
+                // Same parsing as _submit, minus the token write: a password
+                // gate confirms access to something already session'd, it
+                // does not issue a new session — writing tokens here would
+                // stash "undefined" strings when the endpoint never sends any.
+                const res = await fetch(c.passwordUrl, {
+                    method:      'POST',
+                    headers:     { 'Content-Type': 'application/json' },
+                    body:        JSON.stringify({ password }),
+                    credentials: _cookieMode() ? 'same-origin' : 'omit',
                 });
-                const data = await res.json();
-                if (!res.ok) { showStatus('status-password', 'err', data.message || t('msg.login_failed')); return; }
+                const data = await _parseBody(res);
+                if (!res.ok) { showStatus('status-password', 'err', data?.message || t('msg.login_failed')); return; }
             }
             if (c.onSuccess) c.onSuccess();
             else window.location.href = c.redirect ?? '/';
