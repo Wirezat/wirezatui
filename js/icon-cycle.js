@@ -3,7 +3,9 @@
 
    initIconCycle(scope?)
      Wires every [data-wui-cycle] within scope (default: document). Safe to call
-     repeatedly; already-wired images are skipped.
+     repeatedly; already-wired images are skipped. A clone of a wired image
+     (an overlay built from a hidden template, say) is a new element and is
+     wired afresh.
 
    The attribute holds a JSON array of frames. Each frame carries the whole
    presentation of the image while it is shown, not just its source:
@@ -16,6 +18,17 @@
    cannot share one set of attributes, and swapping only the source would render
    the second one with the first one's rules.
 
+   A frame may also carry a `label`:
+
+     [{"src": "/a.png", "label": "Copper Ore"},
+      {"src": "/b.png", "label": "Deepslate Copper Ore"}]
+
+   It is written into the image's paired [data-wui-cycle-label] element as the
+   frame shows, so a title can name what the image currently stands for. The
+   pair is found by containment — the first [data-wui-cycle-label] inside the
+   nearest ancestor that holds one — so generated markup needs no ids, and an
+   image and its label only have to share a container.
+
    Use it where one slot legitimately stands for several things and picking one
    would misrepresent the rest.
 
@@ -26,13 +39,14 @@
 
 const CYCLE_MS = 1000;   // JEI's cadence: long enough to read, short enough to notice
 
-const _wired = new Set();   // { el, frames }
-let   _timer = null;
-let   _tick  = 0;
+const _wired    = new Set();       // { el, frames, label }
+const _wiredEls = new WeakSet();   // elements already in _wired
+let   _timer    = null;
+let   _tick     = 0;
 
 export function initIconCycle(scope = document) {
     scope.querySelectorAll('[data-wui-cycle]').forEach(el => {
-        if (el.dataset.wuiCycleWired) return;
+        if (_wiredEls.has(el)) return;
 
         let frames;
         try {
@@ -43,13 +57,22 @@ export function initIconCycle(scope = document) {
         if (!Array.isArray(frames) || frames.length < 2) return;
         if (!frames.every(f => f && typeof f.src === 'string')) return;
 
-        el.dataset.wuiCycleWired = '1';
-        _wired.add({ el, frames });
+        _wiredEls.add(el);
+        const label = frames.some(f => typeof f.label === 'string') ? _labelFor(el) : null;
+        _wired.add({ el, frames, label });
     });
 
     if (_wired.size && _timer === null) {
         _timer = setInterval(_advance, CYCLE_MS);
     }
+}
+
+function _labelFor(el) {
+    for (let node = el.parentElement; node; node = node.parentElement) {
+        const label = node.querySelector('[data-wui-cycle-label]');
+        if (label) return label;
+    }
+    return null;
 }
 
 function _advance() {
@@ -59,7 +82,7 @@ function _advance() {
             _wired.delete(entry);
             continue;
         }
-        _show(entry.el, entry.frames[_tick % entry.frames.length]);
+        _show(entry, entry.frames[_tick % entry.frames.length]);
     }
     if (_wired.size === 0) {
         clearInterval(_timer);
@@ -67,7 +90,7 @@ function _advance() {
     }
 }
 
-function _show(el, frame) {
+function _show({ el, label }, frame) {
     if (el.getAttribute('src') !== frame.src) {
         el.setAttribute('src', frame.src);
     }
@@ -78,5 +101,8 @@ function _show(el, frame) {
     }
     if (frame.style !== undefined && el.getAttribute('style') !== frame.style) {
         el.setAttribute('style', frame.style);
+    }
+    if (label && typeof frame.label === 'string' && label.textContent !== frame.label) {
+        label.textContent = frame.label;
     }
 }

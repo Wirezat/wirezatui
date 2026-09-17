@@ -21,9 +21,14 @@
 
    Grid column count: use data-cols on .infocard-grid — initInfocards sets
    the --_ic-cols CSS variable from it after cloning.
+
+   Cycling images (icon-cycle.js's [data-wui-cycle]) inside a definition are
+   wired again on the clone, so a card keeps stepping through its frames — and
+   their labels — in time with the trigger it came from.
 */
 
-import { wireMarquee } from './marquee.js';
+import { wireMarquee }   from './marquee.js';
+import { initIconCycle } from './icon-cycle.js';
 
 let _active    = null;   // { overlay, def }
 let _showTimer = null;
@@ -91,6 +96,7 @@ function _show(trigger, def) {
     _active = { overlay, def };
 
     _wireMarquees(overlay);
+    initIconCycle(overlay);
     _position(trigger, overlay);
 }
 
