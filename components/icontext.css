@@ -63,8 +63,11 @@
 /* ── Inline variant ──────────────────────────────────────────────────────── */
 /* Subtitle beside the label rather than under it. For a table cell, where two
    stacked lines cost the row twice the height the data needs — the label
-   carries the weight and the subtitle trails it as faint context. It shrinks
-   first, so a narrow cell loses the origin before it loses the name. */
+   carries the weight and the subtitle trails it as faint context.
+   Clamp this variant with an ellipsis, never a marquee: a marquee duplicates
+   the text, and in a row whose width comes from its own content that widens
+   the box instead of scrolling inside it, pushing the subtitle out of the
+   cell. Hand a long label a hover card instead. */
 .icontext-inline .icontext-body {
     flex-direction: row;
     align-items: baseline;
@@ -73,14 +76,17 @@
 
 .icontext-inline .icontext-text {
     flex: 0 1 auto;
+    min-width: 0;
     font-weight: var(--weight-semibold);
+    text-overflow: ellipsis;
 }
 
 /* Fainter than the stacked subtitle: on its own line a subtitle is read, on
    the same line it is only glanced at, and at muted it competes with the
-   label it is meant to qualify. */
+   label it is meant to qualify. The heavy shrink factor makes it give up its
+   width first, so the label stays whole until the subtitle is out of room. */
 .icontext-inline .icontext-subtitle {
-    flex: 0 1 auto;
+    flex: 0 200 auto;
     min-width: 0;
     font-size: var(--text-sm);
     color: var(--text-faint);
