@@ -151,3 +151,8 @@
 }
 .main-panel .container, .mp .container,
 .side-panel .container, .sp .container { flex: 1 1 auto; }
+
+/* Opt-out of the stretching above, for two columns of very different length. */
+.split-layout.fit { align-items: flex-start; }
+.split-layout.fit .main-panel .container, .split-layout.fit .mp .container,
+.split-layout.fit .side-panel .container, .split-layout.fit .sp .container { flex: 0 0 auto; }
