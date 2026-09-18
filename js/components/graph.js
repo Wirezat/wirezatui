@@ -80,7 +80,7 @@ export function renderGraph(parent, { nodes = [] } = {}, {
     }
     probeContainer.remove()
 
-    // ── Deepen levels: longest path from the root side ────────────────────────
+    // Deepen levels: longest path from the root side
     // Callers pass BFS levels (first-visit depth). For layout we want each node
     // at the DEEPEST level any consumer implies (consumer.level + 1), so an item
     // used on levels 2 and 3 renders at 3. Relaxation passes, capped to node
@@ -100,7 +100,7 @@ export function renderGraph(parent, { nodes = [] } = {}, {
         if (!changed) break
     }
 
-    // ── Column assignment + crossing-reduction ordering ──────────────────────
+    // Column assignment + crossing-reduction ordering
     const byLevel = new Map()
     for (const n of nodes) {
         const lv = depth.get(n.id)
@@ -132,9 +132,9 @@ export function renderGraph(parent, { nodes = [] } = {}, {
         return cs.reduce((s, v) => s + v, 0) / cs.length
     }
 
-    // ── Positions — level 0 (result) on the RIGHT, deeper levels leftward.
+    // Positions — level 0 (result) on the RIGHT, deeper levels leftward.
     // Row height is per-node (measured above), so columns stack at whatever
-    // height each card actually needs. ────────────────────────────────────────
+    // height each card actually needs.
     const pos = new Map()
     let maxColHeight = 0
     const nCols = levels.length
@@ -152,7 +152,7 @@ export function renderGraph(parent, { nodes = [] } = {}, {
     const width  = nCols ? PAD * 2 + nCols * NODE_W + (nCols - 1) * COL_GAP : 0
     const height = nCols ? maxColHeight : 0
 
-    // ── Board: toolbar (fullscreen) + drag-pannable canvas ────────────────────
+    // Board: toolbar (fullscreen) + drag-pannable canvas
     const board = document.createElement('div')
     board.className = 'graph-board'
 
@@ -231,7 +231,7 @@ export function renderGraph(parent, { nodes = [] } = {}, {
     const escExit = e => { if (e.key === 'Escape') setFullscreen(false) }
     fsBtn.addEventListener('click', () => setFullscreen(!board.classList.contains('graph-board-fs')))
 
-    // ── Edges (SVG underlay) — flow arrows point dependency → consumer ───────
+    // Edges (SVG underlay) — flow arrows point dependency → consumer
     const svgNS = 'http://www.w3.org/2000/svg'
     const svg = document.createElementNS(svgNS, 'svg')
     svg.setAttribute('class', 'graph-edges')
@@ -301,7 +301,7 @@ export function renderGraph(parent, { nodes = [] } = {}, {
     }
     inner.appendChild(svg)
 
-    // ── Nodes ─────────────────────────────────────────────────────────────────
+    // Nodes
     const nodeEls = new Map() // id → element, for highlight toggling below
     for (const n of nodes) {
         const p = pos.get(n.id)
@@ -332,10 +332,10 @@ export function renderGraph(parent, { nodes = [] } = {}, {
 
     parent.appendChild(board)
 
-    // ── Path highlight — click a node to dim everything not on its path
+    // Path highlight — click a node to dim everything not on its path
     // (transitive dependencies + transitive consumers); click again, a
     // different node, or empty canvas to clear. Pure graph traversal, no
-    // domain meaning — same edges the layout above already uses. ─────────────
+    // domain meaning — same edges the layout above already uses.
     let highlightedId = null
     function pathThrough(id) {
         const path = new Set([id])

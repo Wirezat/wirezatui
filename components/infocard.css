@@ -8,18 +8,18 @@
    The JS (js/infocard.js) clones .infocard-def content into a live .infocard
    overlay anchored to the trigger. Call initInfocards(scope?) once per mount.
 
-   ── Slots (all optional) ────────────────────────────────────────────────
+   Slots (all optional):
      .infocard-header                     — icon + title + subtitle
      .infocard-section[data-label="…"]   — key/value group with optional heading
      .infocard-row > .infocard-key + .infocard-val
      .infocard-grid[data-cols="3"]        — fixed grid (e.g. crafting table)
      .infocard-grid-cell[data-label="…"] — single cell; img or text inside
-   ── ─────────────────────────────────────────────────────────────────── */
+   */
 
-/* ── Hidden definition node (never visible itself) ────────────────────── */
+/* Hidden definition node (never visible itself) */
 .infocard-def { display: none !important; }
 
-/* ── Live overlay card ─────────────────────────────────────────────────── */
+/* Live overlay card */
 .infocard {
     position: fixed;
     z-index: 9000;
@@ -52,7 +52,7 @@
    so scrollWidth is measurable (a plain inline box always reports 0). */
 .infocard-clamp-inner { display: inline-block; }
 
-/* ── Header ─────────────────────────────────────────────────────────────── */
+/* Header */
 .infocard-header {
     display: flex;
     align-items: center;
@@ -93,7 +93,7 @@
     text-overflow: ellipsis;
 }
 
-/* ── Section ─────────────────────────────────────────────────────────────── */
+/* Section */
 .infocard-section {
     padding: var(--gap-inline) var(--pad-container);
 }
@@ -114,7 +114,7 @@
     margin-bottom: var(--gap-icon);
 }
 
-/* ── Row ─────────────────────────────────────────────────────────────────── */
+/* Row */
 .infocard-row {
     display: flex;
     align-items: baseline;
@@ -138,7 +138,7 @@
     word-break: break-all;
 }
 
-/* ── Grid (crafting table etc.) ──────────────────────────────────────────── */
+/* Grid (crafting table etc.) */
 .infocard-grid {
     display: grid;
     grid-template-columns: repeat(var(--_ic-cols, 3), 1fr);
@@ -184,7 +184,7 @@
     pointer-events: none;
 }
 
-/* ── Trigger ─────────────────────────────────────────────────────────────── */
+/* Trigger */
 .infocard-trigger {
     display: inline-flex;
     align-items: center;

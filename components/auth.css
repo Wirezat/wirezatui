@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Auth page layout ────────────────────────────────────────────────────── */
+/* Auth page layout */
 /* Use <body class="app-shell"> + <header class="header"> from shell.css,
    then wrap the card in <div class="auth-main"> for centered content. */
 /* .app-shell caps itself at the viewport height and clips overflow (see
@@ -19,7 +19,7 @@
     padding: var(--gap-section);
 }
 
-/* ── Card dimensions ─────────────────────────────────────────────────────── */
+/* Card dimensions */
 :root {
     --auth-card-w:         380px;
     --auth-logo-size:      44px;
@@ -27,7 +27,7 @@
     --auth-logo-radius:    10px;
 }
 
-/* ── Card ────────────────────────────────────────────────────────────────── */
+/* Card */
 .auth-card {
     width: 100%;
     max-width: var(--auth-card-w);
@@ -37,7 +37,7 @@
     overflow: hidden;
 }
 
-/* ── Header (logo + app name + subtitle) ─────────────────────────────────── */
+/* Header (logo + app name + subtitle) */
 .auth-header {
     padding: var(--pad-page) var(--pad-page) var(--pad-card);
     text-align: center;
@@ -70,7 +70,7 @@
     margin-top: 3px;
 }
 
-/* ── Form area ───────────────────────────────────────────────────────────── */
+/* Form area */
 .auth-body {
     padding: var(--gap-section) var(--pad-page) var(--pad-page);
     display: flex;
@@ -91,7 +91,7 @@
     padding: var(--gap-control, 8px) var(--pad-card, 14px);
 }
 
-/* ── Panels (switched by JS) ─────────────────────────────────────────────── */
+/* Panels (switched by JS) */
 .auth-panel {
     display: none;
     flex-direction: column;
@@ -99,7 +99,7 @@
 }
 .auth-panel.active { display: flex; }
 
-/* ── Input wrapper (password field with optional icon indicator) ─────────── */
+/* Input wrapper (password field with optional icon indicator) */
 .input-wrap {
     position: relative;
 }
@@ -121,7 +121,7 @@
 .input-wrap-ok  .input { border-color: var(--success); }
 .input-wrap-err .input { border-color: var(--danger); }
 
-/* ── Footer (status message + submit button) ─────────────────────────────── */
+/* Footer (status message + submit button) */
 .auth-footer {
     display: flex;
     flex-direction: column;
@@ -135,7 +135,7 @@
     font-size: var(--text-md);
 }
 
-/* ── Demo link (below forms, no account needed) ──────────────────────────── */
+/* Demo link (below forms, no account needed) */
 .auth-demo-link {
     display: block;
     text-align: center;
@@ -149,7 +149,7 @@
     text-decoration: underline;
 }
 
-/* ── Inline status message ───────────────────────────────────────────────── */
+/* Inline status message */
 .status-msg {
     font-size: var(--text-sm);
     min-height: var(--text-md);
@@ -158,7 +158,7 @@
 .status-msg.ok  { color: var(--success); }
 .status-msg.err { color: var(--danger); }
 
-/* ── Language menu (dropdown) ────────────────────────────────────────────── */
+/* Language menu (dropdown) */
 .lang-menu { position: relative; }
 
 .lang-dropdown {

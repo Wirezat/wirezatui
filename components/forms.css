@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Field wrapper ───────────────────────────────────────────────────────── */
+/* Field wrapper */
 .field {
     display: flex;
     flex-direction: column;
@@ -11,7 +11,7 @@
     min-width: 0;
 }
 
-/* ── Label (default) ─────────────────────────────────────────────────────── */
+/* Label (default) */
 /* Small, muted — sits above the field. */
 .field-label {
     font-size: var(--text-xs);
@@ -21,7 +21,7 @@
     letter-spacing: 0.05em;
 }
 
-/* ── Caption (Unterschrift) ──────────────────────────────────────────────── */
+/* Caption (Unterschrift) */
 /* Smaller still, sits BELOW the field as a description/hint. */
 .field-caption {
     font-size: var(--text-xs);
@@ -29,7 +29,7 @@
     line-height: 1.4;
 }
 
-/* ── Titel-Container ─────────────────────────────────────────────────────── */
+/* Titel-Container */
 /* Optional. Replaces label when a more prominent heading is needed.
    Can attach to a single field (sits above) or to a container (top-left).  */
 .titel-container {
@@ -42,7 +42,7 @@
     margin-bottom: var(--gap-inline);
 }
 
-/* ── Gast-Inhalt (.wui-guest) ────────────────────────────────────────────── */
+/* Gast-Inhalt (.wui-guest) */
 /* Marks a container whose content is authored by someone who does not know
    this package — an embedded plugin, a rendered document, injected markup.
    Bare input/select/textarea/button inside it pick up the house recipes
@@ -58,7 +58,7 @@
    container. */
 .wui-guest :is(input, select, textarea, button) { min-width: 0; }
 
-/* ── Inputs ──────────────────────────────────────────────────────────────── */
+/* Inputs */
 .input,
 .wui-guest input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"]) {
     height: var(--h-input);
@@ -92,7 +92,7 @@
     line-height: var(--line-height);
 }
 
-/* ── Select / Dropdown field ─────────────────────────────────────────────── */
+/* Select / Dropdown field */
 .select,
 .wui-guest select {
     appearance: none;
@@ -114,7 +114,7 @@
 .select:focus,
 .wui-guest select:focus { border-color: var(--accent); }
 
-/* ── Radio group (toggle-style, ≤4 options) ──────────────────────────────── */
+/* Radio group (toggle-style, ≤4 options) */
 .radio-group {
     display: inline-flex;
     border: 1px solid var(--border);
@@ -146,7 +146,7 @@
 }
 .radio-opt:hover:not(.active) { color: var(--text); }   /* was: background: var(--bg-hover) */
 
-/* ── Checkbox ────────────────────────────────────────────────────────────── */
+/* Checkbox */
 .check-item {
     display: flex;
     align-items: center;
@@ -188,14 +188,14 @@ input[type="checkbox"]:hover:not(:checked) {
 
 input[type="checkbox"]:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── Form row (multiple fields side by side) ─────────────────────────────── */
+/* Form row (multiple fields side by side) */
 .form-row {
     display: flex;
     gap: var(--gap-control);
     align-items: flex-end;
 }
 
-/* ── Form actions (buttons — always bottom-right, never in a field row) ──── */
+/* Form actions (buttons — always bottom-right, never in a field row) */
 .form-actions {
     display: flex;
     justify-content: flex-end;

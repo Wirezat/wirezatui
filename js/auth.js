@@ -25,7 +25,7 @@
 import { initDropdowns } from './dropdown.js';
 import { initThemeBtn }  from './theme.js';
 
-// ── Session management ────────────────────────────────────────────────────────
+// Session management
 
 const _cfg = {
     mode:       'bearer',           // 'bearer' | 'cookie'
@@ -163,7 +163,7 @@ export function applyRoles() {
 }
 
 
-// ── Login page init ───────────────────────────────────────────────────────────
+// Login page init
 
 /*
    Usage:
@@ -197,7 +197,7 @@ const DEFAULTS = {
 export function initAuth(cfg, { t, getLang, setLang }) {
     const c = { loginUrl: _cfg.loginApi, ...DEFAULTS, ...cfg };
 
-    // ── App identity ──────────────────────────────────────────────────────────
+    // App identity
     const logoEl  = document.getElementById('auth-logo');
     const titleEl = document.getElementById('auth-title');
     const subEl   = document.getElementById('auth-sub');
@@ -209,7 +209,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     }
     document.title = (c.name ?? 'App') + ' — ' + t('login.title');
 
-    // ── Skip if already logged in ─────────────────────────────────────────────
+    // Skip if already logged in
     // Token mode can see its own credential. Cookie mode cannot, so the server
     // is the one that redirects an already-signed-in visitor away from here.
     if (!_cookieMode() && localStorage.getItem('access_token')) {
@@ -217,7 +217,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
         return;
     }
 
-    // ── Mode (both / login-only / register-only / password-only) ─────────────
+    // Mode (both / login-only / register-only / password-only)
     function applyMode(mode) {
         const tabs          = document.getElementById('auth-tabs');
         const panelLogin    = document.getElementById('panel-login');
@@ -252,7 +252,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
             .catch(() => {});
     }
 
-    // ── Tab switching ─────────────────────────────────────────────────────────
+    // Tab switching
     function switchTab(name) {
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.classList.toggle('active', tab.id === 'tab-' + name);
@@ -263,7 +263,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.getElementById('tab-login')?.addEventListener('click', () => switchTab('login'));
     document.getElementById('tab-register')?.addEventListener('click', () => switchTab('register'));
 
-    // ── Password match indicator ──────────────────────────────────────────────
+    // Password match indicator
     function checkMatch() {
         const pw1  = document.getElementById('reg-password')?.value ?? '';
         const pw2  = document.getElementById('reg-confirm')?.value  ?? '';
@@ -281,7 +281,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.getElementById('reg-password')?.addEventListener('input', checkMatch);
     document.getElementById('reg-confirm')?.addEventListener('input', checkMatch);
 
-    // ── Status helpers ────────────────────────────────────────────────────────
+    // Status helpers
     function showStatus(id, cls, text) {
         const el = document.getElementById(id);
         if (!el) return;
@@ -295,7 +295,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
         el.textContent = '';
     }
 
-    // ── Credential submit ─────────────────────────────────────────────────────
+    // Credential submit
     /* One request shape for both transports. Token mode reads the tokens out of
        the JSON body; cookie mode expects the server to have set the cookie and
        may answer with no body at all, so the response is only parsed when there
@@ -319,7 +319,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
         return { ok: true };
     }
 
-    // ── Login ─────────────────────────────────────────────────────────────────
+    // Login
     async function doLogin() {
         clearStatus('status-login');
         const username = document.getElementById('login-username')?.value.trim() ?? '';
@@ -337,7 +337,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.getElementById('login-password')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
     document.getElementById('btn-login')?.addEventListener('click', doLogin);
 
-    // ── Register ──────────────────────────────────────────────────────────────
+    // Register
     async function doRegister() {
         clearStatus('status-reg');
         const username = document.getElementById('reg-username')?.value.trim() ?? '';
@@ -360,7 +360,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.getElementById('reg-confirm')?.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
     document.getElementById('btn-register')?.addEventListener('click', doRegister);
 
-    // ── Password-only ─────────────────────────────────────────────────────────
+    // Password-only
     async function doPassword() {
         clearStatus('status-password');
         const password = document.getElementById('password-only')?.value ?? '';
@@ -390,7 +390,7 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.getElementById('password-only')?.addEventListener('keydown', e => { if (e.key === 'Enter') doPassword(); });
     document.getElementById('btn-password')?.addEventListener('click', doPassword);
 
-    // ── Theme + lang ──────────────────────────────────────────────────────────
+    // Theme + lang
     initThemeBtn();
 
     const flags   = c.langFlags ?? DEFAULTS.langFlags;

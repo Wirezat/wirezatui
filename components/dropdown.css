@@ -3,13 +3,13 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Trigger wrapper ─────────────────────────────────────────────────────── */
+/* Trigger wrapper */
 .dropdown-wrap {
     position: relative;
     display: inline-flex;
 }
 
-/* ── Dropdown panel ──────────────────────────────────────────────────────── */
+/* Dropdown panel */
 .dropdown-panel {
     position: absolute;
     top: calc(100% + var(--gap-icon, 4px));

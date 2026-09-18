@@ -289,7 +289,7 @@ function _laidOutRect(els, fromEnd) {
   return els[fromEnd ? els.length - 1 : 0].getBoundingClientRect();
 }
 
-// ── Shared scroll dispatcher for 'ancestor' mode ────────────────────────────
+// Shared scroll dispatcher for 'ancestor' mode
 // One `scroll` listener per distinct scrollEl (in practice one per page —
 // .main), no matter how many groups are open at once. Each firing is
 // throttled to once per animation frame; each check is one

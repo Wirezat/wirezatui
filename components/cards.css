@@ -3,14 +3,14 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Tile grid ───────────────────────────────────────────────────────────── */
+/* Tile grid */
 .tile-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: var(--gap-card);
 }
 
-/* ── Tile (3-row: title / subtitle / meta) ───────────────────────────────── */
+/* Tile (3-row: title / subtitle / meta) */
 .tile {
     display: flex;
     flex-direction: column;
@@ -69,7 +69,7 @@
    three. */
 .tile-meta > * { white-space: nowrap; }
 
-/* ── "New" tile variant ──────────────────────────────────────────────────── */
+/* "New" tile variant */
 .tile-new {
     border-style: dashed;
     opacity: 0.6;
@@ -81,7 +81,7 @@
 }
 .tile-new:hover { opacity: 1; border-color: var(--accent); color: var(--accent); }
 
-/* ── Stat tile ───────────────────────────────────────────────────────────── */
+/* Stat tile */
 /* Same 3-row structure: value = title, name = subtitle, meta = empty.      */
 .stat-tile {
     display: flex;
@@ -109,14 +109,14 @@
     letter-spacing: 0.05em;
 }
 
-/* ── Stat tile grid ──────────────────────────────────────────────────────── */
+/* Stat tile grid */
 .stat-grid {
     display: flex;
     flex-wrap: wrap;
     gap: var(--gap-item);
 }
 
-/* ── Delete button on tile (appears on hover) ────────────────────────────── */
+/* Delete button on tile (appears on hover) */
 .tile-action {
     position: absolute;
     top: var(--gap-field);

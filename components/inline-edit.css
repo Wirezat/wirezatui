@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Read-only field ─────────────────────────────────────────────────────── */
+/* Read-only field */
 /* No border; transparent background. Not interactive. */
 .field-ro {
     display: block;
@@ -19,7 +19,7 @@
     width: 100%;
 }
 
-/* ── Editable field — hover state ────────────────────────────────────────── */
+/* Editable field — hover state */
 /* Shows that the field can be clicked to edit. */
 .field-editable {
     display: block;
@@ -39,7 +39,7 @@
     border-color: var(--border);
 }
 
-/* ── Active / editing state ──────────────────────────────────────────────── */
+/* Active / editing state */
 /* Looks like a real input when clicked. */
 .field-editable:focus,
 .field-editable.editing {
@@ -50,7 +50,7 @@
     outline: none;
 }
 
-/* ── Inline-editable table cell ──────────────────────────────────────────── */
+/* Inline-editable table cell */
 /* For Odoo-style table row editing. */
 td.cell-editable {
     padding: 0;

@@ -63,7 +63,7 @@ export function closeWuiModal() {
 
 function _escClose(e) { if (e.key === 'Escape') closeWuiModal() }
 
-/* ── Chrome ──────────────────────────────────────────────────────────────── */
+/* Chrome */
 
 function buildModal(cfg) {
     closeWuiModal()
@@ -249,7 +249,7 @@ function _actionButton(a, handle) {
     return btn
 }
 
-/* ── Wizard ──────────────────────────────────────────────────────────────── */
+/* Wizard */
 
 function _mountWizard(cfg, { header, body, footer, handle }) {
     const steps = cfg.steps ?? []
@@ -306,7 +306,7 @@ function _mountWizard(cfg, { header, body, footer, handle }) {
     renderStep()
 }
 
-/* ── Popconfirm ──────────────────────────────────────────────────────────── */
+/* Popconfirm */
 
 /* Anchored, backdrop-less confirm card. Positioning mirrors popover.js:
    the anchor's client rect pins a fixed-position panel below/right-aligned. */
@@ -343,7 +343,7 @@ function _buildPopconfirm(cfg) {
     return handle
 }
 
-/* ── Drag ────────────────────────────────────────────────────────────────── */
+/* Drag */
 
 /* Press-and-move on the header translates the card. Same pointer pattern as
    the graph canvas's drag-pan, incl. the 4px threshold that keeps plain

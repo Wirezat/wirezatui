@@ -62,14 +62,14 @@ export class WuiAutocomplete {
     window.addEventListener('resize', repos, { passive: true });
   }
 
-  // ── Public ──────────────────────────────────────────────────────────────
+  // Public
   close() {
     clearTimeout(this._closeT);
     this._buf = []; this._q = null; this._active = -1;
     this._drop.classList.remove('open');
   }
 
-  // ── Private ─────────────────────────────────────────────────────────────
+  // Private
   _tryOpen() {
     const q = this._in.value;
     if (this._buf.length && this._q === q) {

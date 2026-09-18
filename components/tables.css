@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Base table ──────────────────────────────────────────────────────────── */
+/* Base table */
 .table {
     /* min-width, not width: under table-layout:fixed (set per-table by
        consuming pages that need persisted column widths), a hard width:100%
@@ -19,7 +19,7 @@
     font-size: var(--text-base);
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
+/* Header */
 .table thead th {
     padding: var(--pad-cell-y) var(--pad-cell);
     text-align: left;
@@ -33,7 +33,7 @@
     white-space: nowrap;
 }
 
-/* ── Body rows ───────────────────────────────────────────────────────────── */
+/* Body rows */
 .table tbody td {
     padding: var(--pad-cell-y) var(--pad-cell);
     color: var(--text);
@@ -45,7 +45,7 @@
 
 .table tbody tr:hover td { background: var(--bg-hover); }
 
-/* ── Row that navigates ──────────────────────────────────────────────────── */
+/* Row that navigates */
 /* Set by the table factory's rowHref. The controls inside keep their own
    cursor — clicking those does something else. */
 .table tbody tr[data-href] { cursor: pointer; }
@@ -53,13 +53,13 @@
 .table tbody tr[data-href] button,
 .table tbody tr[data-href] select { cursor: auto; }
 
-/* ── Empty cell ──────────────────────────────────────────────────────────── */
+/* Empty cell */
 /* A dash where a value would be. A blank cell reads as a rendering fault;
    a dash says the table looked and there was nothing. */
 .td-empty { color: var(--text-faint); }
 .td-empty::before { content: '—'; }
 
-/* ── Group header row ────────────────────────────────────────────────────── */
+/* Group header row */
 .table-group-hd td {
     padding: var(--gap-inline) var(--pad-cell);
     background: var(--bg);
@@ -73,11 +73,11 @@
 }
 .table-group-hd:first-child td { border-top: none; }
 
-/* ── Collapsible group header ────────────────────────────────────────────── */
+/* Collapsible group header */
 .table-group-hd.collapsible { cursor: pointer; user-select: none; }
 .table-group-hd.collapsible:hover td { background: color-mix(in srgb, var(--bg-hover) 100%, transparent); }
 
-/* ── Expandable detail row ───────────────────────────────────────────────── */
+/* Expandable detail row */
 .table-expand-row td {
     padding: 0;
     background: var(--bg);
@@ -100,18 +100,18 @@
 }
 .table-expand-trigger:hover { color: var(--accent); }
 
-/* ── Checklist variant (table + checkbox column) ─────────────────────────── */
+/* Checklist variant (table + checkbox column) */
 .table-checklist td.check-col {
     width: 36px;
     text-align: center;
     padding-right: var(--pad-cell);
 }
 
-/* ── Muted / secondary cell text ─────────────────────────────────────────── */
+/* Muted / secondary cell text */
 .td-muted { color: var(--text-muted); font-size: var(--text-sm); }
 .td-faint  { color: var(--text-faint); font-size: var(--text-xs); }
 
-/* ── Number / mono cell ──────────────────────────────────────────────────── */
+/* Number / mono cell */
 .td-mono {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
@@ -119,7 +119,7 @@
     white-space: nowrap;
 }
 
-/* ── Action cell (buttons/icons, right-aligned) ──────────────────────────── */
+/* Action cell (buttons/icons, right-aligned) */
 .td-actions {
     text-align: right;
     width: 1%;
@@ -127,7 +127,7 @@
     padding-left: var(--gap-control);
 }
 
-/* ── Link cell ───────────────────────────────────────────────────────────── */
+/* Link cell */
 .td-link {
     color: var(--text);
     font-weight: var(--weight-medium);
@@ -136,7 +136,7 @@
 }
 .td-link:hover { color: var(--accent); text-decoration: underline; }
 
-/* ── Drag handle ─────────────────────────────────────────────────────────── */
+/* Drag handle */
 .drag-col  { width: 24px; padding-left: var(--gap-inline) !important; padding-right: var(--gap-inline) !important; }
 .drag-handle {
     display: inline-block;
@@ -150,7 +150,7 @@
 .table tbody tr:hover .drag-handle { color: var(--text-muted); }
 .drag-handle:active { cursor: grabbing; }
 
-/* ── Drag-reorder states ─────────────────────────────────────────────────── */
+/* Drag-reorder states */
 /* Row being dragged: faded placeholder stays in its original position */
 tr.wui-drag-source td { opacity: 0.35; }
 tr.wui-drag-source .drag-handle { cursor: grabbing !important; }
@@ -182,7 +182,7 @@ tr.wui-drop-zone-end td {
     background: color-mix(in srgb, var(--bg-card) 92%, var(--accent));
 }
 
-/* ── Collapsible group header arrow ──────────────────────────────────────── */
+/* Collapsible group header arrow */
 /* Wrap the group label in .group-hd-inner and add an empty .group-hd-arrow
    span — the glyph itself is CSS-injected, not markup, so callers never
    hand-place '▾'/'▸'. */
@@ -202,7 +202,7 @@ tr.wui-drop-zone-end td {
 .group-hd-arrow::before { content: '▾'; }
 .table-group-hd.collapsed .group-hd-arrow::before { content: '▸'; }
 
-/* ── Editable group header ───────────────────────────────────────────────── */
+/* Editable group header */
 /* Opt-in: add data-group-editable to tr.table-group-hd.                     */
 /* Clicking .group-hd-name enters edit mode; Enter/blur commits, Escape      */
 /* cancels. Delete button appears only in edit mode.                          */
@@ -242,7 +242,7 @@ tr.wui-drop-zone-end td {
 .table-group-hd.group-editing .group-hd-name  { display: none; }
 .table-group-hd.group-editing .group-hd-input { display: inline-block; }
 
-/* ── Group scope bar (opt-in) ────────────────────────────────────────────── */
+/* Group scope bar (opt-in) */
 /* Vertical accent bar on the left of groups that have at least one item.     */
 /* Visible on header whether collapsed or expanded — lets the user distinguish */
 /* an empty group (no bar) from a collapsed group (bar present).              */
@@ -288,11 +288,11 @@ tr.wui-drop-zone-end td {
     background: linear-gradient(to bottom, var(--accent) 40%, transparent 100%);
 }
 
-/* ── Row spacer ──────────────────────────────────────────────────────────── */
+/* Row spacer */
 .row-spacer td { height: 8px; padding: 0 !important; border: none !important; background: transparent !important; }
 .row-spacer:hover td { background: transparent !important; }
 
-/* ── Hidden rows (opt-in feature) ───────────────────────────────────────── */
+/* Hidden rows (opt-in feature) */
 /* Activate on a table by adding .table-has-hidden.
    Hidden rows: .row-hidden (hidden by default, shown when .show-hidden is toggled).
    Toggle button: any [data-wui-hidden-toggle] inside or near the table.    */
@@ -325,7 +325,7 @@ tr.wui-drop-zone-end td {
     color: var(--text);
 }
 
-/* ── Inline editable cell ────────────────────────────────────────────────── */
+/* Inline editable cell */
 .td-input {
     border: none;
     border-bottom: 1px solid var(--border);
@@ -354,7 +354,7 @@ tr.wui-drop-zone-end td {
 .td-editable.editing .td-val  { display: none; }
 .td-editable.editing .td-input { display: block; }
 
-/* ── Bulk row ─────────────────────────────────────────────────────────────── */
+/* Bulk row */
 tr[data-wui-bulk-row] { display: none; }
 table.bulk-active tr[data-wui-bulk-row] { display: table-row; }
 tr[data-wui-bulk-row] td {
@@ -364,7 +364,7 @@ tr[data-wui-bulk-row] td {
 tr[data-wui-bulk-row] td:first-child { border-left: 2px solid var(--accent); }
 tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
 
-/* ── Bulk writable cell ──────────────────────────────────────────────────── */
+/* Bulk writable cell */
 .bulk-writable {
     display: flex;
     align-items: center;
@@ -372,11 +372,11 @@ tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
 }
 .bulk-writable .td-input { flex: 1; min-width: 0; }
 
-/* ── Balance table (inputs / outputs / surplus) ──────────────────────────── */
+/* Balance table (inputs / outputs / surplus) */
 .balance-val  { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); }
 .balance-warn { color: var(--danger); font-weight: var(--weight-semibold); }
 
-/* ── Cell-clamp: overflow strategies for narrow table cells ─────────────── */
+/* Cell-clamp: overflow strategies for narrow table cells */
 /* Base: clips content. Apply one modifier for the overflow behaviour.
    --scroll's hover marquee comes from the shared js/marquee.js +
    components/marquee.css base via initCellClampScroll. */

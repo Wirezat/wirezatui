@@ -16,7 +16,7 @@
    Nebenspalte     .side-panel       .sp      layout/page.css
    ─────────────────────────────────────────────────────────────────────── */
 
-/* ── App shell ───────────────────────────────────────────────────────────── */
+/* App shell */
 /* height (not min-height) + overflow: hidden is load-bearing: .main's own
    overflow-y: auto only ever activates if .main cannot grow past its
    allotted height. With min-height, a tall page just grew the whole shell
@@ -31,7 +31,7 @@
     background: var(--bg);
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
+/* Header */
 .header {
     position: sticky;
     top: 0;
@@ -82,14 +82,14 @@
     gap: var(--gap-control);
 }
 
-/* ── App body (sidebar + main) ───────────────────────────────────────────── */
+/* App body (sidebar + main) */
 .app-body {
     display: flex;
     flex: 1;
     min-height: 0;
 }
 
-/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+/* Sidebar */
 .sidebar {
     width: var(--sidebar-w);
     flex-shrink: 0;
@@ -105,7 +105,7 @@
     overflow-y: auto;
 }
 
-/* ── Main content area ───────────────────────────────────────────────────── */
+/* Main content area */
 .main {
     flex: 1;
     min-width: 0;
@@ -121,7 +121,7 @@
     gap: var(--gap-section);
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
+/* Responsive */
 @media (max-width: 700px) {
     .sidebar { display: none; }
     .page { padding: var(--pad-container); }

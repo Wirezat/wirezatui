@@ -4,13 +4,13 @@
      Requires: components/inline-edit.css, components/forms.css
 -->
 
-<!-- ── Read-only (not editable) ──────────────────────────────────── -->
+<!-- Read-only (not editable) -->
 <div class="field">
   <label class="field-label">{{LABEL}}</label>
   <span class="field-ro">{{VALUE}}</span>
 </div>
 
-<!-- ── Editable (click to edit) ──────────────────────────────────── -->
+<!-- Editable (click to edit) -->
 <!-- data-inline marks element for initInlineEdit() auto-wiring      -->
 <div class="field">
   <label class="field-label">{{LABEL}}</label>
@@ -18,14 +18,14 @@
   <span class="field-caption">{{CAPTION}}</span>  <!-- optional -->
 </div>
 
-<!-- ── With Titel-Container instead of label ─────────────────────── -->
+<!-- With Titel-Container instead of label -->
 <div>
   <div class="titel-container">{{SECTION_TITLE}}</div>
   <span class="field-editable" data-inline>{{VALUE}}</span>
   <span class="field-caption">{{CAPTION}}</span>
 </div>
 
-<!-- ── Editable table cell ────────────────────────────────────────── -->
+<!-- Editable table cell -->
 <table class="table">
   <tbody>
     <tr>

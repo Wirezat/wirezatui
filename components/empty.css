@@ -5,7 +5,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Empty message row ───────────────────────────────────────────────────── */
+/* Empty message row */
 /* Placed as the last <tr> in an empty table body. */
 .table-empty-row td {
     text-align: center;
@@ -16,7 +16,7 @@
     border-bottom: none;
 }
 
-/* ── Placeholder rows ────────────────────────────────────────────────────── */
+/* Placeholder rows */
 /* Min 5 rows of "—" to fill visual space. */
 .table-placeholder-row td {
     color: color-mix(in srgb, var(--border-strong) 60%, transparent);
@@ -25,7 +25,7 @@
     user-select: none;
 }
 
-/* ── Standalone empty state (non-table contexts) ─────────────────────────── */
+/* Standalone empty state (non-table contexts) */
 .empty-state {
     display: flex;
     flex-direction: column;

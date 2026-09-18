@@ -43,7 +43,7 @@ export function createContainer({
     const el = document.createElement('div')
     el.className = 'container' + (config ? ' container-config' : '')
 
-    // ── Header ────────────────────────────────────────────────────────────
+    // Header
     const header = document.createElement('div')
     header.className = 'container-header'
 
@@ -88,7 +88,7 @@ export function createContainer({
 
     el.appendChild(header)
 
-    // ── Filter bar ────────────────────────────────────────────────────────
+    // Filter bar
     if (filters.length > 0) {
         const filterBar = document.createElement('div')
         filterBar.className = 'container-filter'
@@ -118,12 +118,12 @@ export function createContainer({
         el.appendChild(filterBar)
     }
 
-    // ── Body ──────────────────────────────────────────────────────────────
+    // Body
     const body = document.createElement('div')
     body.className = flush ? 'container-body-flush' : 'container-body'
     el.appendChild(body)
 
-    // ── API ───────────────────────────────────────────────────────────────
+    // API
     function setContent(content) {
         body.innerHTML = ''
         if (typeof content === 'string') {

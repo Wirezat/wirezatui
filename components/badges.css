@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Base badge ──────────────────────────────────────────────────────────── */
+/* Base badge */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -18,7 +18,7 @@
     color: var(--text-muted);
 }
 
-/* ── Semantic variants ───────────────────────────────────────────────────── */
+/* Semantic variants */
 /* Outline recipe (Schritt 4): bg-card surface, full semantic-color border,
    text follows the border color — no tinted-background fills. */
 .badge-accent {
@@ -45,7 +45,7 @@
     border-color: var(--warn);
 }
 
-/* ── Unit chip ───────────────────────────────────────────────────────────── */
+/* Unit chip */
 /* The unit attached to a number: /s, EU/t, mB. Borderless and tinted rather
    than outlined like .badge — it is not a status the row carries but part of
    the value beside it, and a full border would read as a second datum. */
@@ -63,7 +63,7 @@
     white-space: nowrap;
 }
 
-/* ── Dot indicator ───────────────────────────────────────────────────────── */
+/* Dot indicator */
 .badge-dot::before {
     content: '';
     display: inline-block;

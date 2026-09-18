@@ -37,7 +37,7 @@
     border: none;
 }
 
-/* ── Status message — inline text-only sibling of .alert ──────────────────
+/* Status message — inline text-only sibling of .alert */
    No card surface/border, just a color-only state next to a field or
    button (e.g. "Saved" / "Username taken"). Use .alert for page-placed
    banners, .status-msg for inline form/action feedback. */

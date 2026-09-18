@@ -5,7 +5,7 @@
    Requires: tokens/base.css + app/theme.css + components/dropdown.css
 */
 
-/* ── Trigger button ──────────────────────────────────────────────────────── */
+/* Trigger button */
 .user-menu-trigger {
     display: inline-flex;
     align-items: center;
@@ -54,7 +54,7 @@
 }
 .dropdown-wrap:has(.dropdown-panel.open) .chevron { transform: rotate(180deg); }
 
-/* ── Dropdown panel content ──────────────────────────────────────────────── */
+/* Dropdown panel content */
 /* Panel visibility + positioning from dropdown.css (.dropdown-panel / .dropdown-panel.open) */
 
 .user-dropdown-header {

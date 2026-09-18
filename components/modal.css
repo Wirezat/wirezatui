@@ -3,7 +3,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Backdrop ────────────────────────────────────────────────────────────── */
+/* Backdrop */
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -23,7 +23,7 @@
    that attribute and rely on the flex default above. */
 .modal-backdrop[data-wui-modal]:not(.open) { display: none; }
 
-/* ── Modal panel ─────────────────────────────────────────────────────────── */
+/* Modal panel */
 .modal-card, .modal {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -37,7 +37,7 @@
     flex-direction: column;
 }
 
-/* ── Modal header ────────────────────────────────────────────────────────── */
+/* Modal header */
 .modal-header {
     padding: 14px 14px 0 14px;   /* loses its bottom portion */
     display: flex;
@@ -76,7 +76,7 @@
 }
 .modal-close:hover { color: var(--text); }   /* was: background: var(--bg-hover) */
 
-/* ── Modal body ──────────────────────────────────────────────────────────── */
+/* Modal body */
 .modal-body {
     padding: 8px 14px 14px 14px;  /* top drops to 8px */
     overflow-y: auto;
@@ -93,7 +93,7 @@
     color: var(--text-muted);
 }
 
-/* ── Modal footer ────────────────────────────────────────────────────────── */
+/* Modal footer */
 .modal-footer {
     padding: 0 14px 14px 14px;    /* loses its top portion */
     display: flex;
@@ -127,7 +127,7 @@
 .modal-header[data-draggable] { cursor: grab; }
 .modal-header[data-draggable]:active { cursor: grabbing; }
 
-/* ── Wizard extras ───────────────────────────────────────────────────────── */
+/* Wizard extras */
 .modal-step-count {
     font-size: var(--text-sm);
     color: var(--text-faint);

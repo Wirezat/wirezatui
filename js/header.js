@@ -64,10 +64,6 @@ function _buildSidebar(links) {
     if (!nav) return;
     const p = window.location.pathname;
 
-    // Destructured, because this used to take the whole link object into a
-    // parameter named `href` and then compare `p === href` — a pathname
-    // against an object, never equal. Exact-path matching was dead: only
-    // activeFor prefixes ever marked a link active.
     const isActive = ({ href, activeFor = [] }) =>
         p === href || activeFor.some(prefix => p.startsWith(prefix));
 

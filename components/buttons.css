@@ -32,7 +32,7 @@
    rule as host code, where .btn-danger without .btn is the author's own
    business. */
 
-/* ── Variants ────────────────────────────────────────────────────────────── */
+/* Variants */
 /* Outline recipe (Schritt 3): bg-card surface, full semantic-color border,
    text follows the border color. No filled buttons — replaces the old
    background:var(--accent)/white-text style entirely. */
@@ -68,14 +68,14 @@
     border-color: var(--danger);
 }
 
-/* ── Sizes ───────────────────────────────────────────────────────────────── */
+/* Sizes */
 .btn-sm {
     height: var(--h-btn-sm);
     padding: 0 var(--pad-btn-sm);
     font-size: var(--text-sm);
 }
 
-/* ── Flat (borderless) variants ──────────────────────────────────────────── */
+/* Flat (borderless) variants */
 .btn-flat {
     background: transparent;
     color: var(--text-faint);
@@ -98,7 +98,7 @@
 }
 .btn-icon.btn-sm { width: var(--h-btn-sm); }
 
-/* ── Icon-always-colored button pattern ──────────────────────────────────── */
+/* Icon-always-colored button pattern */
 /* Icon always colored, chrome (bg/border) invisible until hover.             */
 /* Pass the desired color via --_icon-color (inline style or ancestor CSS).   */
 /* Compose with .btn + a size modifier. Works on non-square buttons too.      */
@@ -113,7 +113,7 @@
     border-color: var(--_icon-color, currentColor);
 }
 
-/* ── Two-state toggle button (monochrome, frameless) ─────────────────────── */
+/* Two-state toggle button (monochrome, frameless) */
 /* Like btn-icon-color: no frame except on hover. Monochrome two-state via      */
 /* intensity — OFF: faint, ON: full primary text colour. State via aria-pressed.*/
 .btn-toggle {

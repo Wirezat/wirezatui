@@ -7,19 +7,19 @@
      Requires: components/forms.css
 -->
 
-<!-- ── Field with label above (default) ──────────────────────────── -->
+<!-- Field with label above (default) -->
 <div class="field">
   <label class="field-label">{{LABEL}}</label>
   <input class="input" type="text" placeholder="{{PLACEHOLDER}}">
 </div>
 
-<!-- ── Field with caption below (Unterschrift-Stil) ──────────────── -->
+<!-- Field with caption below (Unterschrift-Stil) -->
 <div class="field">
   <input class="input" type="number">
   <span class="field-caption">{{CAPTION_TEXT}}</span>
 </div>
 
-<!-- ── Titel-Container replacing label (prominent heading) ───────── -->
+<!-- Titel-Container replacing label (prominent heading) -->
 <div>
   <div class="titel-container">{{SECTION_TITLE}}</div>
   <div class="field">
@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<!-- ── Multi-field row (logically related fields side by side) ───── -->
+<!-- Multi-field row (logically related fields side by side) -->
 <div class="form-row">
   <div class="field" style="flex:1">
     <label class="field-label">{{LABEL_A}}</label>
@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<!-- ── Radio group (toggle-style, ≤4 options) ────────────────────── -->
+<!-- Radio group (toggle-style, ≤4 options) -->
 <div class="field">
   <label class="field-label">{{LABEL}}</label>
   <div class="radio-group">
@@ -51,19 +51,19 @@
   </div>
 </div>
 
-<!-- ── Checkbox ───────────────────────────────────────────────────── -->
+<!-- Checkbox -->
 <label class="check-item">
   <input type="checkbox">
   {{OPTION_LABEL}}
 </label>
 
-<!-- ── Textarea ──────────────────────────────────────────────────── -->
+<!-- Textarea -->
 <div class="field">
   <label class="field-label">{{LABEL}}</label>
   <textarea class="input textarea" placeholder="{{PLACEHOLDER}}"></textarea>
 </div>
 
-<!-- ── Form actions (always bottom-right, never in form-row) ─────── -->
+<!-- Form actions (always bottom-right, never in form-row) -->
 <div class="form-actions">
   <button class="btn btn-ghost">{{CANCEL}}</button>
   <button class="btn btn-primary">{{SAVE}}</button>

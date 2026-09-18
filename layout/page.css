@@ -4,7 +4,7 @@
    Requires: tokens/base.css + app/theme.css
 */
 
-/* ── Breadcrumb ──────────────────────────────────────────────────────────── */
+/* Breadcrumb */
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -33,7 +33,7 @@
 }
 .breadcrumb-dd-btn:hover { color: var(--accent); }
 
-/* ── Page header ─────────────────────────────────────────────────────────── */
+/* Page header */
 .page-header {
     display: flex;
     align-items: flex-start;
@@ -67,7 +67,7 @@
     margin-top: 3px;
 }
 
-/* ── Konfig-Bar ──────────────────────────────────────────────────────────── */
+/* Konfig-Bar */
 /* Collapsible strip under page-header. Trigger (⚙) sits in .page-title-row.
    When no controls are registered: omit trigger + bar entirely.            */
 
@@ -113,7 +113,7 @@
     color: var(--text-muted);
 }
 
-/* ── Split-layout — main-panel (left) + side-panel (right, opt-in) ──────────
+/* Split-layout — main-panel (left) + side-panel (right, opt-in) */
    align-items:stretch makes both columns take the height of the taller one;
    flex:1 on EVERY container in BOTH columns (not just side-panel, which was
    the old, asymmetric behavior) distributes that stretched height evenly

@@ -10,9 +10,9 @@
      5. components/<name>.css  (only what the app uses)
 */
 
-/* ── Base colors — set by the consuming app's theme.css; these are the
+/* Base colors — set by the consuming app's theme.css; these are the */
    fallback defaults, deliberately generic so a misconfigured app is
-   visibly wrong instead of silently fine. ── */
+   visibly wrong instead of silently fine. */
 :root {
     --accent:   #3b82f6;
     --danger:   #dc2626;
@@ -25,7 +25,7 @@
     --bg-card:  #1f2937;
 }
 
-/* ── Derived — pure CSS formulas, no JS shading. ── */
+/* Derived — pure CSS formulas, no JS shading. */
 :root {
     --accent-muted:  color-mix(in srgb, var(--accent) 15%, transparent);
     --accent-hover:  color-mix(in srgb, var(--accent) 85%, black);
@@ -40,21 +40,21 @@
     --bg-hover:      color-mix(in srgb, var(--bg-card) 92%, var(--text));
 }
 
-/* ── Elevation — one hairline shadow, not a scale. A surface either sits on
+/* Elevation — one hairline shadow, not a scale. A surface either sits on */
    the page or it does not; anything deeper than this reads as a card stack
-   the layout does not have. Themes retune it for their own background. ── */
+   the layout does not have. Themes retune it for their own background. */
 :root {
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.10);
 }
 
-/* ── Rounding — deliberately sharp. No --radius-lg. ── */
+/* Rounding — deliberately sharp. No --radius-lg. */
 :root {
     --radius:      1px;
     --radius-sm:   1px;
     --radius-pill: 99px;
 }
 
-/* ── Typography ──────────────────────────────────────────────────────────── */
+/* Typography */
 :root {
     --font:             "Segoe UI", -apple-system, system-ui, sans-serif;
     --font-mono:        "Courier New", monospace;
@@ -74,14 +74,14 @@
     --line-height:      1.5;
 }
 
-/* ── Layout ──────────────────────────────────────────────────────────────── */
+/* Layout */
 :root {
     --header-h:         52px;
     --sidebar-w:        220px;
     --page-w:           1200px;
 }
 
-/* ── Spacing — named by context, not pixel value ─────────────────────────── */
+/* Spacing — named by context, not pixel value */
 :root {
     /* Gaps (between elements) */
     --gap-icon:         4px;    /* icon ↔ label */
@@ -111,7 +111,7 @@
     --h-header:         var(--header-h);
 }
 
-/* ── Reset ───────────────────────────────────────────────────────────────── */
+/* Reset */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -153,7 +153,7 @@ button { cursor: pointer; background: none; border: none; }
 
 img, svg { display: block; max-width: 100%; }
 
-/* ── Scrollbars ──────────────────────────────────────────────────────────── */
+/* Scrollbars */
 /* Applies to every scrollable element (Firefox: inherited via `*`; WebKit: the
    ::-webkit-scrollbar pseudo-elements target whichever element scrolls, no
    selector scoping needed). Uses theme tokens so it matches light/dark/app

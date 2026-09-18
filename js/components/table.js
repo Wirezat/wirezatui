@@ -39,7 +39,7 @@ export function renderTable(parent, {
     const table = document.createElement('table')
     table.className = 'table' + (checklist ? ' table-checklist' : '')
 
-    // ── Head ──────────────────────────────────────────────────────────────
+    // Head
     const thead = document.createElement('thead')
     const hrow  = document.createElement('tr')
     cols.forEach(col => {
@@ -62,7 +62,7 @@ export function renderTable(parent, {
     thead.appendChild(hrow)
     table.appendChild(thead)
 
-    // ── Body ──────────────────────────────────────────────────────────────
+    // Body
     const tbody = document.createElement('tbody')
     const dataRows = rows.filter(r => !r.group)
 
