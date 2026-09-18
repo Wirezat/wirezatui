@@ -10,7 +10,7 @@
      5. components/<name>.css  (only what the app uses)
 */
 
-/* Base colors — set by the consuming app's theme.css; these are the */
+/* Base colors — set by the consuming app's theme.css; these are the
    fallback defaults, deliberately generic so a misconfigured app is
    visibly wrong instead of silently fine. */
 :root {
@@ -40,7 +40,7 @@
     --bg-hover:      color-mix(in srgb, var(--bg-card) 92%, var(--text));
 }
 
-/* Elevation — one hairline shadow, not a scale. A surface either sits on */
+/* Elevation — one hairline shadow, not a scale. A surface either sits on
    the page or it does not; anything deeper than this reads as a card stack
    the layout does not have. Themes retune it for their own background. */
 :root {

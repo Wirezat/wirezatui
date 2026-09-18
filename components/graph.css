@@ -99,7 +99,7 @@
     box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-/* Labels (optional, per-node, zero or more) */
+/* Labels (optional, per-node, zero or more)
    A self-describing, independently clickable row — the current machine name,
    a "click to pick a recipe" prompt, whatever the caller wants. Only ones
    with a `menu` become interactive (see .clickable); a bare label is inert
@@ -122,7 +122,7 @@
 }
 .graph-node-label.clickable:hover { color: var(--accent); }
 
-/* Path highlight */
+/* Path highlight
    Click a node to dim everything not on its path (see graph.js pathThrough).
    Selected node keeps full opacity + an accent ring; edges on the path are
    thickened so the traced route reads clearly against the dimmed rest. */

@@ -93,7 +93,7 @@
     text-overflow: ellipsis;
 }
 
-/* Sprite sheets */
+/* Sprite sheets
    A vertical strip of frames in one file — the game's animated textures, fluids
    above all. Squeezing the whole strip into an icon box reads as a smear, so
    `cover` scales it to fill by width and lets the rest overflow, and the
