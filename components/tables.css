@@ -45,6 +45,14 @@
 
 .table tbody tr:hover td { background: var(--bg-hover); }
 
+/* ── Row that navigates ──────────────────────────────────────────────────── */
+/* Set by the table factory's rowHref. The controls inside keep their own
+   cursor — clicking those does something else. */
+.table tbody tr[data-href] { cursor: pointer; }
+.table tbody tr[data-href] input,
+.table tbody tr[data-href] button,
+.table tbody tr[data-href] select { cursor: auto; }
+
 /* ── Empty cell ──────────────────────────────────────────────────────────── */
 /* A dash where a value would be. A blank cell reads as a rendering fault;
    a dash says the table looked and there was nothing. */

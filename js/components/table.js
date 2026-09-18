@@ -21,6 +21,7 @@
        onCheck: (row, checked) => {},   // checklist callback
        onAction: (row) => {},           // action button callback
        actionLabel: '…',
+       rowHref: (row) => `/items/${row.id}`,  // whole row navigates there
      })
 */
 
@@ -32,6 +33,7 @@ export function renderTable(parent, {
     onCheck      = null,
     onAction     = null,
     actionLabel  = '…',
+    rowHref      = null,
 } = {}) {
     parent.innerHTML = ''
     const table = document.createElement('table')
@@ -78,6 +80,10 @@ export function renderTable(parent, {
         }
 
         const tr = document.createElement('tr')
+        // A row whose content links somewhere should be clickable as a whole,
+        // not only on the few pixels the link's text covers.
+        const href = rowHref ? rowHref(row) : null
+        if (href) tr.dataset.href = href
         cols.forEach(col => {
             const td = document.createElement('td')
             if (col.cls) td.className = col.cls
@@ -160,6 +166,17 @@ export function renderTable(parent, {
         if (!trigger) return
         const panel = document.getElementById(trigger.dataset.expand)
         panel?.classList.toggle('open')
+    })
+
+    // Whole-row navigation. A click that landed on something interactive
+    // belongs to that element — the delete button deletes, the name link
+    // navigates on its own — so the row only handles what nothing else claimed.
+    table.addEventListener('click', e => {
+        const tr = e.target.closest('tr[data-href]')
+        if (!tr) return
+        if (e.target.closest('a, button, input, select, textarea, label')) return
+        if (e.metaKey || e.ctrlKey || e.shiftKey) window.open(tr.dataset.href, '_blank')
+        else window.location.href = tr.dataset.href
     })
 
     return table
