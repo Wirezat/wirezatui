@@ -36,19 +36,33 @@
 
 .nav-link:hover { color: var(--text); }
 
+/* Marked by the surface it sits on, not by an edge stripe: the stripe reads
+   as a border the panel does not have, and it only ever marks one link. */
 .nav-link.active {
-    color: var(--accent);
+    color: var(--text);
     font-weight: var(--weight-semibold, 600);
-    box-shadow: inset 2px 0 0 var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-/* Icon slot inside nav-link */
+/* Icon slot inside nav-link — a glyph or an image of the same box. */
 .nav-icon {
-    width: 16px;
+    --nav-icon-size: 20px;
+
+    width: var(--nav-icon-size);
+    height: var(--nav-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     flex-shrink: 0;
     opacity: 0.75;
     font-style: normal;
+}
+.nav-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
 }
 .nav-link.active .nav-icon { opacity: 1; }
 

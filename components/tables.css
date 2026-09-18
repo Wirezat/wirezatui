@@ -45,6 +45,12 @@
 
 .table tbody tr:hover td { background: var(--bg-hover); }
 
+/* ── Empty cell ──────────────────────────────────────────────────────────── */
+/* A dash where a value would be. A blank cell reads as a rendering fault;
+   a dash says the table looked and there was nothing. */
+.td-empty { color: var(--text-faint); }
+.td-empty::before { content: '—'; }
+
 /* ── Group header row ────────────────────────────────────────────────────── */
 .table-group-hd td {
     padding: var(--gap-inline) var(--pad-cell);
@@ -228,19 +234,21 @@ tr.wui-drop-zone-end td {
 .table-group-hd.group-editing .group-hd-name  { display: none; }
 .table-group-hd.group-editing .group-hd-input { display: inline-block; }
 
-/* ── Group scope bar ─────────────────────────────────────────────────────── */
+/* ── Group scope bar (opt-in) ────────────────────────────────────────────── */
 /* Vertical accent bar on the left of groups that have at least one item.     */
 /* Visible on header whether collapsed or expanded — lets the user distinguish */
 /* an empty group (no bar) from a collapsed group (bar present).              */
-/* Requires: header has data-group-populated; PL rows have data-group.        */
+/* Requires: .table-group-bars on the table; header has data-group-populated;  */
+/* rows have data-group. Opt-in because data-group is what makes grouping work */
+/* at all, so a table cannot drop the stripe by dropping the attribute.        */
 
-.table-group-hd[data-group-populated] td:first-child,
-[data-plid][data-group] td:first-child {
+.table-group-bars .table-group-hd[data-group-populated] td:first-child,
+.table-group-bars [data-plid][data-group] td:first-child {
     position: relative;
     overflow: visible; /* allow ::before to paint outside overflow:hidden td */
 }
 
-.table-group-hd[data-group-populated] td:first-child::before {
+.table-group-bars .table-group-hd[data-group-populated] td:first-child::before {
     content: '';
     position: absolute;
     left: 0;
@@ -252,13 +260,13 @@ tr.wui-drop-zone-end td {
 }
 
 /* Collapsed: bar fades out downward — signals "non-empty, just hidden" */
-.table-group-hd[data-group-populated].collapsed td:first-child::before {
+.table-group-bars .table-group-hd[data-group-populated].collapsed td:first-child::before {
     background: linear-gradient(to bottom, var(--accent) 30%, transparent 100%);
     bottom: 0;
     border-radius: 2px 2px 0 0;
 }
 
-[data-plid][data-group] td:first-child::before {
+.table-group-bars [data-plid][data-group] td:first-child::before {
     content: '';
     position: absolute;
     left: 0;
@@ -268,7 +276,7 @@ tr.wui-drop-zone-end td {
     background: var(--accent);
 }
 
-[data-plid][data-group]:has(+ .row-spacer) td:first-child::before {
+.table-group-bars [data-plid][data-group]:has(+ .row-spacer) td:first-child::before {
     background: linear-gradient(to bottom, var(--accent) 40%, transparent 100%);
 }
 

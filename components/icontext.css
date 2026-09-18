@@ -60,6 +60,33 @@
     white-space: nowrap;
 }
 
+/* ── Inline variant ──────────────────────────────────────────────────────── */
+/* Subtitle beside the label rather than under it. For a table cell, where two
+   stacked lines cost the row twice the height the data needs — the label
+   carries the weight and the subtitle trails it as faint context. It shrinks
+   first, so a narrow cell loses the origin before it loses the name. */
+.icontext-inline .icontext-body {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--gap-control);
+}
+
+.icontext-inline .icontext-text {
+    flex: 0 1 auto;
+    font-weight: var(--weight-semibold);
+}
+
+/* Fainter than the stacked subtitle: on its own line a subtitle is read, on
+   the same line it is only glanced at, and at muted it competes with the
+   label it is meant to qualify. */
+.icontext-inline .icontext-subtitle {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+    text-overflow: ellipsis;
+}
+
 /* ── Sprite sheets ───────────────────────────────────────────────────────────
    A vertical strip of frames in one file — the game's animated textures, fluids
    above all. Squeezing the whole strip into an icon box reads as a smear, so

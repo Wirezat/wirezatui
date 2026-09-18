@@ -9,6 +9,7 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -117,6 +118,25 @@
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
 }
+
+/* ── Container footer ────────────────────────────────────────────────────── */
+/* Closing strip under the body: counts, paging, totals. Mirrors
+   .container-toolbar so a list is bounded at both ends instead of trailing
+   off into the page. */
+.container-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-control);
+    padding: var(--gap-inline) var(--pad-container);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+/* Pushes everything after it to the far end of a toolbar or footer. */
+.container-toolbar .spacer,
+.container-footer .spacer { margin-left: auto; }
 
 /* ── Config-container variant ────────────────────────────────────────────── */
 /* For settings / form containers. Visually distinguished by accent tint.   */

@@ -40,6 +40,13 @@
     --bg-hover:      color-mix(in srgb, var(--bg-card) 92%, var(--text));
 }
 
+/* ── Elevation — one hairline shadow, not a scale. A surface either sits on
+   the page or it does not; anything deeper than this reads as a card stack
+   the layout does not have. Themes retune it for their own background. ── */
+:root {
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.10);
+}
+
 /* ── Rounding — deliberately sharp. No --radius-lg. ── */
 :root {
     --radius:      1px;

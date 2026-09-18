@@ -45,6 +45,24 @@
     border-color: var(--warn);
 }
 
+/* ── Unit chip ───────────────────────────────────────────────────────────── */
+/* The unit attached to a number: /s, EU/t, mB. Borderless and tinted rather
+   than outlined like .badge — it is not a status the row carries but part of
+   the value beside it, and a full border would read as a second datum. */
+.badge-unit {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px var(--gap-inline);
+    border: none;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
 /* ── Dot indicator ───────────────────────────────────────────────────────── */
 .badge-dot::before {
     content: '';

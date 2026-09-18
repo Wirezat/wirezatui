@@ -54,13 +54,20 @@
 .tile-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--gap-item);
+    row-gap: var(--gap-icon);
     font-size: var(--text-xs);
     color: var(--text-faint);
     margin-top: auto;
     padding-top: var(--gap-inline);
     border-top: 1px solid var(--border);
 }
+
+/* Each stat wraps as a whole or not at all: a row that runs out of width
+   should drop a stat to the next line, not break "Aug 30, 2026" across
+   three. */
+.tile-meta > * { white-space: nowrap; }
 
 /* ── "New" tile variant ──────────────────────────────────────────────────── */
 .tile-new {
