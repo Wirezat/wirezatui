@@ -75,7 +75,14 @@ export function logout() {
     window.location.href = _cfg.loginPath;
 }
 
-async function _refresh() {
+let _refreshing = null;
+
+function _refresh() {
+    _refreshing ??= _doRefresh().finally(() => { _refreshing = null; });
+    return _refreshing;
+}
+
+async function _doRefresh() {
     if (!_cfg.refreshApi) return false;
     if (_cookieMode()) {
         try {
@@ -93,7 +100,7 @@ async function _refresh() {
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ refresh_token: r }),
         });
-        if (!res.ok) return false;
+        if (!res.ok) return getRefresh() !== r && !!getRefresh();
         const data = await res.json();
         _setTokens(data.access_token, data.refresh_token);
         return true;
