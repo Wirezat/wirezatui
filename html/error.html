@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>404</title>
+  <link rel="stylesheet" href="/static/ui/index.css" />
+  <link rel="stylesheet" href="/static/css/theme.css" />
+  <script>
+    (function(){
+      const s = localStorage.getItem('theme');
+      if (s === 'dark' || (!s && matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+</head>
+<body class="app-shell">
+
+  <header class="header">
+    <div class="header-brand"></div>
+    <div class="header-right">
+      <button data-wui-theme></button>
+    </div>
+  </header>
+
+  <!-- Slots: icon, code, sub (optional), text, link (optional). Add .danger to .error-card for a red icon. -->
+  <main class="error-main">
+    <div class="error-card">
+      <div class="error-head">
+        <div class="error-icon">?</div>
+        <div class="error-code">404</div>
+        <div class="error-sub">Page not found</div>
+      </div>
+      <div class="error-body">
+        <p class="error-text">Check the address for typos.</p>
+        <a class="btn btn-primary error-link" href="/">Home</a>
+      </div>
+    </div>
+  </main>
+
+<script type="module">
+  import { initThemeBtn } from '/static/ui/js/theme.js';
+  initThemeBtn();
+</script>
+
+</body>
+</html>

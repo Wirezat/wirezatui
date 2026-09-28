@@ -20,6 +20,7 @@
      components/dropdown.css
      components/user-menu.css
      components/auth.css      — login/register card, lang picker
+     components/error-page.css — full-page error card (404, expired, …)
      components/infocard.css  — hover-triggered info card overlay
      components/autocomplete.css
      components/graph.css     — layered directed graph board
@@ -61,6 +62,7 @@
 @import './components/dropdown.css';
 @import './components/user-menu.css';
 @import './components/auth.css';
+@import './components/error-page.css';
 @import './components/infocard.css';
 @import './components/autocomplete.css';
 @import './components/graph.css';

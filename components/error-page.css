@@ -1,0 +1,80 @@
+/* wirezat-ui-v1 / components/error-page.css
+   Full-page error card: head (icon, code, optional sub), body (text, optional link).
+   Template: html/error.html
+   Requires: tokens/base.css + app/theme.css
+*/
+
+:root {
+    --error-card-w:         380px;
+    --error-icon-size:      44px;
+    --error-icon-font-size: 22px;
+    --error-icon-radius:    10px;
+    --error-sub-gap:        3px;
+}
+
+.error-main {
+    display: grid;
+    place-items: center;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--gap-section);
+}
+
+.error-card {
+    width: 100%;
+    max-width: var(--error-card-w);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.error-head {
+    padding: var(--pad-page) var(--pad-page) var(--pad-card);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.error-icon {
+    width: var(--error-icon-size);
+    height: var(--error-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--gap-item);
+    font-size: var(--error-icon-font-size);
+    font-weight: var(--weight-semibold);
+    color: #fff;
+    background: var(--accent);
+    border-radius: var(--error-icon-radius);
+}
+.error-card.danger .error-icon { background: var(--danger); }
+
+.error-code {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+}
+
+.error-sub {
+    margin-top: var(--error-sub-gap);
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+}
+
+.error-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-field);
+    padding: var(--gap-section) var(--pad-page) var(--pad-page);
+}
+
+.error-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--line-height);
+    color: var(--text-muted);
+}
+
+.error-link { align-self: center; }
