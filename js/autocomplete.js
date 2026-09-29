@@ -42,9 +42,6 @@ export class WuiAutocomplete {
     this._buf      = [];
     this._active   = -1;
     this._off      = 0;
-    // Offset of _buf[0] in the full result set — advances when scrolling down
-    // trims rows off the top, so scrolling back up knows which earlier page to
-    // re-fetch and prepend (rows.length may be less than a full page near 0).
     this._bufStart = 0;
     this._hasMore  = false;
     this._loading  = false;
@@ -72,7 +69,6 @@ export class WuiAutocomplete {
     window.addEventListener('resize', this._repos, { passive: true });
   }
 
-  // Public
   close() {
     clearTimeout(this._closeT);
     this._buf = []; this._q = null; this._active = -1;
@@ -85,7 +81,6 @@ export class WuiAutocomplete {
     window.removeEventListener('resize', this._repos);
   }
 
-  // Private
   _tryOpen() {
     const q = this._in.value;
     if (this._buf.length && this._q === q) {
@@ -126,9 +121,7 @@ export class WuiAutocomplete {
     }
   }
 
-  // Scrolling down near the bottom: fetch the next page, append it, and trim
-  // rows off the TOP if the virtual window exceeds MAX (freeing memory/DOM
-  // nodes for very long lists) — the inverse of _loadBackward.
+  // Fetches and appends the next page, trimming rows off the top past MAX.
   async _loadForward() {
     if (!this._hasMore) return;
     this._loading = true;
@@ -169,10 +162,7 @@ export class WuiAutocomplete {
     }
   }
 
-  // Scrolling up near the top of an already-trimmed window: re-fetch the page
-  // immediately before _bufStart and prepend it, trimming off the BOTTOM if
-  // the window would exceed MAX — the inverse of _loadForward. Without this,
-  // scrolling down evicts earlier rows from the DOM with no way back to them.
+  // Fetches and prepends the page before the buffer, trimming rows off the bottom past MAX.
   async _loadBackward() {
     this._loading = true;
     try {
@@ -180,9 +170,6 @@ export class WuiAutocomplete {
       const fetchStart = Math.max(0, this._bufStart - PAGE);
       const { rows }   = await this._fetch(q, fetchStart);
       if (this._q !== q) return;
-      // Only keep rows that precede what's already in _buf — a fetch(q, fetchStart)
-      // may return up to PAGE rows starting there, but _bufStart marks where our
-      // current window already begins.
       const newRows = rows.slice(0, Math.max(0, this._bufStart - fetchStart));
       if (!newRows.length) return;
 
@@ -194,7 +181,7 @@ export class WuiAutocomplete {
         const trim = Math.min(excess, this._buf.length);
         for (let i = 0; i < trim; i++) d.lastElementChild?.remove();
         this._buf     = this._buf.slice(0, this._buf.length - trim);
-        this._hasMore = true; // we just evicted rows past the end, so more exist again
+        this._hasMore = true;
       }
 
       const h   = d.children[0]?.offsetHeight || 34;
@@ -217,8 +204,7 @@ export class WuiAutocomplete {
     }
   }
 
-  // Keeps each rendered row's data-idx in sync with its actual position in
-  // _buf — required after any prepend/trim, since those shift every row's index.
+  // Syncs each row's data-idx to its position in _buf.
   _reindex() {
     Array.from(this._drop.children).forEach((el, i) => { el.dataset.idx = i; });
   }
@@ -249,9 +235,6 @@ export class WuiAutocomplete {
   _pos() {
     const r = this._in.getBoundingClientRect();
     const d = this._drop.style;
-    // Flush with the input — row layout (see autocomplete.css) gives the
-    // primary name priority and truncates the secondary label instead, so
-    // the dropdown no longer needs extra width to avoid crushing the name.
     d.top   = (r.bottom - 1) + 'px';
     d.left  = r.left + 'px';
     d.width = r.width + 'px';

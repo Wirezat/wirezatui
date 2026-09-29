@@ -1,10 +1,6 @@
-/* wirezat-ui-v1 / components/autocomplete.css
-   Search input with virtual-scrolling dropdown.
-   Activate: wrap input in .wui-ac-wrap; add sibling .wui-ac-drop.
-   Requires: tokens/base.css, components/forms.css
-*/
+/* wirezat-ui-v1 / components/autocomplete.css — search input with virtual-scrolling dropdown.
+   Activate: wrap input in .wui-ac-wrap, add sibling .wui-ac-drop. Requires tokens/base.css, components/forms.css. */
 
-/* Wrapper */
 .wui-ac-wrap {
     position: relative;
 }
@@ -16,8 +12,8 @@
     position: fixed;
     z-index: 9999;
     background: var(--bg);
-    border: 1px solid var(--border-strong);           /* was: 1.5px solid var(--accent) */
-    border-top: none;                                  /* was: 1px solid var(--accent-muted) */
+    border: 1px solid var(--border-strong);
+    border-top: none;
     border-radius: 0 0 var(--radius) var(--radius);
     max-height: 260px;
     overflow-y: auto;
@@ -26,7 +22,6 @@
 }
 .wui-ac-drop.open { display: block; }
 
-/* Row */
 .wui-ac-row {
     display: flex;
     align-items: baseline;
@@ -39,11 +34,9 @@
     overflow: hidden;
 }
 .wui-ac-row:hover,
-.wui-ac-row.ac-active { color: var(--accent); }        /* was: background: var(--accent-muted); color: var(--accent-dark) */
+.wui-ac-row.ac-active { color: var(--accent); }
 
 /* Primary field */
-/* The result's own name — must stay fully readable; the secondary field
-   (mod/context label) yields space to it and truncates first. */
 .wui-ac-primary {
     flex-shrink: 0;
     font-weight: var(--weight-medium);
