@@ -1,0 +1,48 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/tables.css">
+<link rel="stylesheet" href="../components/uom.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif;max-width:560px}
+p{margin:18px 0 6px;color:var(--text-muted);font-size:13px}</style>
+</head><body>
+  <p>Item-Rate (Stück pro Zeit)</p>
+  <span class="wui-uom" data-uom-per="time" data-uom-per-unit="s" data-uom-value="101/45"></span>
+
+  <p>Fluid-Rate (Volumen pro Zeit)</p>
+  <span class="wui-uom" data-uom="volume" data-uom-unit="mb" data-uom-per="time" data-uom-per-unit="t" data-uom-value="250"></span>
+
+  <p>Volumen allein</p>
+  <span class="wui-uom" data-uom="volume" data-uom-unit="b" data-uom-value="16"></span>
+
+  <p>In klickbarer Tabellenzeile (Klick aufs Badge darf die Zeile nicht auslösen)</p>
+  <table class="table"><tbody>
+    <tr id="row" style="cursor:pointer"><td>Steel Double Ingot</td>
+      <td><span class="wui-uom" data-uom-per="time" data-uom-per-unit="min" data-uom-value="303"></span></td></tr>
+  </tbody></table>
+  <div id="log" style="font-size:12px;color:var(--text-faint);margin-top:6px"></div>
+
+  <p>Nachträglich per innerHTML eingefügt</p>
+  <div id="late"></div>
+
+<script type="module">
+  import { defineUom, initUom } from '../js/uom.js'
+  defineUom('time', { base: 's', default: 't', units: [
+    { id: 't',   label: 't',   factor: { num: 1,    den: 20 } },
+    { id: 's',   label: 's',   factor: { num: 1,    den: 1 } },
+    { id: 'min', label: 'min', factor: { num: 60,   den: 1 } },
+    { id: 'h',   label: 'h',   factor: { num: 3600, den: 1 } },
+  ]})
+  defineUom('volume', { base: 'mb', units: [
+    { id: 'mb', label: 'mB', factor: { num: 1,       den: 1 } },
+    { id: 'b',  label: 'B',  factor: { num: 1000,    den: 1 } },
+    { id: 'kb', label: 'kB', factor: { num: 1000000, den: 1 } },
+  ]})
+  initUom()
+  document.getElementById('row').onclick = () => { document.getElementById('log').textContent = 'Zeile geklickt ' + new Date().toLocaleTimeString() }
+  setTimeout(() => {
+    document.getElementById('late').innerHTML =
+      '<span class="wui-uom" data-uom-per="time" data-uom-per-unit="t" data-uom-value="1/8"></span>'
+  }, 300)
+</script>
+</body></html>

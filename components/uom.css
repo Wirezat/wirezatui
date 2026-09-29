@@ -1,0 +1,114 @@
+/* wirezat-ui-v1 / components/uom.css
+   Unit-of-measure badge and its hover/picker overlay. Behaviour: js/uom.js
+   Requires: tokens/base.css + app/theme.css
+*/
+
+:root {
+    --uom-gap:         var(--gap-inline);
+    --uom-pop-min-w:   160px;
+    --uom-pop-shadow:  0 6px 24px rgba(0, 0, 0, .18);
+    --uom-pop-z:       9000;
+    --uom-row-gap:     var(--gap-inline);
+    --uom-unit-w:      6ch;
+    --uom-cell-pad-y:  var(--gap-icon);
+    --uom-cell-pad-x:  var(--gap-field);
+    --uom-tint:        color-mix(in srgb, var(--accent) 8%, transparent);
+    --uom-marker-w:    2px;
+}
+
+.wui-uom {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--uom-gap);
+    color: var(--text);
+    cursor: pointer;
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+}
+.wui-uom:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
+
+.wui-uom-value { font-family: var(--font-mono); }
+
+.wui-uom-unit {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px var(--gap-inline);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.wui-uom:hover .wui-uom-unit,
+.wui-uom.wui-uom-open .wui-uom-unit { color: var(--accent); }
+
+.wui-uom-pop {
+    position: fixed;
+    z-index: var(--uom-pop-z);
+    min-width: var(--uom-pop-min-w);
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap-icon) 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--uom-pop-shadow);
+    font-size: var(--text-sm);
+}
+
+.wui-uom-row {
+    display: flex;
+    gap: var(--uom-row-gap);
+    padding: var(--gap-icon) var(--pad-container);
+    font: inherit;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    text-align: left;
+}
+.wui-uom-row.active {
+    color: var(--accent);
+    box-shadow: inset var(--uom-marker-w) 0 0 var(--accent);
+}
+.wui-uom-row { cursor: pointer; }
+.wui-uom-row:hover { color: var(--text); }
+.wui-uom-row.active:hover { color: var(--accent); }
+
+.wui-uom-row-val  { flex: 1; font-family: var(--font-mono); color: var(--text); text-align: right; }
+.wui-uom-row-unit { min-width: var(--uom-unit-w); font-family: var(--font-mono); }
+
+.wui-uom-grid {
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+}
+.wui-uom-grid th {
+    padding: var(--uom-cell-pad-y) var(--uom-cell-pad-x);
+    font-weight: var(--weight-normal);
+    color: var(--text-muted);
+    text-align: right;
+    white-space: nowrap;
+}
+.wui-uom-grid thead th { border-bottom: 1px solid var(--border); }
+.wui-uom-grid tbody th { text-align: left; border-right: 1px solid var(--border); }
+.wui-uom-grid th.active { color: var(--accent); }
+.wui-uom-grid td { padding: 0; }
+.wui-uom-grid td.in-row,
+.wui-uom-grid td.in-col { background: var(--uom-tint); }
+
+.wui-uom-cell {
+    width: 100%;
+    padding: var(--uom-cell-pad-y) var(--uom-cell-pad-x);
+    font: inherit;
+    color: var(--text-muted);
+    text-align: right;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.wui-uom-cell:hover { color: var(--text); }
+.wui-uom-grid td.active .wui-uom-cell {
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
