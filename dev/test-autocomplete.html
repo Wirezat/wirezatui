@@ -1,0 +1,87 @@
+<!doctype html><html><head>
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/forms.css">
+<link rel="stylesheet" href="../components/autocomplete.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif;display:grid;gap:40px;max-width:420px}
+:root{--accent:#c9973f;--danger:#c96a6a;--warn:#c67d3c;--success:#5aa864;--text:#1f1d1a;--border:#c7c1b8;--bg:#fff;--bg-card:#fff}</style>
+</head><body>
+  <section>
+    <p>A — default: first row preselected, select closes.</p>
+    <div class="wui-ac-wrap"><input class="input" id="a"><div class="wui-ac-drop" id="a-drop"></div></div>
+  </section>
+  <section>
+    <p>B — preselect off, variants, "more…" keeps the list open.</p>
+    <div class="wui-ac-wrap"><input class="input" id="b"><div class="wui-ac-drop" id="b-drop"></div></div>
+  </section>
+  <section>
+    <p>C — destroy: live window scroll/resize listener count stays the same after the cycle.</p>
+    <button id="c-cycle">create + destroy 20 instances</button> <output id="c-out"></output>
+  </section>
+  <section>
+    <p>D — icons: labels align whether a row has an icon, an image or none; onRender counter.</p>
+    <div class="wui-ac-wrap"><input class="input" id="d"><div class="wui-ac-drop" id="d-drop"></div></div>
+    <output id="d-out">onRender: 0</output>
+  </section>
+<script type="module">
+  import { WuiAutocomplete } from '../js/autocomplete.js'
+
+  const live = { scroll: 0, resize: 0 }
+  const add = window.addEventListener.bind(window)
+  const rem = window.removeEventListener.bind(window)
+  window.addEventListener = (type, ...rest) => { if (type in live) live[type]++; return add(type, ...rest) }
+  window.removeEventListener = (type, ...rest) => { if (type in live) live[type]--; return rem(type, ...rest) }
+
+  const words = ['alpha', 'beta', 'gamma', 'delta', 'stop here', 'warning', 'done']
+  const fetchFrom = list => async (q) => ({ rows: list.filter(w => w.includes(q)).map(name => ({ name })), hasMore: false })
+  const log = (tag, row) => console.log(tag, row.name)
+
+  new WuiAutocomplete({
+    inputEl: document.getElementById('a'), dropEl: document.getElementById('a-drop'),
+    fetch: fetchFrom(words), primary: r => r.name, onSelect: r => log('A', r),
+  })
+
+  let extra = 0
+  const b = document.getElementById('b')
+  const bRows = () => [...words, 'Bad Name', ...Array.from({ length: extra }, (_, i) => `extra ${i + 1}`), 'more…']
+  new WuiAutocomplete({
+    inputEl: b, dropEl: document.getElementById('b-drop'),
+    preselect: false,
+    fetch: async (q) => ({ rows: bRows().filter(w => w.includes(q)).map(name => ({ name })), hasMore: false }),
+    primary: r => r.name,
+    variant: r => ({ 'stop here': 'danger', warning: 'warn', done: 'success', 'Bad Name': 'Bad Name' })[r.name],
+    onSelect: r => {
+      log('B', r)
+      if (r.name !== 'more…') return
+      extra++
+      b.dispatchEvent(new Event('input'))
+      return true
+    },
+  })
+
+  document.getElementById('c-cycle').addEventListener('click', () => {
+    const before = JSON.stringify(live)
+    for (let i = 0; i < 20; i++) {
+      const input = document.createElement('input')
+      const drop = document.createElement('div')
+      new WuiAutocomplete({ inputEl: input, dropEl: drop, fetch: fetchFrom(words), primary: r => r.name, onSelect: () => {} }).destroy()
+    }
+    document.getElementById('c-out').textContent = `before ${before}, after ${JSON.stringify(live)}`
+  })
+
+  const pixel = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><rect width="1" height="1" fill="#c9973f"/><rect x="1" y="1" width="1" height="1" fill="#5aa864"/></svg>')
+  const dRows = Array.from({ length: 120 }, (_, i) => ({ name: `row ${i + 1}`, kind: i % 3 }))
+  let renders = 0
+  new WuiAutocomplete({
+    inputEl: document.getElementById('d'), dropEl: document.getElementById('d-drop'),
+    fetch: async (q, offset) => {
+      const rows = dRows.filter(r => r.name.includes(q))
+      return { rows: rows.slice(offset, offset + 50), hasMore: offset + 50 < rows.length }
+    },
+    primary: r => r.name,
+    secondary: r => ['emoji', 'image', 'none'][r.kind],
+    icon: r => [`📁`, `<img src="${pixel}" alt="">`, ''][r.kind],
+    onRender: () => { document.getElementById('d-out').textContent = `onRender: ${++renders}` },
+    onSelect: r => log('D', r),
+  })
+</script>
+</body></html>

@@ -6,11 +6,17 @@
        inputEl,            // <input> element
        dropEl,             // .wui-ac-drop element (sibling of input inside .wui-ac-wrap)
        fetch,              // async (q, offset) => { rows: [...], hasMore: bool }
-       onSelect,           // (row) => void
+       onSelect,           // (row) => void | true  — return true to keep the dropdown open
        primary,            // (row) => string  — main display value
        secondary?,         // (row) => string  — optional secondary display value
+       variant?,           // (row) => string  — adds class ac-<name> to the row (danger, warn, success)
+       icon?,              // (row) => html    — trusted markup in a fixed-width leading cell
+       onRender?,          // (dropEl) => void — after rows are inserted
+       preselect?,         // default true — highlight the first row after each search
        debounceMs?,        // default 180
      })
+
+   destroy() closes the dropdown and removes the window listeners.
 
    fetch() receives (query, offset) and must return { rows, hasMore }.
    Rows are plain objects; primary/secondary extract display strings from them.
@@ -21,13 +27,17 @@ const PAGE = 50;
 const MAX  = 150;
 
 export class WuiAutocomplete {
-  constructor({ inputEl, dropEl, fetch, onSelect, primary, secondary, debounceMs = 180 }) {
+  constructor({ inputEl, dropEl, fetch, onSelect, primary, secondary, variant, icon, onRender, preselect = true, debounceMs = 180 }) {
     this._in   = inputEl;
     this._drop = dropEl;
     this._fetch  = fetch;
     this._onSel  = onSelect;
     this._pri    = primary;
     this._sec    = secondary || null;
+    this._variant   = variant || null;
+    this._icon      = icon || null;
+    this._onRender  = onRender || null;
+    this._preselect = preselect;
 
     this._buf      = [];
     this._active   = -1;
@@ -57,9 +67,9 @@ export class WuiAutocomplete {
     });
     dropEl.addEventListener('scroll', () => this._onScroll());
 
-    const repos = () => { if (dropEl.classList.contains('open')) this._pos(); };
-    window.addEventListener('scroll', repos, { passive: true, capture: true });
-    window.addEventListener('resize', repos, { passive: true });
+    this._repos = () => { if (dropEl.classList.contains('open')) this._pos(); };
+    window.addEventListener('scroll', this._repos, { passive: true, capture: true });
+    window.addEventListener('resize', this._repos, { passive: true });
   }
 
   // Public
@@ -67,6 +77,12 @@ export class WuiAutocomplete {
     clearTimeout(this._closeT);
     this._buf = []; this._q = null; this._active = -1;
     this._drop.classList.remove('open');
+  }
+
+  destroy() {
+    this.close();
+    window.removeEventListener('scroll', this._repos, { capture: true });
+    window.removeEventListener('resize', this._repos);
   }
 
   // Private
@@ -92,7 +108,7 @@ export class WuiAutocomplete {
       this._buf     = rows;
       this._off     = rows.length;
       this._hasMore = hasMore;
-      this._active  = rows.length ? 0 : -1;
+      this._active  = rows.length && this._preselect ? 0 : -1;
       this._render();
     } finally {
       this._loading = false;
@@ -140,13 +156,14 @@ export class WuiAutocomplete {
       const frag = document.createDocumentFragment();
       rows.forEach(row => {
         const el = document.createElement('div');
-        el.className = 'wui-ac-row';
+        el.className = 'wui-ac-row' + this._rowClass(row);
         el.innerHTML  = this._rowHTML(row);
         frag.appendChild(el);
       });
       d.appendChild(frag);
       this._buf = [...this._buf, ...rows];
       this._reindex();
+      this._onRender?.(this._drop);
     } finally {
       this._loading = false;
     }
@@ -185,7 +202,7 @@ export class WuiAutocomplete {
       const frag = document.createDocumentFragment();
       newRows.forEach(row => {
         const el = document.createElement('div');
-        el.className = 'wui-ac-row';
+        el.className = 'wui-ac-row' + this._rowClass(row);
         el.innerHTML  = this._rowHTML(row);
         frag.appendChild(el);
       });
@@ -194,6 +211,7 @@ export class WuiAutocomplete {
       this._active = this._active >= 0 ? this._active + newRows.length : -1;
       d.scrollTop  = top + newRows.length * h;
       this._reindex();
+      this._onRender?.(this._drop);
     } finally {
       this._loading = false;
     }
@@ -210,15 +228,22 @@ export class WuiAutocomplete {
     if (!this._buf.length) { d.classList.remove('open'); return; }
     this._pos();
     d.innerHTML = this._buf.map((row, i) =>
-      `<div class="wui-ac-row${i === this._active ? ' ac-active' : ''}" data-idx="${i}">${this._rowHTML(row)}</div>`
+      `<div class="wui-ac-row${this._rowClass(row)}${i === this._active ? ' ac-active' : ''}" data-idx="${i}">${this._rowHTML(row)}</div>`
     ).join('');
     d.classList.add('open');
+    this._onRender?.(this._drop);
   }
 
   _rowHTML(row) {
+    const i = this._icon ? `<span class="wui-ac-icon">${this._icon(row) || ''}</span>` : '';
     const p = esc(this._pri(row));
     const s = this._sec ? `<span class="wui-ac-secondary">${esc(this._sec(row))}</span>` : '';
-    return `<span class="wui-ac-primary">${p}</span>${s}`;
+    return `${i}<span class="wui-ac-primary">${p}</span>${s}`;
+  }
+
+  _rowClass(row) {
+    const v = this._variant ? this._variant(row) : '';
+    return v && /^[a-z][a-z0-9-]*$/.test(v) ? ' ac-' + v : '';
   }
 
   _pos() {
@@ -235,8 +260,7 @@ export class WuiAutocomplete {
   _select(i) {
     const row = this._buf[i];
     if (!row) return;
-    this._onSel(row);
-    this.close();
+    if (!this._onSel(row)) this.close();
   }
 
   _schedClose() {
