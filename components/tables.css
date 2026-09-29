@@ -376,6 +376,11 @@ tr[data-wui-bulk-row]:hover td { background: var(--accent-muted) !important; }
 .balance-val  { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); }
 .balance-warn { color: var(--danger); font-weight: var(--weight-semibold); }
 
+/* Column sizing: .cell-fit shrinks to its content, .cell-fill takes the rest and lets its
+   content truncate. */
+.table td.cell-fit  { width: 1%; white-space: nowrap; }
+.table td.cell-fill { width: 100%; max-width: 0; }
+
 /* Cell-clamp: overflow strategies for narrow table cells */
 /* Base: clips content. Apply one modifier for the overflow behaviour.
    --scroll's hover marquee comes from the shared js/marquee.js +
