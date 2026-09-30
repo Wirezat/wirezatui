@@ -12,6 +12,8 @@
        { label: 'Compressor', subtitle: '← iron_double_ingot', action: 'r1' },
        { label: 'Stop here',  action: 'stop', danger: true },
      ], {
+     An item's optional icon is trusted HTML; once one item has one, every item
+     gets the icon cell so the labels stay aligned.
        onSelect: (action) => { ... },
      })
 */
@@ -29,8 +31,10 @@ export function openPopover(anchorEl, items = [], { onSelect = () => {} } = {}) 
     // visibility is CSS-unconditional (see .dropdown-panel-floating) — its
     // lifecycle is create-to-show / remove-to-hide, handled entirely below.
     panel.className = 'dropdown-panel dropdown-panel-floating'
+    const withIcons = items.some(it => it.icon)
     panel.innerHTML = items.map((it, i) => `
         <button type="button" class="dropdown-item${it.danger ? ' danger' : ''}${it.active ? ' active' : ''}" data-idx="${i}">
+            ${withIcons ? `<span class="dropdown-item-icon">${it.icon || ''}</span>` : ''}
             <span class="dropdown-item-main">
                 <span class="dropdown-item-label">${esc(it.label)}</span>
                 ${it.subtitle ? `<span class="dropdown-item-subtitle">${esc(it.subtitle)}</span>` : ''}
