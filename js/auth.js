@@ -23,6 +23,7 @@
 */
 
 import { initDropdowns } from './dropdown.js';
+import { getLang }       from './i18n.js';
 import { initThemeBtn }  from './theme.js';
 
 // Session management
@@ -55,8 +56,6 @@ function _setTokens(a, r) {
 
 export function logout() {
     if (_cookieMode()) {
-        // keepalive so the request survives the navigation below — otherwise
-        // the server may never get to invalidate the session.
         fetch(_cfg.logoutApi, { method: 'POST', credentials: 'same-origin', keepalive: true })
             .catch(() => {});
     } else {
@@ -86,8 +85,6 @@ async function _doRefresh() {
     if (!_cfg.refreshApi) return false;
     if (_cookieMode()) {
         try {
-            // The refresh token is a cookie too, so there is nothing to send;
-            // a successful response rotates the cookies server-side.
             const res = await fetch(_cfg.refreshApi, { method: 'POST', credentials: 'same-origin' });
             return res.ok;
         } catch { return false; }
@@ -107,7 +104,13 @@ async function _doRefresh() {
     } catch { return false; }
 }
 
+function withLang(url) {
+    if (typeof url !== 'string' || !url.startsWith('/api/') || /[?&]lang=/.test(url)) return url;
+    return url + (url.includes('?') ? '&' : '?') + 'lang=' + encodeURIComponent(getLang());
+}
+
 function _send(url, options) {
+    url = withLang(url);
     const headers = options.body instanceof FormData
         ? { ...options.headers }
         : { 'Content-Type': 'application/json', ...options.headers };
@@ -123,10 +126,6 @@ export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
     let res = await _send(url, options);
     if (res.status !== 401) return res;
 
-    // Token mode can tell "never logged in" from "session expired": no token at
-    // all means the former, which is an expected outcome for the caller (e.g.
-    // /api/me on a public page), not a session worth bouncing. Cookie mode
-    // cannot see its own credential, so it has to try the refresh either way.
     if (!_cookieMode() && !getToken()) return res;
 
     if (await _refresh()) {
@@ -134,8 +133,6 @@ export async function apiFetch(url, options = {}, { silent401 = false } = {}) {
         if (res.status !== 401) return res;
     }
 
-    // On public pages a dead session just means "treat as logged out" —
-    // bouncing to /login would break pages that never required auth.
     if (silent401) return res;
     logout();
     return null;
@@ -194,8 +191,6 @@ export function applyRoles() {
 */
 
 const DEFAULTS = {
-    // loginUrl falls back to configure()'s loginApi so an app that already set
-    // its endpoints for the session layer does not have to repeat itself here.
     registerUrl: '/api/auth/register',
     configUrl:   '/api/auth/config',
     langFlags:   { en: '🇬🇧', de: '🇩🇪' },
@@ -217,8 +212,6 @@ export function initAuth(cfg, { t, getLang, setLang }) {
     document.title = (c.name ?? 'App') + ' — ' + t('login.title');
 
     // Skip if already logged in
-    // Token mode can see its own credential. Cookie mode cannot, so the server
-    // is the one that redirects an already-signed-in visitor away from here.
     if (!_cookieMode() && localStorage.getItem('access_token')) {
         window.location.href = c.redirect ?? '/';
         return;
@@ -377,10 +370,6 @@ export function initAuth(cfg, { t, getLang, setLang }) {
                 const result = await c.onPassword(password);
                 if (!result?.ok) { showStatus('status-password', 'err', result?.message || t('msg.login_failed')); return; }
             } else if (c.passwordUrl) {
-                // Same parsing as _submit, minus the token write: a password
-                // gate confirms access to something already session'd, it
-                // does not issue a new session — writing tokens here would
-                // stash "undefined" strings when the endpoint never sends any.
                 const res = await fetch(c.passwordUrl, {
                     method:      'POST',
                     headers:     { 'Content-Type': 'application/json' },
