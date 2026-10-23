@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens/base.css">
+<link rel="stylesheet" href="../components/forms.css">
+<link rel="stylesheet" href="../components/buttons.css">
+<link rel="stylesheet" href="../components/tables.css">
+<link rel="stylesheet" href="../components/autocomplete.css">
+<link rel="stylesheet" href="../components/locked.css">
+<style>body{background:var(--bg);color:var(--text);padding:24px;font-family:sans-serif;display:grid;gap:24px;max-width:420px}
+:root{--accent:#c9973f;--danger:#c96a6a;--warn:#c67d3c;--success:#5aa864;--text:#1f1d1a;--border:#c7c1b8;--bg:#fff;--bg-card:#fff}
+@media (prefers-color-scheme:dark){:root{--text:#e5e7eb;--border:#374151;--bg:#111827;--bg-card:#1f2937}}
+.wui-ac-drop{position:static;display:block}</style>
+</head><body>
+  <section>
+    <p>Button</p>
+    <button class="btn" id="btn-normal">normal</button>
+    <button class="btn locked" id="btn-locked">locked</button>
+  </section>
+  <section>
+    <p>Table cell</p>
+    <table><tr><td id="td-normal">normal</td><td class="locked" id="td-locked">locked</td></tr></table>
+  </section>
+  <section>
+    <p>Autocomplete row</p>
+    <div class="wui-ac-wrap"><input class="input" id="ac"><div class="wui-ac-drop" id="ac-drop"></div></div>
+  </section>
+  <output id="log"></output>
+<script type="module">
+  import { WuiAutocomplete } from '../js/autocomplete.js'
+  const log = document.getElementById('log')
+  for (const id of ['btn-normal', 'btn-locked', 'td-normal', 'td-locked'])
+    document.getElementById(id).addEventListener('click', () => { log.textContent += id + ' ' })
+  new WuiAutocomplete({
+    inputEl: document.getElementById('ac'), dropEl: document.getElementById('ac-drop'),
+    preselect: false,
+    fetch: async () => ({ rows: [{ name: 'normal' }, { name: 'locked' }], hasMore: false }),
+    primary: r => r.name,
+    variant: r => r.name === 'locked' ? 'locked' : '',
+    onSelect: r => { log.textContent += 'ac-' + r.name + ' ' },
+  })
+</script>
+</body></html>

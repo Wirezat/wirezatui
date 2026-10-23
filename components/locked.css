@@ -1,0 +1,19 @@
+/* Dims an element or autocomplete row (ac-locked) with cursor: not-allowed. */
+
+.locked,
+.wui-ac-row.ac-locked {
+    --locked-color: var(--bg);
+    --locked-opacity: 0.55;
+
+    position: relative;
+    cursor: not-allowed;
+}
+
+.locked::after,
+.wui-ac-row.ac-locked::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--locked-color) calc(var(--locked-opacity) * 100%), transparent);
+    pointer-events: none;
+}

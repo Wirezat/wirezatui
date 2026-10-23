@@ -38,6 +38,7 @@
      components/feedback.css
      components/form-fields.css
      components/glint.css
+     components/locked.css    — .locked / .ac-locked dimming overlay
      components/icontext.css
      components/skeleton.css
      components/tabs.css      — .wui-tabs / .wui-tab (replaces legacy .tabs-bar)
@@ -81,6 +82,7 @@
 @import './components/feedback.css';
 @import './components/form-fields.css';
 @import './components/glint.css';
+@import './components/locked.css';
 @import './components/icontext.css';
 @import './components/skeleton.css';
 @import './components/tabs.css';
