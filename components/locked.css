@@ -14,6 +14,7 @@
     content: '';
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background: color-mix(in srgb, var(--locked-color) calc(var(--locked-opacity) * 100%), transparent);
     pointer-events: none;
 }
